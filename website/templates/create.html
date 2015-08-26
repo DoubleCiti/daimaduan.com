@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}粘贴新代码{% endblock %}
+{% block content %}
+<div class="row">
+	<div class="well">
+		<form class="form-horizontal" action="create" method="POST" enctype="multipart/form-data">
+			<fieldset>
+				<legend>分享代码</legend>
+				<div class="form-group">
+					<lable class="control-label col-md-2">标题</lable>
+					<div class="col-md-9">
+						{{ form.title }}
+					</div>
+				</div>
+				<div class="form-group">
+					<lable class="control-label col-md-2">标签</lable>
+					<div class="col-md-9">
+						<input type="text" name="tags" class="form-control" placeholder="多个标签用空格分割, 最多可以写3个标签哦" />
+						<!-- <div class="checkbox">
+							<label>
+								是否私有
+							</label>
+                        </div> -->
+					</div>
+				</div>
+				<div class="form-group">
+					<lable class="control-label col-md-2">代码</lable>
+					<div class="col-md-9">
+						<textarea class="form-control" rows="10" name="content"></textarea>
+						<span class="help-block">在这里贴上您想分享的代码吧</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-8 col-md-offset-2">
+						<input type="submit" class="btn btn-primary" value="分享" />
+					</div>
+				</div>
+			</fieldset>
+
+		</form>
+	</div>
+</div>
+{% endblock %}
+{% block sidebar %}
+<h2 class="new-paste-title">
+	<span></span>
+	站点介绍
+</h2>
+<p class="lh24 pt15">
+	代码段(以前的大卫粘贴)是一个什么样的网站呢?
+	我很难用一句话来形容. 你可以用它来贴代码, 你也可以用它来展示代码,
+	你也可以用它来收藏代码, 你也可以用它来观察别人都在写什么代码.
+</p>
+{% endblock %}

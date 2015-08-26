@@ -1,0 +1,9 @@
+Beaker==1.7.0
+bottle==0.12.8
+Jinja2==2.8
+MarkupSafe==0.23
+mongoengine==0.10.0
+Paste==2.0.2
+pymongo==3.0.3
+six==1.9.0
+WTForms==2.0.2

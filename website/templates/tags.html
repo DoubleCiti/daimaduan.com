@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}所有标签{% endblock %}
+{% block content %}
+<h2 class="new-paste-title pl10">
+	<span></span>
+		标签列表
+</h2>
+<div id="tag_view" class="mt10 pt10 pl20 pr20">
+	{% for tag in tags %}
+		{% include 'items/_tag.html' %}
+	{% endfor %}
+</div>
+{% endblock %}

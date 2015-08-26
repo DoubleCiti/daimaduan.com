@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table">
+	<thead>
+		<tr><td>最新代码</td></tr>
+	</thead>
+	<tbody>
+	{% for paste in pastes %}
+		<tr><td>
+		{% include ('items/_paste.html') %}
+		</td></tr>
+	{% endfor %}
+	</tbody>
+</table>
+<div class="row col-md-12">
+<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+</div>
+{% endblock %}

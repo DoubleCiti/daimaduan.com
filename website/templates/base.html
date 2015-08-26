@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="代码段是一个优秀的代码分享平台, 用户可以在代码段上分享自己的代码, 查看别人优秀的代码, 甚至收藏别人的代码, 打造一个属于自己的代码库">
+		<meta name="keywords" content="代码, 开发, 平台, 分享">
+		<title>{% block title %}最新代码{% endblock %} - 代码段</title>
+		<link rel="shortcut icon" href="/static/images/favicon.ico" />
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="http://yandex.st/highlightjs/8.0/styles/monokai.min.css" rel="stylesheet">
+		<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+		(function() {
+			var po = document.createElement('script');
+			po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://plus.google.com/js/client:plusone.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(po, s);
+		})();
+		</script>
+		<script src="/static/js/pastecookie.js"></script>
+		{% block javascript %}{% endblock %}
+	</head>
+	<body>
+		<div class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">代码段</a><small>v2.0</small>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="/">首页</a></li>
+						<li><a href="/tags">标签</a></li>
+						<li><a href="/rank">排行榜</a></li>
+					</ul>
+					<form action="/search" class="navbar-form navbar-left">
+						<input type="text" name="keyword" placeholder="搜索代码" class="form-control col-md-10" value="" />
+					</form>
+					<a href="/create" class="btn btn-danger navbar-left col-md-2 share-btn"><span class="plus"></span>分享我的代码</a>
+					<ul class="nav navbar-nav navbar-right">
+					{% if request.session.get('username', None) %}
+						<li class="dropdown">
+							<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">
+								<img src="" class="lf" />
+								{{ request.session['username'] }}
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/messages"><i class="icon-envelope"></i> 系统消息</a></li>
+								<li><a href="/manage"><i class="icon-cog"></i> 设置</a></li>
+								<li class="divider"></li>
+								<li><a href="/signout"><i class="icon-off"></i> 登出</a></li>
+							</ul>
+						</li>
+					{% else %}
+						<li><a href="/signin">登录/注册</a></li>
+					{% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div id="wrviewer" class="col-md-9 bs-docs-section">{% block content %}{% endblock %}</div>
+			<div id="sidebar" class="col-md-3">{% block sidebar %}{% endblock %}</div>
+		</div>
+		<div class="container">
+			<div class="col-md-12">
+			<hr />
+			<p class="flink container clearfix">
+				<span>
+					© 2011 - 2014 <a href="/">daimaduan.com</a> All right reserved.
+				</span>
+				<span>
+					Powered by <a href="https://github.com/kingheaven/PasteCookie">PasteCookie</a>
+				</span>
+				<span class="pull-right">
+					<a href="/posts">开发日志</a> | 
+					<a href="/rss">订阅本站</a> | 
+					<a href="/page/faq">FAQ</a> | 
+					<a href="/page/about">关于我们</a> | 
+					<a href="/page/contact">联系我们</a>
+				</span>
+			</p>
+			</div>
+		</div>
+	<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'daimaduan'; // required: replace example with your forum shortname
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function () {
+		var s = document.createElement('script'); s.async = true;
+		s.type = 'text/javascript';
+		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+	}());
+	</script>
+	</body>
+</html>
