@@ -62,7 +62,6 @@ def view(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
     return {'paste': paste}
 
-
 @app.get('/signup')
 @jinja2_view('signup.html')
 def signup_get():
@@ -78,9 +77,11 @@ def signup_post():
         user.username = form.username.data
         user.password = form.password.data
         user.save()
+
         return redirect('/signin')
 
 
+# FIXME: 将注销改为 DELETE 请求
 @app.get('/signin')
 @jinja2_view('signin.html')
 def signin_get():
@@ -95,6 +96,10 @@ def signin_post():
         request.session['username'] = user.username
         redirect('/')
 
+@app.get('/signout')
+def signout_get():
+    del request.session['username']
+    redirect('/')
 
 @app.route('/static/<filepath:path>')
 def server_static(filepath):
