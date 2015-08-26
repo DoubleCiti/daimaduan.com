@@ -57,3 +57,5 @@ docs/_build/
 target/
 website/sessions
 website/config.cfg
+.idea/
+.venv/

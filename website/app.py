@@ -1,7 +1,7 @@
 #-*-encoding:utf-8-*-
 from bootstrap import app
 from bottle import run, request, redirect
-from bottle import jinja2_view, TEMPLATE_PATH, Jinja2Template
+from bottle import jinja2_view
 from bottle import static_file
 
 from beaker.middleware import SessionMiddleware
@@ -11,25 +11,6 @@ from models import SignupForm
 from models import PasteForm
 from models import User
 from models import Paste
-
-
-TEMPLATE_PATH[:] = ['templates']
-Jinja2Template.settings = {
-    'autoescape': True,
-}
-Jinja2Template.defaults = {
-    'request': request
-}
-
-
-@app.hook('before_request')
-def before_request():
-    request.session = request.environ.get('beaker.session')
-
-
-@app.hook('after_request')
-def after_request():
-    request.session.save()
 
 
 @app.route('/')
@@ -96,16 +77,18 @@ def signin_post():
         redirect('/')
 
 
-@app.route('/static/<filepath:path>')
-def server_static(filepath):
-    return static_file(filepath, root='./static')
-
-
 session_opts = {
     'session.type': 'file',
     'session.cookie_expires': 7 * 24 * 3600,
     'session.data_dir': './sessions',
     'session.auto': True
 }
-app = SessionMiddleware(app, session_opts)
-run(app, server='paste', port=8080, reloader=True, debug=True)
+application = SessionMiddleware(app, session_opts)
+
+
+if __name__ == '__main__':
+    @app.route('/static/<filepath:path>')
+    def server_static(filepath):
+        return static_file(filepath, root='./static')
+
+    run(application, host='0.0.0.0', server='paste', port=8080, reloader=True, debug=True)
