@@ -72,10 +72,11 @@ def signup_get():
 @app.post('/signup')
 @jinja2_view('signup.html')
 def signup_post():
-    user = User()
     form = SignupForm(request.forms)
     if form.validate():
-        # user.save()
+        user = User()
+        form.populate_obj(user)
+        user.save()
 
         return redirect('/signin')
     
