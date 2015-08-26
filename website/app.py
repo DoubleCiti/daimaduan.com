@@ -7,10 +7,11 @@ from bottle import static_file
 from beaker.middleware import SessionMiddleware
 
 from models import SigninForm
-from models import SignupForm
 from models import PasteForm
 from models import User
 from models import Paste
+
+from forms import SignupForm
 
 
 TEMPLATE_PATH[:] = ['templates']
@@ -69,17 +70,16 @@ def signup_get():
 
 
 @app.post('/signup')
+@jinja2_view('signup.html')
 def signup_post():
-    form = SignupForm(request.POST)
+    user = User()
+    form = SignupForm(request.forms)
     if form.validate():
-        user = User()
-        user.email = form.email.data
-        user.username = form.username.data
-        user.password = form.password.data
-        user.save()
+        # user.save()
 
         return redirect('/signin')
-
+    
+    return { 'form': form }
 
 # FIXME: 将注销改为 DELETE 请求
 @app.get('/signin')

@@ -1,32 +1,18 @@
 {% extends 'base.html' %}
+{% import 'wtf.html' as f %}
 {% block title %}注册新用户{% endblock %}
 {% block content %}
-    <form action="/signup" method="POST">
-        <fieldset>
-            <legend>用户注册</legend>
-            <div class="form-group">
-                {{ form.email.label(class="control-label col-md-2") }}
-                <div class="col-md-9">
-                    {{ form.email }}
-                </div>
-            </div>
-            <div class="form-group">
-                {{ form.username.label(class="control-label col-md-2") }}
-                <div class="col-md-9">
-                    {{ form.username }}
-                </div>
-            </div>
-            <div class="form-group">
-                {{ form.password.label(class="control-label col-md-2") }}
-                <div class="col-md-9">
-                    {{ form.password }}
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-8 col-md-offset-2">
-                    <input type="submit" class="btn btn-primary" value="注册" />
-                </div>
-            </div>
-        </fieldset>
-    </form>
+<form action="/signup" method="POST" class="form-horizontal">
+    <div class="panel panel-default">
+        <div class="panel-heading">用户注册</div>
+        <div class="panel-body">
+            {{ f.render_field(form.email, placeholder='Email', type='email') }}
+            {{ f.render_field(form.username, placeholder='Username', type='text') }}
+            {{ f.render_field(form.password, placeholder='Password', type='password') }}
+        </div>
+        <div class="panel-footer">
+            <input type="submit" class="btn btn-primary" value="注册" />
+        </div>
+    </div>
+</form>
 {% endblock %}

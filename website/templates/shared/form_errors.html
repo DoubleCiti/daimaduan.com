@@ -1,0 +1,5 @@
+{% for field, errors in form.errors.iteritems() %}
+<div class="alert alert-error">
+    {{ form[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
