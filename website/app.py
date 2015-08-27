@@ -1,12 +1,12 @@
 #-*-encoding:utf-8-*-
 from bootstrap import app
-from bottle import run, request, redirect
+from bottle import run, request, redirect, abort
 from bottle import jinja2_view
 from bottle import static_file
 
 from beaker.middleware import SessionMiddleware
 
-from models import PasteForm
+from models import CodeForm
 from models import User
 from models import Paste
 
@@ -16,32 +16,34 @@ from forms import SigninForm
 @app.route('/')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Paste.objects()}
+    return {'pastes': Code.objects()}
 
 
 @app.get('/create')
 @jinja2_view('create.html')
 def create_get():
-    return {'form': PasteForm()}
+    return {'form': CodeForm()}
 
 
 @app.post('/create')
 def create():
-    form = PasteForm(request.POST)
+    form = CodeForm(request.POST)
     if form.validate():
         user = User.objects(username=request.session['username']).first()
-        paste = Paste(title=form.title.data,
-                      content=form.content.data,
-                      user=user)
-        paste.save()
+        code = Code(title=form.title.data,
+                    content=form.content.data,
+                    user=user)
+        code.save()
     return redirect('/')
 
 
-@app.route('/paste/<hash_id>')
+@app.route('/code/<hash_id>')
 @jinja2_view('view.html')
 def view(hash_id):
-    paste = Paste.objects(hash_id=hash_id).first()
-    return {'paste': paste}
+    code = Code.objects(hash_id=hash_id).first()
+    if not code:
+        abort(404)
+    return {'code': code}
 
 @app.get('/signup')
 @jinja2_view('signup.html')
