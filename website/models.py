@@ -7,14 +7,7 @@ import mongoengine
 
 from bootstrap import app
 
-
 mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
-
-
-class SignupForm(wtforms.Form):
-    username = wtforms.StringField(u'username')
-    email = wtforms.StringField(u'email')
-    password = wtforms.PasswordField(u'password')
 
 
 class SigninForm(wtforms.Form):
