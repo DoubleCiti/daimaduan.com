@@ -7,8 +7,8 @@ from bottle import static_file
 
 from beaker.middleware import SessionMiddleware
 
-from models import CodeForm
 from models import User
+from models import Code
 from models import Paste
 
 from forms import SignupForm
@@ -35,34 +35,42 @@ def load_user(user_id):
 @app.route('/')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Code.objects()}
+    return {'pastes': Paste.objects()}
 
 
 @app.get('/create')
 @jinja2_view('create.html')
 def create_get():
-    return {'form': CodeForm()}
+    return {}
 
 
 @app.post('/create')
+@jinja2_view('create.html')
 def create():
-    form = CodeForm(request.POST)
-    if form.validate():
-        user = User.objects(username=request.session['username']).first()
-        code = Code(title=form.title.data,
-                    content=form.content.data,
+    title_list = request.forms.getlist('title')
+    content_list = request.forms.getlist('content')
+    if len(title_list) != len(content_list):
+        return {}
+    user = User.objects(username=request.session['username']).first()
+    paste = Paste(user=user, title=request.forms.get('paste_title', None))
+    for i in range(len(title_list)):
+        code = Code(title=title_list[i],
+                    content=content_list[i],
                     user=user)
         code.save()
+        paste.codes.append(code)
+    paste.save()
     return redirect('/')
 
 
-@app.route('/code/<hash_id>')
+@app.route('/paste/<hash_id>')
 @jinja2_view('view.html')
 def view(hash_id):
-    code = Code.objects(hash_id=hash_id).first()
-    if not code:
+    paste = Paste.objects(hash_id=hash_id).first()
+    if not paste:
         abort(404)
-    return {'code': code}
+    return {'paste': paste}
+
 
 @app.get('/signup')
 @jinja2_view('signup.html')

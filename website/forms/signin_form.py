@@ -5,6 +5,7 @@ from wtforms import PasswordField
 from wtforms.validators import InputRequired
 from models import User
 
+
 class SigninForm(Form):
     email = StringField(u'email', validators=[InputRequired()])
     password = PasswordField(u'password', validators=[InputRequired()])
