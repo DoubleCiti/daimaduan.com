@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 Signup Form
 """
@@ -12,6 +11,7 @@ from wtforms.validators import InputRequired
 from wtforms.validators import Email
 from wtforms.validators import Regexp
 from models import User
+
 
 class SignupForm(Form):
     username = StringField(u'username', validators=[
