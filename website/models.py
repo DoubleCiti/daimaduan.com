@@ -9,12 +9,6 @@ from bootstrap import app
 
 mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
 
-
-class SigninForm(wtforms.Form):
-    email = wtforms.StringField(u'email')
-    password = wtforms.PasswordField(u'password')
-
-
 class PasteForm(wtforms.Form):
     title = wtforms.StringField(u'title')
     content = wtforms.TextAreaField(u'content')
@@ -41,6 +35,9 @@ class User(BaseDocument):
 
     def generate_password(self, string):
         return hashlib.sha1('%s%s' % (string, self.salt)).hexdigest()
+
+    def check_login(self, password):
+        return self.generate_password(password) == self.password
 
 
 class Paste(BaseDocument):

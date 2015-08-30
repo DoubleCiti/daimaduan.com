@@ -6,13 +6,12 @@ from bottle import static_file
 
 from beaker.middleware import SessionMiddleware
 
-from models import SigninForm
 from models import PasteForm
 from models import User
 from models import Paste
 
 from forms import SignupForm
-
+from forms import SigninForm
 
 @app.route('/')
 @jinja2_view('index.html')
@@ -71,12 +70,15 @@ def signin_get():
 
 
 @app.post('/signin')
+@jinja2_view('signin.html')
 def signin_post():
-    form = SignupForm(request.POST)
-    user = User.objects(email=form.email.data).first()
-    if user.generate_password(form.password.data) == user.password:
-        request.session['username'] = user.username
+    form = SigninForm(request.POST)
+    if form.validate():
+        request.session['username'] = form.user.username
         redirect('/')
+    else:
+        return locals();
+
 
 @app.get('/signout')
 def signout_get():
