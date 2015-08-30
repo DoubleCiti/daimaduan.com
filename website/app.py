@@ -72,7 +72,7 @@ def signin_get():
 @app.post('/signin')
 @jinja2_view('signin.html')
 def signin_post():
-    form = SignupForm(request.POST)
+    form = SigninForm(request.POST)
     if form.validate():
         request.session['username'] = form.user.username
         redirect('/')

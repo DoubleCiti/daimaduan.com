@@ -37,7 +37,7 @@ class User(BaseDocument):
         return hashlib.sha1('%s%s' % (string, self.salt)).hexdigest()
 
     def check_login(self, password):
-        self.generate_password(password) == self.password
+        return self.generate_password(password) == self.password
 
 
 class Paste(BaseDocument):
