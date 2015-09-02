@@ -51,3 +51,9 @@ class Paste(BaseDocument):
         # TODO: needs to make sure hash_id is unique
         self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
         super(Paste, self).save(*args, **kwargs)
+
+    def name(self):
+        if len(self.title):
+            return self.title
+        else:
+            return u'代码段: %s' % self.hash_id
