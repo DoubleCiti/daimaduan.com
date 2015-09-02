@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}{{ paste.title }}{% endblock %}
+{% block title %}{{ paste.name() }}{% endblock %}
 {% block content %}
-<div class="row col-md-12">
-	<h4>
-		{{ paste.title }}
-		<span class="ml10 fs13 clc">by</span>
-        <a href="/user/view/#/" class="carte fs13" title="#">dxie</a>
-		<span class="ml10 fs13 clc">###</span>
-	</h4>
-	<h5>
-{#		{% for tag in paste.tags %}{% include 'items/_tag.html' %}{% endfor %}#}
-	</h5>
-	<div id="code_view" class="row col-md-12"><pre><code>{{ paste.content | safe }}</code></pre></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      {{ paste.name() }}
+    </div>
+    {#    {% for tag in paste.tags %}{% include 'items/_tag.html' %}{% endfor %}#}
+  </div>
+
+  <pre class="panel-body"><code>{{ paste.content | safe }}</code></pre>
+
+  <div class="panel-footer">
+    {% include 'items/_comments.html' %}    
+  </div>
 </div>
-{% include 'items/_comments.html' %}
 {% endblock %}

@@ -1,0 +1,9 @@
+.hljs {
+  background: none;
+}
+
+pre.panel-body {
+  border: 0;
+  background: none;
+  margin: 0;
+}

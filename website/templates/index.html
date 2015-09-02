@@ -1,18 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<table class="table">
-	<thead>
-		<tr><td>最新代码</td></tr>
-	</thead>
-	<tbody>
-	{% for paste in pastes %}
-		<tr><td>
-		{% include ('items/_paste.html') %}
-		</td></tr>
-	{% endfor %}
-	</tbody>
-</table>
-<div class="row col-md-12">
-<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+<div class="panel panel-default">
+	<div class="panel-heading">最新代码</div>
+
+	<ul class="list-group">
+		{% for paste in pastes %}
+			{% include ('items/_paste.html') %}
+		{% endfor %}
+		<li class="list-group-item">
+			<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+			</div>
+		</li>
+	</ul>
 </div>
 {% endblock %}
