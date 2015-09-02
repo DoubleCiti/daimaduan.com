@@ -80,10 +80,9 @@ def signin_post():
         return locals();
 
 
-@app.get('/signout')
-def signout_get():
+@app.delete('/signout')
+def signout_delete():
     del request.session['username']
-    redirect('/')
 
 session_opts = {
     'session.type': 'file',
