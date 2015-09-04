@@ -21,12 +21,16 @@ class User(BaseDocument):
     username = mongoengine.StringField(required=True)
     email = mongoengine.StringField(required=True)
     password = mongoengine.StringField(required=True)
-    salt= mongoengine.StringField()
+    salt = mongoengine.StringField()
+    email_confirm_code = mongoengine.StringField()
+    is_email_confirmed = mongoengine.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.salt:
             self.salt = hashlib.sha1(str(time.time())).hexdigest()
             self.password = self.generate_password(self.password)
+        if not self.email_confirm_code:
+            self.email_confirm_code = hashlib.sha1("%s%s" % (self.username, self.salt)).hexdigest()
         super(User, self).save(*args, **kwargs)
 
     def generate_password(self, string):

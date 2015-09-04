@@ -96,6 +96,21 @@ def signin_post():
 def signout_delete():
     del request.session['username']
 
+
+@app.get('/email/confirm')
+def email_confirm():
+    if request.GET.get('email', None) or request.GET.get('hash', None):
+        abort(500)
+    user = User.objects(email=request.GET.get('email')).first()
+    if not user:
+        abort(500)
+    if request.GET.get('hash') == user.email_confirm_code:
+        user.is_confirmed = True
+        user.save()
+        redirect('/signin')
+    abort(500)
+
+
 session_opts = {
     'session.type': 'file',
     'session.cookie_expires': 7 * 24 * 3600,
