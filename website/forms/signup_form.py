@@ -1,8 +1,4 @@
 # coding: utf-8
-"""
-Signup Form
-"""
-
 from wtforms import Form
 from wtforms import StringField
 from wtforms import PasswordField

@@ -3,10 +3,13 @@
 {% block content %}
 <script type="text/javascript">
 $(document).ready(function() {
-	var code = $('.code').last();
+	var i = 1;
+	var code = $('.code').last().clone();
 	$('#one_more').click(function(event) {
 		event.preventDefault();
-		$('.code').last().append(code.clone());
+		$('#codes').append($(code));
+		$('.code').last().find('input').first().attr('name', 'codes-' + i + '-title');
+		$('.code').last().find('textarea').first().attr('name', 'codes-' + i + '-content');
 	});
 });
 </script>
@@ -15,28 +18,29 @@ $(document).ready(function() {
 		<form class="form-horizontal" action="create" method="POST" enctype="multipart/form-data">
 			<fieldset>
 				<legend>分享代码</legend>
-				<div class="code">
+				<div id="codes">
 					<div class="form-group">
 						<lable class="control-label col-md-2">标题</lable>
-						<div class="col-md-9">
-							<input type="text" name="paste_title" />
+						<div class="col-md-9">{{ form.title }}
 						</div>
 					</div>
-				</div>
-				<div class="code">
-					<div class="form-group">
-						<lable class="control-label col-md-2">标题</lable>
-						<div class="col-md-9">
-							<input type="text" name="title" />
+					{% for code in form.codes %}
+					<div class="code">
+						<div class="form-group">
+							<lable class="control-label col-md-2">标题</lable>
+							<div class="col-md-9">
+								{{ code.title }}
+							</div>
+						</div>
+						<div class="form-group">
+							<lable class="control-label col-md-2">代码</lable>
+							<div class="col-md-9">
+								{{ code.content }}
+								<span class="help-block">在这里贴上您想分享的代码吧</span>
+							</div>
 						</div>
 					</div>
-					<div class="form-group">
-						<lable class="control-label col-md-2">代码</lable>
-						<div class="col-md-9">
-							<textarea class="form-control" rows="10" name="content"></textarea>
-							<span class="help-block">在这里贴上您想分享的代码吧</span>
-						</div>
-					</div>
+					{% endfor %}
 				</div>
 				<div class="form-group">
 					<div class="col-md-8 col-md-offset-2">

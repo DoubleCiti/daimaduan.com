@@ -12,6 +12,7 @@ from models import Paste
 
 from forms import SignupForm
 from forms import SigninForm
+from forms import PasteForm
 
 
 @app.route('/')
@@ -23,25 +24,24 @@ def index():
 @app.get('/create')
 @jinja2_view('create.html')
 def create_get():
-    return {}
+    form = PasteForm(data={'codes': [{'title': '', 'content': ''}]})
+    return {'form': form}
 
 
 @app.post('/create')
 @jinja2_view('create.html')
-def create():
-    title_list = request.forms.getlist('title')
-    content_list = request.forms.getlist('content')
-    if len(title_list) != len(content_list):
-        return {}
-    user = User.objects(username=request.session['username']).first()
-    paste = Paste(user=user, title=request.forms.get('paste_title', None))
-    for i in range(len(title_list)):
-        code = Code(title=title_list[i],
-                    content=content_list[i],
-                    user=user)
-        code.save()
-        paste.codes.append(code)
-    paste.save()
+def create_post():
+    form = PasteForm(request.POST)
+    if form.validate():
+        user = User.objects(username=request.session['username']).first()
+        paste = Paste(title=form.title.data, user=user)
+        for c in form.codes:
+            code = Code(title=c.title.data,
+                        content=c.content.data,
+                        user=user)
+            code.save()
+            paste.codes.append(code)
+        paste.save()
     return redirect('/')
 
 
