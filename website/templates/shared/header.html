@@ -18,11 +18,11 @@
       <a href="/create" class="btn btn-danger navbar-btn share-btn"><span class="plus"></span>分享我的代码</a>
 
       <ul class="nav navbar-nav navbar-right">
-      {% if request.session.get('username', None) %}
+      {% if request.user %}
         <li class="dropdown">
           <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">
             <img src="" class="lf" />
-            {{ request.session['username'] }}
+            {{ request.user.username }}
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
