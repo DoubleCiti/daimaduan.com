@@ -1,6 +1,6 @@
-#-*-encoding:utf-8-*-
-from bootstrap import app
-from bottle import run, request, redirect
+# coding: utf-8
+from bootstrap import app, login
+from bottle import run, request, redirect, abort
 from bottle import error
 from bottle import jinja2_view
 from bottle import static_file
@@ -25,6 +25,11 @@ def error_404(error):
 @jinja2_view('error.html')
 def error_500(error):
     return {'title': u"服务器错误", 'message': u"服务器开小差了, 晚点再来吧!"}
+
+
+@login.load_user
+def load_user(user_id):
+    return User.objects(id=user_id).first()
 
 
 @app.route('/')
@@ -71,12 +76,11 @@ def signup_post():
         user = User()
         form.populate_obj(user)
         user.save()
-
         return redirect('/signin')
-    
+
     return { 'form': form }
 
-# FIXME: 将注销改为 DELETE 请求
+
 @app.get('/signin')
 @jinja2_view('signin.html')
 def signin_get():
@@ -88,7 +92,7 @@ def signin_get():
 def signin_post():
     form = SigninForm(request.POST)
     if form.validate():
-        request.session['username'] = form.user.username
+        login.login_user(str(form.user.id))
         redirect('/')
     else:
         return locals();
@@ -96,7 +100,9 @@ def signin_post():
 
 @app.delete('/signout')
 def signout_delete():
-    del request.session['username']
+    login.logout_user()
+    request.environ.get('beaker.session').delete()
+
 
 session_opts = {
     'session.type': 'file',

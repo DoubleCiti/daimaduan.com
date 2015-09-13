@@ -15,14 +15,10 @@ class SigninForm(Form):
 
         user = User.objects(email=self.email.data).first()
 
-        if user is None:
-            self.password.errors.append(u'登录邮箱或者密码不正确')
-            return False
+        if user:
+            if user.check_login(self.password.data):
+                self.user = user
+                return True
 
-        if not user.check_login(self.password.data):
-            self.password.errors.append(u'登录邮箱或者密码不正确')
-            return False
-
-        self.user = user
-
-        return True
+        self.password.errors.append(u'登录邮箱或者密码不正确')
+        return False
