@@ -1,17 +1,12 @@
-#-*-encoding:utf-8-*-
+# coding: utf-8
 import datetime
 import time
 import hashlib
-import wtforms
 import mongoengine
 
 from bootstrap import app
 
 mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
-
-class PasteForm(wtforms.Form):
-    title = wtforms.StringField(u'title')
-    content = wtforms.TextAreaField(u'content')
 
 
 class BaseDocument(mongoengine.Document):
@@ -40,7 +35,7 @@ class User(BaseDocument):
         return self.generate_password(password) == self.password
 
 
-class Paste(BaseDocument):
+class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)
 
     hash_id = mongoengine.StringField()
@@ -50,10 +45,23 @@ class Paste(BaseDocument):
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
         self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
-        super(Paste, self).save(*args, **kwargs)
 
     def name(self):
         if len(self.title):
             return self.title
         else:
             return u'代码段: %s' % self.hash_id
+        super(Code, self).save(*args, **kwargs)
+
+
+class Paste(BaseDocument):
+    user = mongoengine.ReferenceField(User)
+
+    title = mongoengine.StringField()
+    hash_id = mongoengine.StringField()
+    codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
+
+    def save(self, *args, **kwargs):
+        # TODO: needs to make sure hash_id is unique
+        self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
+        super(Paste, self).save(*args, **kwargs)

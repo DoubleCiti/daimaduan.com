@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}{{ paste.name() }}{% endblock %}
+{% block title %}{{ paste.title }}{% endblock %}
 {% block content %}
 <div class="panel panel-default">
+  {% for code in paste.codes %}
   <div class="panel-heading">
     <div class="panel-title">
-      {{ paste.name() }}
+      {{ code.title }}
     </div>
     {#    {% for tag in paste.tags %}{% include 'items/_tag.html' %}{% endfor %}#}
   </div>
 
-  <pre class="panel-body"><code>{{ paste.content | safe }}</code></pre>
+  <pre class="panel-body"><code>{{ code.content | safe }}</code></pre>
+  {% endfor %}
 
   <div class="panel-footer">
     {% include 'items/_comments.html' %}    
