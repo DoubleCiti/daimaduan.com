@@ -2,6 +2,11 @@
   background: none;
 }
 
+#form-signin, #form-signup {
+  margin: 30px auto;
+  width: 600px;
+}
+
 pre.panel-body {
   border: 0;
   background: none;

@@ -2,17 +2,15 @@
 {% import 'wtf.html' as f %}
 {% block title %}注册新用户{% endblock %}
 {% block content %}
-<form action="/signup" method="POST" class="form-horizontal">
-    <div class="panel panel-default">
-        <div class="panel-heading">用户注册</div>
-        <div class="panel-body">
-            {{ f.render_field(form.email, placeholder='Email', type='email') }}
-            {{ f.render_field(form.username, placeholder='Username', type='text') }}
-            {{ f.render_field(form.password, placeholder='Password', type='password') }}
-        </div>
-        <div class="panel-footer">
-            <input type="submit" class="btn btn-primary" value="注册" />
-        </div>
+<form action="/signup" method="POST" id="form-signup">
+  <div class="panel panel-default">
+    <div class="panel-heading">用户注册</div>
+    <div class="panel-body">
+      {{ f.render_field(form.email, placeholder='Email', type='email') }}
+      {{ f.render_field(form.username, placeholder='Username', type='text') }}
+      {{ f.render_field(form.password, placeholder='Password', type='password') }}
+      <input type="submit" class="btn btn-primary" value="注册" />
     </div>
+  </div>
 </form>
 {% endblock %}
