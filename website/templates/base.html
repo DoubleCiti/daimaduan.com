@@ -7,7 +7,11 @@
 		<meta name="keywords" content="代码, 开发, 平台, 分享">
 		<title>{% block title %}最新代码{% endblock %} - 代码段</title>
 		<link rel="shortcut icon" href="/static/images/favicon.ico" />
-		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+		<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet">
+		<link href="//cdn.bootcss.com/bootswatch/3.3.5/lumen/bootstrap.min.css" rel="stylesheet">
+		<link href="//cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="http://yandex.st/highlightjs/8.0/styles/github.min.css" rel="stylesheet">
 		<link href="/static/css/app.css" rel="stylesheet">
 	</head>
@@ -15,9 +19,9 @@
 		{% include 'shared/header.html' %}
 		
 		<div class="container">
-			<div id="wrviewer" class="col-md-9 bs-docs-section">{% block content %}{% endblock %}</div>
-			<div id="sidebar" class="col-md-3">{% block sidebar %}{% endblock %}</div>
+			{% block content %}{% endblock %}
 		</div>
+
 		<div class="container">
 			<div class="col-md-12">
 			<hr />
@@ -38,9 +42,11 @@
 			</p>
 			</div>
 		</div>
+
 	<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
-	<script src="/static/js/jquery.min.js"></script>
-	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	
 	<script type="text/javascript">
 	(function() {
 		var po = document.createElement('script');
