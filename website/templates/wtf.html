@@ -7,7 +7,7 @@
     {% endif %}
 
     {{ field(class_='form-control', **kwargs) }}
-    
+
     {% if field.errors %}
       {% for e in field.errors %}
         <p class="help-block">{{ e }}</p>

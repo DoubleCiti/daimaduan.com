@@ -59,7 +59,7 @@ def create_get():
 def create_post():
     form = PasteForm(request.POST)
     if form.validate():
-        user = User.objects(username=request.session['username']).first()
+        user = login.get_user()
         paste = Paste(title=form.title.data, user=user)
         for c in form.codes:
             code = Code(title=c.title.data,
