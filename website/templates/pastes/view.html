@@ -5,9 +5,9 @@
   {% for code in paste.codes %}
   <div class="panel-heading">
     <div class="panel-title">
-      {{ code.title }}
+      <h4>{{ code.title }}</h4>
     </div>
-    {#    {% for tag in paste.tags %}{% include 'items/_tag.html' %}{% endfor %}#}
+    {% for tag in paste.tags %}<a href="/tag/{{ tag }}" title="{{ tag }}" class="label label-warning">{{ tag }}</a>{% endfor %}
   </div>
 
   <pre class="panel-body"><code>{{ code.content | safe }}</code></pre>

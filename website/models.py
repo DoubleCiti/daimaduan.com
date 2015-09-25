@@ -41,6 +41,7 @@ class Code(BaseDocument):
     hash_id = mongoengine.StringField()
     title = mongoengine.StringField()
     content = mongoengine.StringField(required=True)
+    tag = mongoengine.StringField()
 
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
@@ -62,6 +63,7 @@ class Paste(BaseDocument):
     title = mongoengine.StringField()
     hash_id = mongoengine.StringField()
     codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
+    tags = mongoengine.ListField(mongoengine.StringField())
 
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
@@ -69,3 +71,8 @@ class Paste(BaseDocument):
         if not self.title:
             self.title = u'代码集合: %s' % self.hash_id
         super(Paste, self).save(*args, **kwargs)
+
+
+class Tag(BaseDocument):
+    name = mongoengine.StringField(required=True, unique=True)
+    popularity = mongoengine.IntField(default=1)
