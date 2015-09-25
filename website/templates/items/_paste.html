@@ -2,6 +2,6 @@
   <div class="pull-right">
     <a href="#" class="text-muted" title="paste.user.username">{{ paste.user.username }}</a>  
   </div>
-  <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">{{ paste.hash_id }}</a>
+  <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">{{ paste.title }}</a>
   {% for tag in paste.tags %}<a href="/tag/{{ tag }}" title="{{ tag }}" class="label label-warning">{{ tag }}</a>{% endfor %}
 </li>

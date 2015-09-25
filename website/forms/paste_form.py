@@ -8,10 +8,10 @@ from wtforms.validators import InputRequired
 
 
 class CodeForm(Form):
-    title = StringField(u'片段描述')
+    title = StringField(u'片段描述', validators=[InputRequired()])
     content = TextAreaField(u'代码片段', validators=[InputRequired()])
 
 
 class PasteForm(Form):
-    title = StringField(u'标题')
+    title = StringField(u'标题', validators=[InputRequired()])
     codes = FieldList(FormField(CodeForm))
