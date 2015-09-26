@@ -1,26 +1,16 @@
 # coding: utf-8
-from bootstrap import app, login
-from bottle import run, request, redirect, abort
+from bottle import abort
 from bottle import jinja2_view
-from bottle import static_file
 
-from beaker.middleware import SessionMiddleware
-from pygments.lexers import guess_lexer
-from pygments.util import ClassNotFound
+from daimaduan.bootstrap import app
+from daimaduan.bootstrap import login
 
-from models import User
-from models import Code
-from models import Paste
-from models import Tag
+from daimaduan.forms import PasteForm
 
-from forms import SignupForm
-from forms import SigninForm
-from forms import PasteForm
-
-
-@login.load_user
-def load_user(user_id):
-    return User.objects(id=user_id).first()
+from daimaduan.models import User
+from daimaduan.models import Code
+from daimaduan.models import Paste
+from daimaduan.models import Tag
 
 
 @app.route('/')
@@ -92,66 +82,3 @@ def tags():
 def tag(tag_name):
     return {'tag': Tag.objects(name=tag_name).first(),
             'pastes': Paste.objects(tags=tag_name)[:10]}
-
-
-@app.get('/signup')
-@jinja2_view('signup.html')
-def signup_get():
-    return {'form': SignupForm()}
-
-
-@app.post('/signup')
-@jinja2_view('signup.html')
-def signup_post():
-    form = SignupForm(request.forms)
-    if form.validate():
-        user = User()
-        form.populate_obj(user)
-        user.save()
-        return redirect('/signin')
-
-    return { 'form': form }
-
-
-@app.get('/signin')
-@jinja2_view('signin.html')
-def signin_get():
-    return {'form': SigninForm()}
-
-
-@app.post('/signin')
-@jinja2_view('signin.html')
-def signin_post():
-    form = SigninForm(request.POST)
-    if form.validate():
-        login.login_user(str(form.user.id))
-        redirect('/')
-    else:
-        return locals();
-
-
-@app.delete('/signout')
-def signout_delete():
-    login.logout_user()
-    request.environ.get('beaker.session').delete()
-
-
-session_opts = {
-    'session.type': 'file',
-    'session.cookie_expires': 7 * 24 * 3600,
-    'session.data_dir': './sessions',
-    'session.auto': True
-}
-application = SessionMiddleware(app, session_opts)
-
-
-if __name__ == '__main__':
-    @app.route('/static/<filepath:path>')
-    def server_static(filepath):
-        return static_file(filepath, root='./static')
-
-    run(application, host='0.0.0.0',
-                     server='paste',
-                     port=8080,
-                     reloader=True,
-                     debug=True)
