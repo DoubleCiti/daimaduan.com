@@ -69,7 +69,7 @@ def create_post():
         paste.save()
         return redirect('/')
     else:
-        return redirect('/create')
+        return {'form': form}
 
 
 

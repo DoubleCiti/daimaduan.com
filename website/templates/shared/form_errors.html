@@ -1,5 +1,13 @@
 {% for field, errors in form.errors.iteritems() %}
-<div class="alert alert-error">
-    {{ form[field].label }}: {{ ', '.join(errors) }}
-</div>
+    <div class="alert alert-error">
+        {% if field == "codes" %}
+            {% for code in form[field] %}
+            <li>
+                {{code.content.label}}不能为空!
+            </li>
+            {% endfor %}
+        {% else %}
+            {{ form[field].label }}: {{ ', '.join(errors) }}
+        {% endif %}
+    </div>
 {% endfor %}
