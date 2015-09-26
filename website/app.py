@@ -67,7 +67,9 @@ def create_post():
             paste.codes.append(code)
         paste.tags = list(set(tags))
         paste.save()
-    return redirect('/')
+        return redirect('/')
+    return {'form': form}
+
 
 
 @app.route('/paste/<hash_id>')
