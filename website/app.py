@@ -68,8 +68,7 @@ def create_post():
         paste.tags = list(set(tags))
         paste.save()
         return redirect('/')
-    else:
-        return {'form': form}
+    return {'form': form}
 
 
 

@@ -9,7 +9,7 @@ from wtforms.validators import InputRequired
 
 class CodeForm(Form):
     title = StringField(u'片段描述')
-    content = TextAreaField(u'代码片段', validators=[InputRequired()])
+    content = TextAreaField(u'代码片段', validators=[InputRequired(message=u'不能为空！')])
 
 
 class PasteForm(Form):

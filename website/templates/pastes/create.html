@@ -15,8 +15,8 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 {% block content %}
+{% include 'shared/form_errors.html' %}
 <form class="form-horizontal" action="/create" method="POST" enctype="multipart/form-data">
-  {% include 'shared/form_errors.html' %}
   <div class="panel panel-default">
     <div class="panel-heading">分享代码</div>
     <div class="panel-body">
