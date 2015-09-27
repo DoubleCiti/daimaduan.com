@@ -6,9 +6,6 @@ from bottle import redirect
 from bottle import abort
 from bottle import jinja2_view
 
-from pygments.lexers import guess_lexer
-from pygments.util import ClassNotFound
-
 from daimaduan.models import User
 
 from daimaduan.forms import SignupForm
