@@ -33,3 +33,21 @@ def signin_post():
 def signout_delete():
     login.logout_user()
     request.environ.get('beaker.session').delete()
+
+
+@app.get('/signup')
+@jinja2_view('signup.html')
+def signup_get():
+    return {'form': SignupForm()}
+
+
+@app.post('/signup')
+@jinja2_view('signup.html')
+def signup_post():
+    form = SignupForm(request.forms)
+    if form.validate():
+        user = User()
+        form.populate_obj(user)
+        user.save()
+        return redirect('/signin')
+    return { 'form': form }
