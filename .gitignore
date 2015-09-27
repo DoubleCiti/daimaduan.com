@@ -55,7 +55,7 @@ docs/_build/
 
 # PyBuilder
 target/
-website/sessions
-website/config.cfg
+sessions
+config.cfg
 .idea/
 .venv/

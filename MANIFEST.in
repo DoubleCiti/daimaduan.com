@@ -1,0 +1,2 @@
+recursive-include daimaduan/templates *
+recursive-include daimaduan/static *

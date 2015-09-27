@@ -4,7 +4,7 @@ import time
 import hashlib
 import mongoengine
 
-from bootstrap import app
+from daimaduan.bootstrap import app
 
 mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
 
