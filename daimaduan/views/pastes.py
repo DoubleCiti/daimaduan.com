@@ -1,5 +1,7 @@
 # coding: utf-8
-from bottle import abort, request, redirect
+from bottle import abort
+from bottle import request
+from bottle import redirect
 from bottle import jinja2_view
 from pygments.lexers import guess_lexer
 from pygments.util import ClassNotFound
