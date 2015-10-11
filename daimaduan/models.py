@@ -10,7 +10,7 @@ mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.hos
 
 
 class BaseDocument(mongoengine.Document):
-    meta = { 'abstract': True }
+    meta = { 'abstract': True, 'strict': False }
 
     created_at = mongoengine.DateTimeField(default=datetime.datetime.now)
     updated_at = mongoengine.DateTimeField(default=datetime.datetime.now)
