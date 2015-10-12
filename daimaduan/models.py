@@ -21,6 +21,7 @@ class User(BaseDocument):
     email = mongoengine.StringField(required=True)
     password = mongoengine.StringField(required=True)
     salt= mongoengine.StringField()
+    oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
 
     def save(self, *args, **kwargs):
         if not self.salt:
@@ -34,6 +35,11 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
+class UserOauth(BaseDocument):
+    user = mongoengine.ReferenceField(User)
+    openid = mongoengine.StringField()
+    token = mongoengine.StringField()
+    provider = mongoengine.StringField()
 
 class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)
