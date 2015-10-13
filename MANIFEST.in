@@ -1,2 +1,3 @@
-recursive-include daimaduan/templates *
-recursive-include daimaduan/static *
+include requirments.txt
+recursive-include daimaduan/templates
+recursive-include daimaduan/static
