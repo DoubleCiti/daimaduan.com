@@ -61,7 +61,7 @@ def create_post():
             paste.codes.append(code)
         paste.tags = list(set(tags))
         paste.save()
-        return redirect('/')
+        return redirect('/paste/%s' % paste.hash_id)
     return {'form': form}
 
 
@@ -73,6 +73,63 @@ def view(hash_id):
     if not paste:
         abort(404)
     return {'paste': paste}
+
+
+@app.route('/paste/<hash_id>/edit')
+@login.login_required
+@jinja2_view('pastes/edit.html')
+def edit_get(hash_id):
+    paste = Paste.objects(hash_id=hash_id).first()
+    if not paste:
+        abort(404)
+    if paste.user.id != request.user.id:
+        abort(404)
+    data = {'title': paste.title,
+            'codes': [{'title': code.title, 'content': code.content} for code in paste.codes]}
+    form = PasteForm(data=data)
+    return {'form': form, 'paste': paste}
+
+
+@app.post('/paste/<hash_id>/edit')
+@login.login_required
+@jinja2_view('pastes/edit.html')
+def edit_post(hash_id):
+    paste = Paste.objects(hash_id=hash_id).first()
+    if not paste:
+        abort(404)
+    if paste.user.id != request.user.id:
+        abort(404)
+    form = PasteForm(request.POST)
+    if form.validate():
+        user = login.get_user()
+        paste.title = form.title.data
+        tags = []
+        for code in paste.codes:
+            paste.codes.remove(code)
+            code.delete()
+        for c in form.codes:
+            try:
+                lexer = guess_lexer(c.content.data)
+                tag_name = lexer.name.lower()
+            except ClassNotFound:
+                tag_name = 'text'
+            code = Code(title=c.title.data,
+                        content=c.content.data,
+                        tag=tag_name,
+                        user=user)
+            code.save()
+            tags.append(tag_name)
+            tag = Tag.objects(name=tag_name).first()
+            if tag:
+                tag.popularity += 1
+            else:
+                tag = Tag(name=tag_name)
+            tag.save()
+            paste.codes.append(code)
+        paste.tags = list(set(tags))
+        paste.save()
+        return redirect('/paste/%s' % paste.hash_id)
+    return {'form': form, 'paste': paste}
 
 
 @app.route('/tags')
