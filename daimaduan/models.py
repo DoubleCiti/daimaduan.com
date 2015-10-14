@@ -68,6 +68,7 @@ class Paste(BaseDocument):
     hash_id = mongoengine.StringField()
     codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
     tags = mongoengine.ListField(mongoengine.StringField())
+    rate = mongoengine.IntField(default=0)
 
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
@@ -84,3 +85,9 @@ class Tag(BaseDocument):
 
 class Syntax(BaseDocument):
     name = mongoengine.StringField(required=True, unique=True)
+
+
+class Rate(BaseDocument):
+    user = mongoengine.ReferenceField(User)
+    paste = mongoengine.ReferenceField(Paste)
+    score = mongoengine.IntField(default=0)
