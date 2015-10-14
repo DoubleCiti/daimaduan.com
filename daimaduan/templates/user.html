@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}
-    {{ user.username }}
-{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
 {% block content %}
 <div class="sidebar col-md-3 jumbotron">
-    <div class="name">
+    <div class="name pull-right">
         {{ user.username }}
     </div>
-    <div class="gravatar">
-        <img src="http://www.gravatar.com/avatar/{{ user.get_email_hash() }}">
+    <div class="gravatar pull-left">
+        <img src="{{ user.gravatar_url() }}">
     </div>
 </div>
-<div class="col-md-9">
+<div class="col-md-8">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#info" data-toggle="tab">个人信息</a></li>
         <li><a href="#pastes" data-toggle="tab">代码段</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="info"></div>
+        <div class="tab-pane fade active in" id="info">
+            <ul class="list-group">
+                <li class="list-group-item">
+                        <strong>Email: </strong> {{ user.email }}
+                </li>
+            </ul>
+        </div>
         <div class="tab-pane fade in" id="pastes">
             <ul class="list-group">
                 {% for paste in pastes %}

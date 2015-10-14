@@ -34,8 +34,8 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
-    def get_email_hash(self):
-        return hashlib.md5(self.email).hexdigest()
+    def gravatar_url(self):
+        return "http://gravatar.duoshuo.com/avatar/%s" % hashlib.md5(self.email).hexdigest()
 
 
 class Code(BaseDocument):

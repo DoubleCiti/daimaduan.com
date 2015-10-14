@@ -14,14 +14,10 @@ pre.panel-body {
 }
 
 .name {
-    float: right;
     padding-right: 30px;
     font-size: 24px;
 }
 
-.gravatar {
-    float: left;
-}
 .container .jumbotron {
     padding: 20px 20px 20px 20px;
 }

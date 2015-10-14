@@ -53,11 +53,12 @@ def signup_post():
         return redirect('/signin')
     return { 'form': form }
 
-@app.get('/<username>')
+
+@app.get('/user/<username>')
 @jinja2_view('user.html')
 def user_index(username):
     user = User.objects(username=username).first()
     if user:
-        pastes = Paste.objects(user=user)
+        pastes = Paste.objects(user=user).order_by('-updated_at')
         return { 'user': user, 'pastes': pastes}
     return abort(404)
