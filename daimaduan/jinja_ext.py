@@ -1,4 +1,5 @@
 from bottle import request
+from bottle import DEBUG
 from bottle import TEMPLATE_PATH, Jinja2Template
 
 def view():
@@ -16,15 +17,30 @@ def func_name():
     except:
         return 'unknown'
 
-TEMPLATE_PATH[:] = ['templates']
+class JinajaPlugin(object):
+    name = 'jinja_ext'
+    api  = 2
 
-Jinja2Template.settings = {
-    'autoescape': True,
-}
+    def setup(self, app):
+        self.app = app
 
-Jinja2Template.defaults = {
-    'request': request,
-    'view_name': view_name,
-    'func_name': func_name
-}
+        TEMPLATE_PATH[:] = ['templates']
+
+        Jinja2Template.settings = {
+            'autoescape': True,
+        }
+
+        Jinja2Template.defaults = {
+            'request': request,
+            'view_name': view_name,
+            'func_name': func_name,
+            'config': app.config,
+            'debug': DEBUG
+        }
+
+    def apply(self, callback, route):
+        def wrapper(*args, **kwargs):
+            return callback(*args, **kwargs)
+        return wrapper
+
 
