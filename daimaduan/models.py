@@ -76,3 +76,7 @@ class Paste(BaseDocument):
 class Tag(BaseDocument):
     name = mongoengine.StringField(required=True, unique=True)
     popularity = mongoengine.IntField(default=1)
+
+
+class Syntax(BaseDocument):
+    name = mongoengine.StringField(required=True, unique=True)

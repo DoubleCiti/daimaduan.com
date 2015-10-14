@@ -3,15 +3,13 @@ from bottle import abort
 from bottle import request
 from bottle import redirect
 from bottle import jinja2_view
-from pygments.lexers import guess_lexer
-from pygments.util import ClassNotFound
 
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
 
 from daimaduan.forms import PasteForm
 
-from daimaduan.models import User
+from daimaduan.models import Syntax
 from daimaduan.models import Code
 from daimaduan.models import Paste
 from daimaduan.models import Tag
@@ -41,11 +39,7 @@ def create_post():
         paste = Paste(title=form.title.data, user=user)
         tags = []
         for c in form.codes:
-            try:
-                lexer = guess_lexer(c.content.data)
-                tag_name = lexer.name.lower()
-            except ClassNotFound:
-                tag_name = 'text'
+            tag_name = c.tag.data.lower()
             code = Code(title=c.title.data,
                         content=c.content.data,
                         tag=tag_name,
@@ -85,7 +79,7 @@ def edit_get(hash_id):
     if paste.user.id != request.user.id:
         abort(404)
     data = {'title': paste.title,
-            'codes': [{'title': code.title, 'content': code.content} for code in paste.codes]}
+            'codes': [{'title': code.title, 'content': code.content, 'tag': code.tag} for code in paste.codes]}
     form = PasteForm(data=data)
     return {'form': form, 'paste': paste}
 
@@ -108,11 +102,7 @@ def edit_post(hash_id):
             paste.codes.remove(code)
             code.delete()
         for c in form.codes:
-            try:
-                lexer = guess_lexer(c.content.data)
-                tag_name = lexer.name.lower()
-            except ClassNotFound:
-                tag_name = 'text'
+            tag_name = c.tag.data.lower()
             code = Code(title=c.title.data,
                         content=c.content.data,
                         tag=tag_name,
