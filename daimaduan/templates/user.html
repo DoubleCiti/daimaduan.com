@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+{% block content %}
+<div class="sidebar col-md-3 jumbotron">
+    <div class="name">
+        {{ user.username }}
+    </div>
+    <div class="gravatar">
+        <img src="http://www.gravatar.com/avatar/{{ user.get_email_hash() }}">
+    </div>
+</div>
+<div class="col-md-9">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#info" data-toggle="tab">个人信息</a></li>
+        <li><a href="#pastes" data-toggle="tab">代码段</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="info"></div>
+        <div class="tab-pane fade in" id="pastes">
+            <ul class="list-group">
+                {% for paste in pastes %}
+                    {% include ('items/_paste.html') %}
+                {% endfor %}
+                <li class="list-group-item">
+                    <button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

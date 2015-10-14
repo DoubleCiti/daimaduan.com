@@ -34,6 +34,9 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
+    def get_email_hash(self):
+        return hashlib.md5(self.email).hexdigest()
+
 
 class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)

@@ -7,6 +7,7 @@ from bottle import abort
 from bottle import jinja2_view
 
 from daimaduan.models import User
+from daimaduan.models import Paste
 
 from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
@@ -51,3 +52,12 @@ def signup_post():
         user.save()
         return redirect('/signin')
     return { 'form': form }
+
+@app.get('/<username>')
+@jinja2_view('user.html')
+def user_index(username):
+    user = User.objects(username=username).first()
+    if user:
+        pastes = Paste.objects(user=user)
+        return { 'user': user, 'pastes': pastes}
+    return abort(404)
