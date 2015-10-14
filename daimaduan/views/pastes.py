@@ -15,13 +15,13 @@ from daimaduan.models import Paste
 from daimaduan.models import Tag
 
 
-@app.route('/')
+@app.route('/', name='pastes.index')
 @jinja2_view('index.html')
 def index():
     return {'pastes': Paste.objects().order_by('-updated_at')}
 
 
-@app.get('/create')
+@app.get('/create', name='pastes.create')
 @login.login_required
 @jinja2_view('pastes/create.html')
 def create_get():
@@ -29,7 +29,7 @@ def create_get():
     return {'form': form}
 
 
-@app.post('/create')
+@app.post('/create', name='pastes.create')
 @login.login_required
 @jinja2_view('pastes/create.html')
 def create_post():
@@ -60,7 +60,7 @@ def create_post():
 
 
 
-@app.route('/paste/<hash_id>')
+@app.route('/paste/<hash_id>', name='pastes.show')
 @jinja2_view('pastes/view.html')
 def view(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
@@ -69,7 +69,7 @@ def view(hash_id):
     return {'paste': paste}
 
 
-@app.route('/paste/<hash_id>/edit')
+@app.route('/paste/<hash_id>/edit', name='pastes.update')
 @login.login_required
 @jinja2_view('pastes/edit.html')
 def edit_get(hash_id):
@@ -84,7 +84,7 @@ def edit_get(hash_id):
     return {'form': form, 'paste': paste}
 
 
-@app.post('/paste/<hash_id>/edit')
+@app.post('/paste/<hash_id>/edit', name='pastes.update')
 @login.login_required
 @jinja2_view('pastes/edit.html')
 def edit_post(hash_id):
@@ -122,13 +122,13 @@ def edit_post(hash_id):
     return {'form': form, 'paste': paste}
 
 
-@app.route('/tags')
+@app.route('/tags', name='tags.index')
 @jinja2_view('tags/index.html')
 def tags():
     return {'tags': Tag.objects().order_by('-popularity')}
 
 
-@app.route('/tag/<tag_name>')
+@app.route('/tag/<tag_name>', name='tags.show')
 @jinja2_view('tags/view.html')
 def tag(tag_name):
     return {'tag': Tag.objects(name=tag_name).first(),

@@ -2,20 +2,17 @@ from bottle import request
 from bottle import DEBUG
 from bottle import TEMPLATE_PATH, Jinja2Template
 
-def view():
-    return request.route.callback
-
 def view_name():
     try:
-        return view().__module__.replace('daimaduan.views.', '')
+        return request.route.name.split('.')[0]
     except:
-        return 'unknown'
+        return 'errors'
 
-def func_name():
+def view_func():
     try:
-        return view().__name__
+        return request.route.name.split('.')[-1]
     except:
-        return 'unknown'
+        return 'error'
 
 class JinajaPlugin(object):
     name = 'jinja_ext'
@@ -33,7 +30,7 @@ class JinajaPlugin(object):
         Jinja2Template.defaults = {
             'request': request,
             'view_name': view_name,
-            'func_name': func_name,
+            'view_func': view_func,
             'config': app.config,
             'debug': DEBUG
         }
