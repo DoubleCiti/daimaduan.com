@@ -12,8 +12,9 @@
 		<link href="//cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="http://yandex.st/highlightjs/8.0/styles/github.min.css" rel="stylesheet">
 		<link href="/static/css/app.css" rel="stylesheet">
+		<link href="/static/css/{{ view_name() }}.css" rel="stylesheet">
 	</head>
-	<body>
+	<body class="view_{{ view_name() }} func_{{ view_func() }}">
 		{% include 'shared/header.html' %}
 		
 		<div class="container">
@@ -36,32 +37,22 @@
 			</div>
 		</div>
 
-	<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
-	<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	
-	<script type="text/javascript">
-	(function() {
-		var po = document.createElement('script');
-		po.type = 'text/javascript'; po.async = true;
-		po.src = 'https://plus.google.com/js/client:plusone.js';
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(po, s);
-	})();
-	</script>
-	<script src="/static/js/app.js"></script>
-	{% block javascript %}{% endblock %}
-	<script type="text/javascript">
-	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-	var disqus_shortname = 'daimaduan'; // required: replace example with your forum shortname
+		<script type="text/javascript">
+		(function() {
+			var po = document.createElement('script');
+			po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://plus.google.com/js/client:plusone.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(po, s);
+		})();
+		</script>
 
-	/* * * DON'T EDIT BELOW THIS LINE * * */
-	(function () {
-		var s = document.createElement('script'); s.async = true;
-		s.type = 'text/javascript';
-		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-	}());
-	</script>
+		<script src="/static/js/app.js"></script>
+		<script src="/static/js/{{ view_name() }}.js"></script>
+		{% include 'shared/script_disqus.html' %}
 	</body>
 </html>

@@ -12,13 +12,13 @@ from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
 
 
-@app.get('/signin')
+@app.get('/signin', name='users.signin')
 @jinja2_view('signin.html')
 def signin_get():
     return {'form': SigninForm()}
 
 
-@app.post('/signin')
+@app.post('/signin', name='users.signin')
 @jinja2_view('signin.html')
 def signin_post():
     form = SigninForm(request.POST)
@@ -29,19 +29,19 @@ def signin_post():
         return locals();
 
 
-@app.delete('/signout')
+@app.delete('/signout', name='users.signout')
 def signout_delete():
     login.logout_user()
     request.environ.get('beaker.session').delete()
 
 
-@app.get('/signup')
+@app.get('/signup', name='users.signup')
 @jinja2_view('signup.html')
 def signup_get():
     return {'form': SignupForm()}
 
 
-@app.post('/signup')
+@app.post('/signup', name='users.signup')
 @jinja2_view('signup.html')
 def signup_post():
     form = SignupForm(request.forms)
