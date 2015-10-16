@@ -1,11 +1,13 @@
-# daimaduan.com
+daimaduan.com
+=============
+[![Build Status](https://travis-ci.org/DoubleCiti/daimaduan.com.svg?branch=master)](https://travis-ci.org/DoubleCiti/daimaduan.com)
+
 source code of daimaduan.com
 
 ## 项目依赖
 
-* Python 2.6+
-* pip 6+
-* mongodb
+* Python 2.7
+* MongoDB 3.0+
 
 ## 本地运行开发服务器
 
