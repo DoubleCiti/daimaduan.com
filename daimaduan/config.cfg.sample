@@ -6,3 +6,8 @@ database = daimaduan
 debug = true
 secret_key = "youdon'tneedtoknow"
 disqus = daimaduan
+
+[oauth.google]
+app_key = 572596272656-9urgn16qjoj36c439pecjcjmsogs76au.apps.googleusercontent.com
+app_secret = 4pdjsuBW6u0-QzDlo7Bo2IVm
+callback_url = http://daimaduan.dev:8080/oauth/callback

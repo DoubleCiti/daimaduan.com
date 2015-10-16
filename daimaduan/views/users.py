@@ -1,10 +1,15 @@
 # coding: utf-8
-from daimaduan.bootstrap import app
-from daimaduan.bootstrap import login
+import json
+
 from bottle import request
 from bottle import redirect
 from bottle import abort
 from bottle import jinja2_view
+
+from daimaduan.bootstrap import app
+from daimaduan.bootstrap import login
+from daimaduan.bootstrap import oauth_google
+from daimaduan.bootstrap import logger
 
 from daimaduan.models import User
 from daimaduan.models import Paste
@@ -12,6 +17,28 @@ from daimaduan.models import Paste
 from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
 
+@app.get('/oauth/<provider>', name='oauth.signin')
+def oauth_signin(provider):
+    redirect_url = app.config['oauth.google.callback_url']
+    url = oauth_google.get_authorize_url(scope='email profile',
+                                         response_type='code',
+                                         redirect_uri=redirect_url)
+    redirect(url)
+
+@app.route('/oauth/<provider>/callback', name='oauth.callback')
+def oauth_callback(provider):
+    data = dict(code=request.params.get('code'),
+                grant_type='authorization_code',
+                redirect_uri=app.config['oauth.google.callback_url'])
+    oauth_session = oauth_google.get_auth_session(data=data, decoder=json.loads)
+
+    access_token = oauth_session.access_token
+    logger.info("%s oauth access token is: %s" % (provider, access_token))
+
+    user_info = oauth_session.get('userinfo').json()
+    logger.info('oauth user %(id)s email: %(email)s' % user_info)
+
+    return 'Welcome %(email)s!' % user_info
 
 @app.get('/signin', name='users.signin')
 @jinja2_view('signin.html')
