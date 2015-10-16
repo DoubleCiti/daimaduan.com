@@ -13,3 +13,11 @@ pre.panel-body {
   margin: 0;
 }
 
+.name {
+    padding-right: 30px;
+    font-size: 24px;
+}
+
+.container .jumbotron {
+    padding: 20px 20px 20px 20px;
+}

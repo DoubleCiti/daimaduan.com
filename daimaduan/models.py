@@ -34,6 +34,10 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
+    @property
+    def gravatar_url(self):
+        return "http://gravatar.duoshuo.com/avatar/%s" % hashlib.md5(self.email).hexdigest()
+
 
 class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)
