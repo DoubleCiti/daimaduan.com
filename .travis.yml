@@ -1,4 +1,6 @@
 language: python
+notifications:
+  slack: gdgxian:pJNN3YhXXtlyA3GXwrih3Qpl
 python:
   - "2.7"
 install:
