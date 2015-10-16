@@ -13,3 +13,4 @@ pymongo==2.8
 six==1.9.0
 wheel==0.24.0
 WTForms==2.0.2
+oauth2
