@@ -27,7 +27,7 @@ def signin_post():
         login.login_user(str(form.user.id))
         redirect('/')
     else:
-        return locals();
+        return locals()
 
 
 @app.delete('/signout', name='users.signout')
@@ -51,7 +51,7 @@ def signup_post():
         form.populate_obj(user)
         user.save()
         return redirect('/signin')
-    return { 'form': form }
+    return {'form': form}
 
 
 @app.get('/user/<username>')
@@ -60,5 +60,5 @@ def user_index(username):
     user = User.objects(username=username).first()
     if user:
         pastes = Paste.objects(user=user).order_by('-updated_at')
-        return { 'user': user, 'pastes': pastes}
+        return {'user': user, 'pastes': pastes}
     return abort(404)

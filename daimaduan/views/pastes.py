@@ -9,7 +9,6 @@ from daimaduan.bootstrap import login
 
 from daimaduan.forms import PasteForm
 
-from daimaduan.models import Syntax
 from daimaduan.models import Code
 from daimaduan.models import Paste
 from daimaduan.models import Tag
@@ -57,7 +56,6 @@ def create_post():
         paste.save()
         return redirect('/paste/%s' % paste.hash_id)
     return {'form': form}
-
 
 
 @app.route('/paste/<hash_id>', name='pastes.show')

@@ -35,15 +35,15 @@ def view_func():
     If faild to get the function name, `error` will be returned instead.
     """
 
-
     try:
         return request.route.name.split('.')[-1]
     except:
         return 'error'
 
+
 class JinajaPlugin(object):
     name = 'jinja_ext'
-    api  = 2
+    api = 2
 
     def setup(self, app):
         self.app = app
@@ -66,5 +66,3 @@ class JinajaPlugin(object):
         def wrapper(*args, **kwargs):
             return callback(*args, **kwargs)
         return wrapper
-
-
