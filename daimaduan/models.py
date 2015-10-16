@@ -10,7 +10,7 @@ mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.hos
 
 
 class BaseDocument(mongoengine.Document):
-    meta = { 'abstract': True, 'strict': False }
+    meta = {'abstract': True, 'strict': False}
 
     created_at = mongoengine.DateTimeField(default=datetime.datetime.now)
     updated_at = mongoengine.DateTimeField(default=datetime.datetime.now)
@@ -20,7 +20,7 @@ class User(BaseDocument):
     username = mongoengine.StringField(required=True)
     email = mongoengine.StringField(required=True)
     password = mongoengine.StringField(required=True)
-    salt= mongoengine.StringField()
+    salt = mongoengine.StringField()
 
     def save(self, *args, **kwargs):
         if not self.salt:

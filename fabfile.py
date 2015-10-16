@@ -1,4 +1,9 @@
-from fabric.api import *
+from fabric.context_managers import cd
+from fabric.operations import local
+from fabric.operations import sudo
+from fabric.operations import run
+from fabric.operations import put
+from fabric.state import env
 
 
 env.colorize_errors = True
@@ -21,9 +26,9 @@ def pack():
 
 def bootstrap():
     sudo('mkdir -p %s' % APP_PATH)
-    sudo('chown %s:%s %s' %(env.user, env.user, APP_PATH))
+    sudo('chown %s:%s %s' % (env.user, env.user, APP_PATH))
     sudo('mkdir -p %s' % LOG_PATH)
-    sudo('chown %s:%s %s' %(env.user, env.user, LOG_PATH))
+    sudo('chown %s:%s %s' % (env.user, env.user, LOG_PATH))
     with cd(APP_PATH):
         run('virtualenv --distribute venv')
 
