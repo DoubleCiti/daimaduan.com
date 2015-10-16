@@ -11,6 +11,5 @@ if __name__ == '__main__':
         return static_file(filepath, root='./static')
 
     run(application, host='0.0.0.0',
-                     server='paste',
                      port=8080,
                      reloader=True)
