@@ -18,3 +18,9 @@
   </div>
 </div>
 {% endblock %}
+{% block sidebar %}
+<div class="panel panel-default">
+  <div>最后修改时间: {{ paste.updated_at }}</div>
+  <div id="rate" data-score="{{ paste.rate }}" data-id="{{ paste.hash_id }}"></div>
+</div>
+{% endblock %}

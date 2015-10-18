@@ -50,8 +50,6 @@ class Code(BaseDocument):
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
         self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
-        if not self.title:
-            self.title = u'代码片段: %s' % self.hash_id
         super(Code, self).save(*args, **kwargs)
 
     def name(self):
@@ -72,7 +70,8 @@ class Paste(BaseDocument):
 
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
-        self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
+        if not self.hash_id:
+            self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
         if not self.title:
             self.title = u'代码集合: %s' % self.hash_id
         super(Paste, self).save(*args, **kwargs)

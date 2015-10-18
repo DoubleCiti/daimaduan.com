@@ -3,7 +3,7 @@ from wtforms import Form
 from wtforms import StringField
 from wtforms import PasswordField
 from wtforms.validators import InputRequired
-from models import User
+from daimaduan.models import User
 
 
 class SigninForm(Form):
