@@ -12,6 +12,7 @@ if DEBUG:
 import daimaduan.views.pastes
 import daimaduan.views.users
 
+
 @login.load_user
 def load_user(user_id):
     return User.objects(id=user_id).first()
@@ -22,6 +23,7 @@ def before_request():
     # this line is used for bottle-login plugin
     request.environ['session'] = request.environ.get('beaker.session')
     request.user = login.get_user()
+
 
 @app.hook('after_request')
 def after_request():

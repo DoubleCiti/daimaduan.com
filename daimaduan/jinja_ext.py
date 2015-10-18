@@ -10,6 +10,7 @@ from bottle import request
 from bottle import DEBUG
 from bottle import TEMPLATE_PATH, Jinja2Template
 
+
 def view_name():
     """Get request's view name
 
@@ -24,6 +25,7 @@ def view_name():
         return request.route.name.split('.')[0]
     except:
         return 'errors'
+
 
 def view_func():
     """Get request's function name.
