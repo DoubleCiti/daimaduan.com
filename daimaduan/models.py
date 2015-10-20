@@ -22,6 +22,8 @@ class User(BaseDocument):
     password = mongoengine.StringField(required=True)
     salt= mongoengine.StringField()
 
+    oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
+
     def save(self, *args, **kwargs):
         if not self.salt:
             self.salt = hashlib.sha1(str(time.time())).hexdigest()
@@ -34,6 +36,20 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
+    @classmethod
+    def find_by_oauth(cls, provider, openid):
+        oauth = UserOauth.objects(provider=provider, openid=openid).first()
+
+        if oauth and oauth.user:
+            return user
+
+
+class UserOauth(BaseDocument):
+    user = mongoengine.ReferenceField('User')
+
+    provider = mongoengine.StringField(required=True)
+    openid = mongoengine.StringField(required=True)
+    token = mongoengine.StringField(required=True)
 
 class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)
