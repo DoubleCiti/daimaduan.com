@@ -58,7 +58,10 @@ def oauth_callback(provider):
 @app.get('/signin', name='users.signin')
 @jinja2_view('signin.html')
 def signin_get():
-    return {'form': SigninForm()}
+    if request.user:
+        redirect('/')
+    else:
+        return {'form': SigninForm()}
 
 
 @app.post('/signin', name='users.signin')
@@ -87,7 +90,10 @@ def signout_delete():
 @app.get('/signup', name='users.signup')
 @jinja2_view('signup.html')
 def signup_get():
-    return {'form': SignupForm()}
+    if request.user:
+        redirect('/')
+    else:
+        return {'form': SignupForm()}
 
 
 @app.post('/signup', name='users.signup')
