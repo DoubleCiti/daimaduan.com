@@ -11,7 +11,7 @@ from daimaduan.models import UserOauth
 def get_session(request):
     """Get session instance from request"""
 
-    request.environ.get('beaker.session')
+    return request.environ.get('beaker.session')
 
 
 def user_bind_oauth(user, session):
@@ -22,3 +22,9 @@ def user_bind_oauth(user, session):
                       openid=session['oauth_openid'],
                       token=session['oauth_token'])
     oauth.save()
+
+    # Clear oauth info in session
+    del session['oauth_provider']
+    del session['oauth_openid']
+    del session['oauth_name']
+    del session['oauth_token']

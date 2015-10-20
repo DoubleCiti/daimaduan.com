@@ -50,6 +50,7 @@ def oauth_callback(provider):
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:
+        # TODO: 直接登录时更新 token.
         login.login_user(str(user.id))
         redirect('/')
     else:
@@ -69,7 +70,10 @@ def signin_post():
     form = SigninForm(request.POST)
     if form.validate():
         login.login_user(str(form.user.id))
-        user_bind_oauth(form.user, )
+        
+        if session['oauth_provider']:
+            user_bind_oauth(form.user, session)
+
         redirect('/')
     else:
         return locals()
@@ -95,6 +99,7 @@ def signup_post():
         user = User()
         form.populate_obj(user)
         user.save()
+
         return redirect('/signin')
     return {'form': form}
 
