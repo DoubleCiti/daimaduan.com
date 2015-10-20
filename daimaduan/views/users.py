@@ -26,7 +26,10 @@ def oauth_signin(provider):
     redirect(url)
 
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
+@jinja2_view('oauths/callback.html')
 def oauth_callback(provider):
+    session = request.environ['session']
+
     data = dict(code=request.params.get('code'),
                 grant_type='authorization_code',
                 redirect_uri=app.config['oauth.google.callback_url'])
@@ -36,9 +39,18 @@ def oauth_callback(provider):
     logger.info("%s oauth access token is: %s" % (provider, access_token))
 
     user_info = oauth_session.get('userinfo').json()
-    logger.info('oauth user %(id)s email: %(email)s' % user_info)
+    session['oauth_provider'] = provider
+    session['oauth_openid'] = user_info['id']
+    session['oauth_name'] = user_info['name']
+    session['oauth_token'] = access_token
+    logger.info('%s oauth user info is: %s' % (provider, user_info))
 
-    return 'Welcome %(email)s!' % user_info
+    user = User.find_by_oauth(provider, user_info['id'])
+    if user:
+        login.login_user(str(user.id))
+        redirect('/')
+    else:
+        return { 'user_info': user_info }
 
 @app.get('/signin', name='users.signin')
 @jinja2_view('signin.html')
