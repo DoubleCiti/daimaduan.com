@@ -11,13 +11,15 @@ from daimaduan.forms import PasteForm
 
 from daimaduan.models import Code
 from daimaduan.models import Paste
+from daimaduan.models import Rate
 from daimaduan.models import Tag
 
 
 @app.route('/', name='pastes.index')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Paste.objects().order_by('-updated_at')}
+    return {'pastes': Paste.objects().order_by('-updated_at')[:10],
+            'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
 @app.get('/create', name='pastes.create')
@@ -37,8 +39,10 @@ def create_post():
         user = login.get_user()
         paste = Paste(title=form.title.data, user=user)
         tags = []
-        for c in form.codes:
+        for i, c in enumerate(form.codes):
             tag_name = c.tag.data.lower()
+            if not c.title.data:
+                c.title.data = '代码片段%s' % (i + 1)
             code = Code(title=c.title.data,
                         content=c.content.data,
                         tag=tag_name,
@@ -99,8 +103,10 @@ def edit_post(hash_id):
         for code in paste.codes:
             paste.codes.remove(code)
             code.delete()
-        for c in form.codes:
+        for i, c in enumerate(form.codes):
             tag_name = c.tag.data.lower()
+            if not c.title.data:
+                c.title.data = '代码片段%s' % (i + 1)
             code = Code(title=c.title.data,
                         content=c.content.data,
                         tag=tag_name,
@@ -118,6 +124,29 @@ def edit_post(hash_id):
         paste.save()
         return redirect('/paste/%s' % paste.hash_id)
     return {'form': form, 'paste': paste}
+
+
+@app.post('/rate/<hash_id>', name='rate.post')
+@login.login_required
+def rate_post(hash_id):
+    score = request.forms.get('score', None)
+    if not score:
+        abort(404)
+    paste = Paste.objects(hash_id=hash_id).first()
+    if not paste:
+        abort(404)
+    user = login.get_user()
+    rate = Rate.objects(paste=paste, user=user).first()
+    if not rate:
+        rate = Rate(paste=paste, user=user, score=request.forms.get('score', score))
+        rate.save()
+    rates = 0
+    rate_objects = Rate.objects(paste=paste)
+    for t in rate_objects:
+        rates += t.score
+    paste.rate = int(rates / len(rate_objects))
+    paste.save()
+    return {'status': 'ok'}
 
 
 @app.route('/tags', name='tags.index')

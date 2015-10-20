@@ -14,7 +14,26 @@
     });
   }
 
+  function initRate() {
+    $('#rate').raty({
+      score: function() {
+        return $(this).attr('data-score');
+      },
+      click: function(score, evt) {
+        $.ajax({
+          data: 'score=' + score,
+          type: 'POST',
+          url: '/rate/' + $(this).attr('data-id'),
+          success: function() {
+            return true;
+          }
+        });
+      }
+    });
+  }
+
   $(document).ready(function() {
     initCodes();
+    initRate();
   });
 })();

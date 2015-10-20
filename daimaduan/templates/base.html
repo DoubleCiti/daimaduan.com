@@ -11,6 +11,7 @@
 		<link href="//cdn.bootcss.com/bootswatch/3.3.5/lumen/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="http://yandex.st/highlightjs/8.0/styles/github.min.css" rel="stylesheet">
+		<link href="/static/css/jquery.raty.css" rel="stylesheet">
 		<link href="/static/css/app.css" rel="stylesheet">
 		<link href="/static/css/{{ view_name() }}.css" rel="stylesheet">
 	</head>
@@ -18,7 +19,8 @@
 		{% include 'shared/header.html' %}
 		
 		<div class="container">
-			{% block content %}{% endblock %}
+			<div class="col-md-9">{% block content %}{% endblock %}</div>
+			<div class="col-md-3">{% block sidebar %}{% endblock %}</div>
 		</div>
 
 		<div class="container">
@@ -40,6 +42,7 @@
 		<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="/static/js/jquery.raty.js"></script>
 	
 		<script type="text/javascript">
 		(function() {

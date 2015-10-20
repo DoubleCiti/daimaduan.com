@@ -14,3 +14,13 @@
 	</ul>
 </div>
 {% endblock %}
+{% block sidebar %}
+<div class="panel panel-default">
+	<div class="panel-heading">热门标签</div>
+	<div class="content">
+	{% for tag in tags %}
+	{% include('items/_tag.html') %}
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}
