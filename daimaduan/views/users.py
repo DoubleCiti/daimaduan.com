@@ -41,18 +41,20 @@ def oauth_callback(provider):
     logger.info("%s oauth access token is: %s" % (provider, access_token))
 
     user_info = oauth_session.get('userinfo').json()
-    session['oauth_provider'] = provider
-    session['oauth_openid'] = user_info['id']
-    session['oauth_name'] = user_info['name']
-    session['oauth_token'] = access_token
     logger.info('%s oauth user info is: %s' % (provider, user_info))
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:
         # TODO: 直接登录时更新 token.
         login.login_user(str(user.id))
-        redirect('/')
+        return redirect('/')
     else:
+        session['oauth_provider'] = provider
+        session['oauth_openid'] = user_info['id']
+        session['oauth_name'] = user_info['name']
+        session['oauth_token'] = access_token
+        session.save()
+
         return { 'user_info': user_info }
 
 @app.get('/signin', name='users.signin')
@@ -73,7 +75,7 @@ def signin_post():
     if form.validate():
         login.login_user(str(form.user.id))
         
-        if session['oauth_provider']:
+        if 'oauth_provider' in session:
             user_bind_oauth(form.user, session)
 
         redirect('/')
