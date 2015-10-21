@@ -45,9 +45,10 @@ def oauth_callback(provider):
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:
+        # import pdb; pdb.set_trace()
         # TODO: 直接登录时更新 token.
         login.login_user(str(user.id))
-        return redirect('/')
+        redirect('/')
     else:
         session['oauth_provider'] = provider
         session['oauth_openid'] = user_info['id']
@@ -73,6 +74,7 @@ def signin_post():
 
     form = SigninForm(request.POST)
     if form.validate():
+        # import pdb; pdb.set_trace()
         login.login_user(str(form.user.id))
         
         if 'oauth_provider' in session:
@@ -80,7 +82,7 @@ def signin_post():
 
         redirect('/')
     else:
-        return locals();
+        return locals()
 
 
 @app.delete('/signout', name='users.signout')

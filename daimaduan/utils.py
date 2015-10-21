@@ -10,8 +10,8 @@ from daimaduan.models import UserOauth
 
 def get_session(request):
     """Get session instance from request"""
-
-    return request.environ.get('beaker.session')
+    return request.environ.get('session')
+    # return request.environ.get('beaker.session')
 
 
 def user_bind_oauth(user, session):

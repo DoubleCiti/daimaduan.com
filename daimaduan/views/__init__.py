@@ -15,19 +15,25 @@ import daimaduan.views.users
 
 @login.load_user
 def load_user(user_id):
+    # import pdb; pdb.set_trace()
     return User.objects(id=user_id).first()
 
 
 @app.hook('before_request')
 def before_request():
     # this line is used for bottle-login plugin
-    request.environ['session'] = request.environ.get('beaker.session')
+    # request.environ['session'] = request.environ.get('beaker.session')
+    # import pdb; pdb.set_trace()
+    # request.user = None
+    # if request.environ.get('session', None):
     request.user = login.get_user()
+
 
 @app.hook('after_request')
 def after_request():
+    pass
     # update beaker.session and then save it
-    request.environ.get('beaker.session').update(request.environ['session'])
-    request.environ.get('beaker.session').save()
-    Jinja2Template.defaults['session'] = request.environ.get('beaker.session')
-
+    # request.environ.get('beaker.session').update(request.environ['session'])
+    # request.environ.get('beaker.session').save()
+    # Jinja2Template.defaults['session'] = request.environ.get('beaker.session')
+    # Jinja2Template.defaults['session'] = request.environ.get('session')
