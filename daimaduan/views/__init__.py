@@ -21,15 +21,10 @@ def load_user(user_id):
 
 @app.hook('before_request')
 def before_request():
-    # this line is used for bottle-login plugin
-    request.environ['session'] = request.environ.get('beaker.session')
     request.user = login.get_user()
 
 
 @app.hook('after_request')
 def after_request():
-    # update beaker.session and then save it
-    request.environ.get('beaker.session').update(request.environ['session'])
-    request.environ.get('beaker.session').save()
     Jinja2Template.defaults['session'] = request.environ.get('beaker.session')
 
