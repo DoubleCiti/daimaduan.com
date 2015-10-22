@@ -20,6 +20,7 @@ from daimaduan.forms import SigninForm
 from daimaduan.utils import user_bind_oauth
 from daimaduan.utils import get_session
 
+
 @app.get('/oauth/<provider>', name='oauth.signin')
 def oauth_signin(provider):
     redirect_url = app.config['oauth.google.callback_url']
@@ -27,6 +28,7 @@ def oauth_signin(provider):
                                          response_type='code',
                                          redirect_uri=redirect_url)
     redirect(url)
+
 
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
 @jinja2_view('oauths/callback.html')
@@ -56,7 +58,8 @@ def oauth_callback(provider):
         session['oauth_token'] = access_token
         session.save()
 
-        return { 'user_info': user_info }
+        return {'user_info': user_info}
+
 
 @app.get('/signin', name='users.signin')
 @jinja2_view('signin.html')
@@ -75,7 +78,7 @@ def signin_post():
     form = SigninForm(request.POST)
     if form.validate():
         login.login_user(str(form.user.id))
-        
+
         if 'oauth_provider' in session:
             user_bind_oauth(form.user, session)
 

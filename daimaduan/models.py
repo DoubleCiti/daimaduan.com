@@ -57,6 +57,7 @@ class UserOauth(BaseDocument):
     openid = mongoengine.StringField(required=True)
     token = mongoengine.StringField(required=True)
 
+
 class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)
 

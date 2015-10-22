@@ -27,4 +27,3 @@ def before_request():
 @app.hook('after_request')
 def after_request():
     Jinja2Template.defaults['session'] = request.environ.get('beaker.session')
-
