@@ -6,3 +6,12 @@ database = daimaduan
 debug = true
 secret_key = "youdon'tneedtoknow"
 disqus = daimaduan
+
+[oauth.google]
+name = google
+client_id = 572596272656-9urgn16qjoj36c439pecjcjmsogs76au.apps.googleusercontent.com
+client_secret = 4pdjsuBW6u0-QzDlo7Bo2IVm
+authorize_url = https://accounts.google.com/o/oauth2/auth
+access_token_url = https://accounts.google.com/o/oauth2/token
+base_url = https://www.googleapis.com/oauth2/v1/
+callback_url = http://daimaduan.dev:8080/oauth/google/callback

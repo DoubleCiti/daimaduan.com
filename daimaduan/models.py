@@ -22,6 +22,8 @@ class User(BaseDocument):
     password = mongoengine.StringField(required=True)
     salt = mongoengine.StringField()
 
+    oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
+
     def save(self, *args, **kwargs):
         if not self.salt:
             self.salt = hashlib.sha1(str(time.time())).hexdigest()
@@ -37,6 +39,23 @@ class User(BaseDocument):
     @property
     def gravatar_url(self):
         return "http://gravatar.duoshuo.com/avatar/%s" % hashlib.md5(self.email).hexdigest()
+
+    @classmethod
+    def find_by_oauth(cls, provider, openid):
+        """Find user that has oauth info with given provider and openid"""
+
+        oauth = UserOauth.objects(provider=provider, openid=openid).first()
+
+        if oauth and oauth.user:
+            return oauth.user
+
+
+class UserOauth(BaseDocument):
+    user = mongoengine.ReferenceField('User')
+
+    provider = mongoengine.StringField(required=True)
+    openid = mongoengine.StringField(required=True)
+    token = mongoengine.StringField(required=True)
 
 
 class Code(BaseDocument):

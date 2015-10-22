@@ -47,10 +47,13 @@ class JinajaPlugin(object):
     name = 'jinja_ext'
     api = 2
 
+    def __init__(self, template_path='templates'):
+        self.template_path = template_path
+
     def setup(self, app):
         self.app = app
 
-        TEMPLATE_PATH[:] = ['templates']
+        TEMPLATE_PATH[:] = [self.template_path]
 
         Jinja2Template.settings = {
             'autoescape': True,
