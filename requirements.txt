@@ -1,6 +1,6 @@
 Beaker==1.7.0
 bottle==0.12.8
-git+https://github.com/greatghoul/bottle-login.git@95f72461097c714a6a545e2480c9fa3f002c1bdf
+git+https://github.com/greatghoul/bottle-login.git@master
 ecdsa==0.13
 Fabric==1.10.2
 flake8==2.4.1
