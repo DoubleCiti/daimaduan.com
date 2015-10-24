@@ -10,5 +10,6 @@ function signoutHandler() {
 
 $(document).ready(function() {
     hljs.initHighlightingOnLoad();
+    hljs.initLineNumbersOnLoad();
     $(document).on('click', '.action-signout', signoutHandler);
 });
