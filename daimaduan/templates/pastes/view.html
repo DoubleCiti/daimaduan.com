@@ -5,12 +5,12 @@
   {% for code in paste.codes %}
   <div class="panel-heading">
     <div class="panel-title">
-      <h4>{{ code.title }}</h4>
+      <h4>{{ code.title }}{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h4>
     </div>
-    <a href="/tag/{{ code.tag }}" title="{{ code.tag }}" class="label label-warning">{{ code.tag }}</a>
+    <a href="/tag/{{ code.tag }}" title="{{ code.tag }}" class="btn btn-xs btn-warning">{{ code.tag }}</a>
   </div>
 
-  <pre class="panel-body"><code>{{ code.content | safe }}</code></pre>
+  <pre class="panel-body"><code>{{ code.content }}</code></pre>
   {% endfor %}
 
   <div class="panel-footer">
@@ -22,15 +22,15 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <div class="panel-title">
-      <h5>更多...</h5>
+      <h5>详情</h5>
     </div>
   </div>
   <div class="panel-body">
     {% if paste.user.id == request.user.id %}<span><a href="/paste/{{ paste.hash_id }}/edit">修改</a></span>{% endif %}
-    <div>标签: {% for tag in paste.tags %}<a href="/tag/{{ tag }}" title="{{ tag }}" class="label label-warning">{{ tag }}</a>{% endfor %}</div>
     <div>分享者: <span><a href="/user/{{ paste.user.username }}">{{ paste.user.username }}</a></span></div>
     <div>最后修改时间: {{ paste.updated_at }}</div>
     <div id="rate" data-score="{{ paste.rate }}" data-id="{{ paste.hash_id }}"></div>
+    <div>{% for tag in paste.tags %}<a href="/tag/{{ tag }}" title="{{ tag }}" class="btn btn-xs btn-warning">{{ tag }}</a>{% endfor %}</div>
   </div>
 </div>
 {% endblock %}

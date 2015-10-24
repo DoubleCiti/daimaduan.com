@@ -18,7 +18,7 @@ from daimaduan.models import Tag
 @app.route('/', name='pastes.index')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Paste.objects().order_by('-updated_at')[:10],
+    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:10],
             'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
@@ -37,7 +37,7 @@ def create_post():
     form = PasteForm(request.POST)
     if form.validate():
         user = login.get_user()
-        paste = Paste(title=form.title.data, user=user)
+        paste = Paste(title=form.title.data, user=user, is_private=form.is_private.data)
         tags = []
         for i, c in enumerate(form.codes):
             tag_name = c.tag.data.lower()
@@ -81,6 +81,7 @@ def edit_get(hash_id):
     if paste.user.id != request.user.id:
         abort(404)
     data = {'title': paste.title,
+            'is_private': paste.is_private,
             'codes': [{'title': code.title, 'content': code.content, 'tag': code.tag} for code in paste.codes]}
     form = PasteForm(data=data)
     return {'form': form, 'paste': paste}
@@ -99,6 +100,7 @@ def edit_post(hash_id):
     if form.validate():
         user = login.get_user()
         paste.title = form.title.data
+        paste.is_private = form.is_private.data
         tags = []
         for code in paste.codes:
             paste.codes.remove(code)

@@ -2,9 +2,9 @@
   <div class="pull-right">
     <a href="#" class="text-muted" title="paste.user.username">{{ paste.user.username }}</a>  
   </div>
-  <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">{{ paste.title }}</a>
+  <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">{{ paste.title }}</a>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}
   {% for tag in paste.tags %}
-    <a href="/tag/{{ tag }}" title="{{ tag }}" class="label label-warning">{{ tag }}</a>
+    <a href="/tag/{{ tag }}" class="btn btn-xs btn-warning" title="{{ tag }}">{{ tag }}</a>
   {% endfor %}
   <div class="clearfix"></div>
 </li>

@@ -83,6 +83,7 @@ class Paste(BaseDocument):
 
     title = mongoengine.StringField()
     hash_id = mongoengine.StringField()
+    is_private = mongoengine.BooleanField(default=False)
     codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
     tags = mongoengine.ListField(mongoengine.StringField())
     rate = mongoengine.IntField(default=0)
