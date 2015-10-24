@@ -1,37 +1,33 @@
 {% extends 'base.html' %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block content %}
-<div class="sidebar col-md-3 jumbotron">
-    <div class="name pull-right">
-        {{ user.username }}
-    </div>
-    <div class="gravatar pull-left">
-        <img src="{{ user.gravatar_url }}">
-    </div>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ user.username }} 的代码</div>
+
+	<ul class="list-group">
+		{% for paste in pastes %}
+			{% include ('items/_paste.html') %}
+		{% endfor %}
+		<li class="list-group-item">
+			<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+		</li>
+	</ul>
 </div>
-<div class="col-md-8">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#info" data-toggle="tab">个人信息</a></li>
-        <li><a href="#pastes" data-toggle="tab">代码段</a></li>
-    </ul>
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="info">
-            <ul class="list-group">
-                <li class="list-group-item">
-                        <strong>Email: </strong> {{ user.email }}
-                </li>
-            </ul>
-        </div>
-        <div class="tab-pane fade in" id="pastes">
-            <ul class="list-group">
-                {% for paste in pastes %}
-                    {% include ('items/_paste.html') %}
-                {% endfor %}
-                <li class="list-group-item">
-                    <button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
-                </li>
-            </ul>
-        </div>
+{% endblock %}
+{% block sidebar %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h5>{{ user.username }}</h5>
     </div>
+  </div>
+  <div class="panel-body">
+      <div>
+          <img src="{{ user.gravatar_url }}">
+      </div>
+      <div>
+          <strong>Email: </strong> {{ user.email }}
+      </div>
+  </div>
 </div>
 {% endblock %}
