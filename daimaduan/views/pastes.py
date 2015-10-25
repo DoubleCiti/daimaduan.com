@@ -165,7 +165,7 @@ def tag(tag_name):
 
 
 @app.route('/favourite/<hash_id>', name='favourites.add')
-def favourites(hash_id):
+def favourites_add(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
     if not paste:
         abort(404)
@@ -176,7 +176,7 @@ def favourites(hash_id):
 
 
 @app.route('/unfavourite/<hash_id>', name='favourites.remove')
-def favourites(hash_id):
+def favourites_remove(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
     if not paste:
         abort(404)

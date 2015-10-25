@@ -21,7 +21,7 @@ class User(BaseDocument):
     email = mongoengine.StringField(required=True)
     password = mongoengine.StringField(required=True)
     salt = mongoengine.StringField()
-    favourites =mongoengine.ListField(mongoengine.ReferenceField("Paste"))
+    favourites = mongoengine.ListField(mongoengine.ReferenceField("Paste"))
 
     oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
 
