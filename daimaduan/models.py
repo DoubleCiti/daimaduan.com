@@ -21,6 +21,7 @@ class User(BaseDocument):
     email = mongoengine.StringField(required=True)
     password = mongoengine.StringField(required=True)
     salt = mongoengine.StringField()
+    favourites = mongoengine.ListField(mongoengine.ReferenceField("Paste"))
 
     oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
 
@@ -48,6 +49,9 @@ class User(BaseDocument):
 
         if oauth and oauth.user:
             return oauth.user
+
+    def is_in_favourites(self, paste):
+        return paste in self.favourites
 
 
 class UserOauth(BaseDocument):
