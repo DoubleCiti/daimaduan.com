@@ -1,7 +1,6 @@
 from beaker.middleware import SessionMiddleware
 
 from daimaduan.bootstrap import app
-from daimaduan.bootstrap import app_root
 import daimaduan.views
 
 
