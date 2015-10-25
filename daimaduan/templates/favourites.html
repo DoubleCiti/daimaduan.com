@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="panel panel-default">
+	<div class="panel-heading">我的收藏</div>
+
+	<ul class="list-group">
+		{% for paste in pastes %}
+			{% include ('items/_paste.html') %}
+		{% endfor %}
+		<li class="list-group-item">
+			<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+		</li>
+	</ul>
+</div>
+{% endblock %}
+{% block sidebar %}
+<div class="panel panel-default">
+	<div class="panel-heading">热门标签</div>
+	<div class="content">
+	{% for tag in tags %}
+	{% include('items/_tag.html') %}
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}

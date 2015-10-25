@@ -13,6 +13,7 @@ from daimaduan.bootstrap import logger
 
 from daimaduan.models import User
 from daimaduan.models import Paste
+from daimaduan.models import Tag
 
 from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
@@ -123,3 +124,10 @@ def user_index(username):
         pastes = Paste.objects(user=user).order_by('-updated_at')
         return {'user': user, 'pastes': pastes}
     return abort(404)
+
+
+@app.get('/user/favourites')
+@jinja2_view('favourites.html')
+def favourites_get():
+    return {'pastes': request.user.favourites,
+            'tags': Tag.objects().order_by('-popularity')[:10]}
