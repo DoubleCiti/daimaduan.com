@@ -29,3 +29,4 @@ oauth_google = OAuth2Service(
     authorize_url=app.config['oauth.google.authorize_url'],
     access_token_url=app.config['oauth.google.access_token_url'],
     base_url=app.config['oauth.google.base_url'])
+
