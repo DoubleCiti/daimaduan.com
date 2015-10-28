@@ -1,6 +1,5 @@
 # coding: utf-8
 import bottle
-import os.path
 import logging
 
 from bottle_login import LoginPlugin
@@ -14,12 +13,8 @@ logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=loggin
 logger = logging.getLogger('daimaduan')
 
 # Auto cast `site.debug` to boolean type.
-app.config.meta_set('site.debug', 'filter', bool)
 app.config.load_config('config.cfg')
 app.config['SECRET_KEY'] = app.config['site.secret_key']
-
-# Setup bottle debug mode through config `site.debug`
-bottle.debug(app.config['site.debug'])
 
 jinja = JinajaPlugin(template_path='templates')
 login = LoginPlugin()

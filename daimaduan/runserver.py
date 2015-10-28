@@ -1,5 +1,3 @@
-import os.path
-
 from bottle import run
 from bottle import static_file
 
@@ -15,4 +13,5 @@ if __name__ == '__main__':
     run(application,
         host='0.0.0.0',
         port=8080,
+        debug=True,
         reloader=True)
