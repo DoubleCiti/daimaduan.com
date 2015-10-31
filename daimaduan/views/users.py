@@ -26,8 +26,9 @@ from daimaduan.utils import get_session
 def oauth_signin(provider):
     oauth_service = oauth_services[provider]
     redirect_uri = app.config['oauth.%s.callback_url' % provider]
+    scope = app.config['oauth.%s.scope' % provider]
 
-    url = oauth_service.get_authorize_url(scope='email profile',
+    url = oauth_service.get_authorize_url(scope=scope,
                                           response_type='code',
                                           redirect_uri=redirect_uri)
     redirect(url)
@@ -36,6 +37,7 @@ def oauth_signin(provider):
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
 @jinja2_view('oauths/callback.html')
 def oauth_callback(provider):
+    logger.info("Oauth callback for %s" % provider)
     redirect_uri = app.config['oauth.%s.callback_url' % provider]
     oauth_service = oauth_services[provider]
     session = get_session(request)
@@ -43,13 +45,19 @@ def oauth_callback(provider):
     data = dict(code=request.params.get('code'),
                 grant_type='authorization_code',
                 redirect_uri=redirect_uri)
-    oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
+
+    if provider == 'google':
+        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
+        user_info = oauth_session.get('userinfo').json()
+    else:
+        oauth_session = oauth_service.get_auth_session(data=data)
+        user_info = oauth_session.get('user').json()
 
     access_token = oauth_session.access_token
+    user_info['id'] = str(user_info['id'])
+    
     logger.info("%s oauth access token is: %s" % (provider, access_token))
-
-    user_info = oauth_session.get('userinfo').json()
-    logger.info('%s oauth user info is: %s' % (provider, user_info))
+    logger.info("%s oauth user info is %s" % (provider, user_info))
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:
