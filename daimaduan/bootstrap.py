@@ -1,6 +1,7 @@
 # coding: utf-8
 import bottle
 import logging
+import mongoengine
 
 from bottle_login import LoginPlugin
 from daimaduan.jinja_ext import JinajaPlugin
@@ -19,6 +20,8 @@ app.config['SECRET_KEY'] = app.config['site.secret_key']
 
 jinja = JinajaPlugin(template_path='templates')
 login = LoginPlugin()
+
+mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
 
 app.install(login)
 app.install(jinja)
