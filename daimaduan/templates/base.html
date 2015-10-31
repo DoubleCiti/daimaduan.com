@@ -19,26 +19,13 @@
 		{% include 'shared/header.html' %}
 		
 		<div class="container">
+			<div class="col-md-12">{% block full_content %}{% endblock %}</div>
 			<div class="col-md-9">{% block content %}{% endblock %}</div>
 			<div class="col-md-3">{% block sidebar %}{% endblock %}</div>
 		</div>
 
-		<div class="container">
-			<div class="col-md-12">
-			<hr />
-			<p class="flink container clearfix">
-				<span>© 2011 - 2015 <a href="https://github.com/DoubleCiti/daimaduan.com">daimaduan.com</a> All right reserved</span>
-<!-- 				<span class="pull-right">
-					<a href="/posts">开发日志</a> | 
-					<a href="/rss">订阅本站</a> | 
-					<a href="/page/faq">FAQ</a> | 
-					<a href="/page/about">关于我们</a> | 
-					<a href="/page/contact">联系我们</a>
-				</span> -->
-			</p>
-			</div>
-		</div>
-
+		{% include 'shared/footer.html' %}
+		
 		<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
