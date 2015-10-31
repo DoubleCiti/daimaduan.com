@@ -13,6 +13,17 @@ from bottle import response
 from daimaduan.models import UserOauth
 
 
+def oauth_config(config, provider):
+    return {
+        'name': config['oauth.%s.name' % provider],
+        'client_id': config['oauth.%s.client_id' % provider],
+        'client_secret': config['oauth.%s.client_secret' % provider],
+        'authorize_url': config['oauth.%s.authorize_url' % provider],
+        'access_token_url': config['oauth.%s.access_token_url' % provider],
+        'base_url': config['oauth.%s.base_url' % provider]
+    }
+
+
 def get_session(request):
     """Get session instance from request"""
 

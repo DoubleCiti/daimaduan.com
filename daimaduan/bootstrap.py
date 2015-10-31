@@ -4,6 +4,7 @@ import logging
 
 from bottle_login import LoginPlugin
 from daimaduan.jinja_ext import JinajaPlugin
+from daimaduan.utils import oauth_config
 from rauth import OAuth2Service
 
 app = bottle.default_app()
@@ -22,11 +23,6 @@ login = LoginPlugin()
 app.install(login)
 app.install(jinja)
 
-oauth_google = OAuth2Service(
-    name=app.config['oauth.google.name'],
-    client_id=app.config['oauth.google.client_id'],
-    client_secret=app.config['oauth.google.client_secret'],
-    authorize_url=app.config['oauth.google.authorize_url'],
-    access_token_url=app.config['oauth.google.access_token_url'],
-    base_url=app.config['oauth.google.base_url'])
-
+oauth_services = {}
+oauth_services['google'] = OAuth2Service(**oauth_config(app.config, 'google'))
+# oauth_services['github'] = OAuth2Service(**oauth_config(app.config, 'github'))
