@@ -55,7 +55,7 @@ def oauth_callback(provider):
 
     access_token = oauth_session.access_token
     user_info['id'] = str(user_info['id'])
-    
+
     logger.info("%s oauth access token is: %s" % (provider, access_token))
     logger.info("%s oauth user info is %s" % (provider, user_info))
 

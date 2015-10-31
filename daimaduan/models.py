@@ -4,12 +4,6 @@ import time
 import hashlib
 import mongoengine
 
-from bottle import request
-
-from daimaduan.bootstrap import app
-
-mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
-
 
 class BaseDocument(mongoengine.Document):
     meta = {'abstract': True, 'strict': False}
