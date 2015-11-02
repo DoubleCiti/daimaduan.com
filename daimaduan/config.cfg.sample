@@ -5,7 +5,9 @@ database = daimaduan
 [site]
 debug = true
 validate_key = "youdon'tneedtoknow"
+secret_key = "ddf4FP4U&VydAq"
 disqus = daimaduan-dev
+token_salt = "iamDavid"
 
 [oauth.google]
 name = google
@@ -26,3 +28,9 @@ access_token_url = https://github.com/login/oauth/access_token
 base_url = https://api.github.com/
 callback_url = http://daimaduan.dev:8080/oauth/github/callback
 scope = user:email
+
+[mail]
+username = daimaduan
+password = guessme
+host = smtp.gmail.com
+port = 587

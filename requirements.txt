@@ -23,3 +23,5 @@ WTForms==2.0.2
 requests==1.2.3
 rauth==0.6.2
 bottle-rauth==0.1.1
+itsdangerous==0.24
+mailthon==0.1.1

@@ -1,5 +1,6 @@
 # coding: utf-8
 import json
+import datetime
 
 from bottle import request
 from bottle import redirect
@@ -9,7 +10,6 @@ from bottle import jinja2_view
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
 from daimaduan.bootstrap import oauth_services
-from daimaduan.bootstrap import logger
 
 from daimaduan.models import User
 from daimaduan.models import Paste
@@ -20,6 +20,10 @@ from daimaduan.forms import SigninForm
 
 from daimaduan.utils import user_bind_oauth, jsontify
 from daimaduan.utils import get_session
+
+from daimaduan.utils import validate_token
+from daimaduan.utils import send_confirm_mail
+from daimaduan.utils import logger
 
 
 @app.get('/oauth/<provider>', name='oauth.signin')
@@ -123,8 +127,10 @@ def signup_post():
         user = User()
         form.populate_obj(user)
         user.save()
+        login.login_user(user.id)
+        send_confirm_mail(app.config, user.email)
 
-        return redirect('/signin')
+        return redirect('/active_email')
     return {'form': form}
 
 
@@ -154,3 +160,36 @@ def favourites_more():
     if not p:
         return {}
     return {'pastes': [paste.to_json() for paste in request.user.get_favourites_by_page(p)]}
+
+
+@app.get('/confirm/<token>')
+@jinja2_view('email/confirm.html')
+def confirm_email(token):
+    email = validate_token(app.config, token)
+    if email:
+        user = User.objects(email=email).first()
+        if user:
+            if user.is_email_confirmed:
+                return {'title': u"Email已经激活过了", 'message': u"对不起，您的email已经激活过了。"}
+            else:
+                user.is_email_confirmed = True
+                user.email_confirmed_on = datetime.datetime.now()
+                user.save()
+                return {'title': u'Email已经激活', 'message': u'您的email已经激活，请点击登录查看最新代码段。'}
+    return {'title': u'Email验证链接错误', 'message': u'对不起，您的验证链接无效或者已经过期。'}
+
+
+@app.get('/active_email')
+@jinja2_view('email/active.html')
+def active_email():
+    return {'email': request.user.email, 'title': u'注册成功'}
+
+
+@app.get('/sendmail/<email>')
+@jinja2_view('email/active.html')
+def send_mail(email):
+    user = User.objects(email=email).first()
+    if user:
+        send_confirm_mail(app.config, email)
+        return {'title': u'发送成功'}
+    return abort(404)

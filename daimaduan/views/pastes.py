@@ -14,6 +14,7 @@ from daimaduan.models import Paste
 from daimaduan.models import Rate
 from daimaduan.models import Tag
 from daimaduan.utils import jsontify
+from daimaduan.utils import user_active_required
 
 
 @app.route('/', name='pastes.index')
@@ -36,6 +37,7 @@ def pastes_more():
 
 @app.get('/create', name='pastes.create')
 @login.login_required
+@user_active_required
 @jinja2_view('pastes/create.html')
 def create_get():
     form = PasteForm(data={'codes': [{'title': '', 'content': ''}]})
@@ -44,6 +46,7 @@ def create_get():
 
 @app.post('/create', name='pastes.create')
 @login.login_required
+@user_active_required
 @jinja2_view('pastes/create.html')
 def create_post():
     form = PasteForm(request.POST)
