@@ -4,6 +4,8 @@ import time
 import hashlib
 import mongoengine
 
+from bottle import request
+
 from daimaduan.bootstrap import app
 
 mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
@@ -107,6 +109,11 @@ class Paste(BaseDocument):
                 'title': self.title,
                 'tags': self.tags,
                 'user': self.user.to_json()}
+
+    def is_user_favourited(self):
+        if request.user:
+            return request.user.is_in_favourites(self)
+        return False
 
 
 class Tag(BaseDocument):
