@@ -4,6 +4,11 @@
 
     A set of utilities.
 """
+from functools import wraps
+
+from json import dumps
+
+from bottle import response
 
 from daimaduan.models import UserOauth
 
@@ -28,3 +33,12 @@ def user_bind_oauth(user, session):
     del session['oauth_openid']
     del session['oauth_name']
     del session['oauth_token']
+
+
+def jsontify(func):
+    @wraps(func)
+    def jsontify_function(*args, **kwargs):
+        result = func(*args, **kwargs)
+        response.content_type = 'application/json'
+        return dumps(result)
+    return jsontify_function
