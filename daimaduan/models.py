@@ -52,6 +52,9 @@ class User(BaseDocument):
     def is_in_favourites(self, paste):
         return paste in self.favourites
 
+    def to_json(self):
+        return {'username': self.username}
+
 
 class UserOauth(BaseDocument):
     user = mongoengine.ReferenceField('User')
@@ -98,6 +101,12 @@ class Paste(BaseDocument):
         if not self.title:
             self.title = u'代码集合: %s' % self.hash_id
         super(Paste, self).save(*args, **kwargs)
+
+    def to_json(self):
+        return {'hash_id': self.hash_id,
+                'title': self.title,
+                'tags': self.tags,
+                'user': self.user.to_json()}
 
 
 class Tag(BaseDocument):

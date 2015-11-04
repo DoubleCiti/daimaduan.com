@@ -13,13 +13,24 @@ from daimaduan.models import Code
 from daimaduan.models import Paste
 from daimaduan.models import Rate
 from daimaduan.models import Tag
+from daimaduan.utils import jsontify
 
 
 @app.route('/', name='pastes.index')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:10],
+    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:20],
             'tags': Tag.objects().order_by('-popularity')[:10]}
+
+
+@app.route('/pastes/more', name="pastes.more")
+@jsontify
+def pastes_more():
+    p = int(request.query.p)
+    if not p:
+        return {}
+    pastes_objects = Paste.objects(is_private=False).order_by('-updated_at')[(p - 1) * 20:p * 20]
+    return {'pastes': [paste.to_json() for paste in pastes_objects]}
 
 
 @app.get('/create', name='pastes.create')
@@ -130,6 +141,7 @@ def edit_post(hash_id):
 
 @app.post('/rate/<hash_id>', name='rate.post')
 @login.login_required
+@jsontify
 def rate_post(hash_id):
     score = request.forms.get('score', None)
     if not score:

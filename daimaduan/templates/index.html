@@ -4,12 +4,12 @@
 <div class="panel panel-default">
 	<div class="panel-heading">最新代码</div>
 
-	<ul class="list-group">
+	<ul class="list-group" id="paste_list">
 		{% for paste in pastes %}
 			{% include ('items/_paste.html') %}
 		{% endfor %}
-		<li class="list-group-item">
-			<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>
+		<li class="list-group-item" id="more_button_li">
+			<button class="btn btn-default btn-block" id="more_button" data-page="2">更多</button>
 		</li>
 	</ul>
 </div>
