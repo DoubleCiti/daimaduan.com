@@ -5,7 +5,7 @@
   {% for code in paste.codes %}
   <div class="panel-heading">
     <div class="panel-title">
-      <h4><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> {{ code.title }}{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h4>
+      <h4><span class="glyphicon {% if paste.is_user_favourited() %}glyphicon-star{% else %}glyphicon-star-empty{% endif %}" aria-hidden="true"></span> {{ code.title }}{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h4>
     </div>
     <a href="/tag/{{ code.tag }}" title="{{ code.tag }}" class="btn btn-xs btn-warning">{{ code.tag }}</a>
   </div>
@@ -20,7 +20,9 @@
 {% endblock %}
 {% block sidebar %}
 <div class="panel panel-default">
-  <div class="panel-heading"></div>
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ paste.title }}</h3>
+  </div>
   <div class="panel-body">
     <div>{% if paste.user.id == request.user.id %}<span><a href="/paste/{{ paste.hash_id }}/edit">修改</a></span>{% endif %}</div>
     {% if request.user %}<div>{% if request.user.is_in_favourites(paste) %}<a href="/unfavourite/{{ paste.hash_id }}">取消加入收藏</a>{% else %}<a href="/favourite/{{ paste.hash_id }}">加入收藏</a>{% endif %}</div>{% endif %}
