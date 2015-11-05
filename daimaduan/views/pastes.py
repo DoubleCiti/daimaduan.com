@@ -173,7 +173,17 @@ def tags():
 @jinja2_view('tags/view.html')
 def tag(tag_name):
     return {'tag': Tag.objects(name=tag_name).first(),
-            'pastes': Paste.objects(tags=tag_name)[:10]}
+            'pastes': Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[:20]}
+
+
+@app.route('/tag/<tag_name>/more')
+@jsontify
+def tag_more(tag_name):
+    p = int(request.query.p)
+    if not p:
+        return {}
+    pastes_objects = Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[(p - 1) * 20:p * 20]
+    return {'pastes': [paste.to_json() for paste in pastes_objects]}
 
 
 @app.route('/favourite/<hash_id>', name='favourites.add')
