@@ -18,7 +18,7 @@ from daimaduan.models import Tag
 from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
 
-from daimaduan.utils import user_bind_oauth
+from daimaduan.utils import user_bind_oauth, jsontify
 from daimaduan.utils import get_session
 
 
@@ -126,8 +126,19 @@ def user_index(username):
     return abort(404)
 
 
-@app.get('/user/favourites')
+@app.get('/user/favourites', name='users.favourites')
+@login.login_required
 @jinja2_view('favourites.html')
 def favourites_get():
-    return {'pastes': request.user.favourites,
+    return {'pastes': request.user.get_favourites_by_page(1),
             'tags': Tag.objects().order_by('-popularity')[:10]}
+
+
+@app.get('/user/favourites/more')
+@login.login_required
+@jsontify
+def favourites_more():
+    p = int(request.query.p)
+    if not p:
+        return {}
+    return {'pastes': [paste.to_json() for paste in request.user.get_favourites_by_page(p)]}
