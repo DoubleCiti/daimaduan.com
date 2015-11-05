@@ -1,6 +1,6 @@
 <li class="list-group-item">
   <div class="pull-right">
-    <a href="#" class="text-muted" title="paste.user.username">{{ paste.user.username }}</a>  
+    <a href="#" class="text-muted" title="{{ paste.user.username }}"><img src="{{ paste.user.gravatar_url(width=27) }}" alt="{{ paste.user.username }}" /></a>
   </div>
   <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">{{ paste.title }}</a>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}
   {% for tag in paste.tags %}
