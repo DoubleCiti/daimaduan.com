@@ -31,7 +31,9 @@
 		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="/static/js/jquery.raty.min.js"></script>
 		<script src="/static/js/highlightjs.line.numbers.min.js"></script>
-
+		<script src="/static/js/app.js"></script>
+		<script src="/static/js/{{ view_name() }}.js"></script>
+		{% include 'shared/script_disqus.html' %}
 		<script type="text/javascript">
 		(function() {
 			var po = document.createElement('script');
@@ -41,9 +43,5 @@
 			s.parentNode.insertBefore(po, s);
 		})();
 		</script>
-
-		<script src="/static/js/app.js"></script>
-		<script src="/static/js/{{ view_name() }}.js"></script>
-		{% include 'shared/script_disqus.html' %}
 	</body>
 </html>
