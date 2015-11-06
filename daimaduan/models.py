@@ -4,6 +4,8 @@ import time
 import hashlib
 import mongoengine
 
+from bottle import request
+
 
 class BaseDocument(mongoengine.Document):
     meta = {'abstract': True, 'strict': False}
