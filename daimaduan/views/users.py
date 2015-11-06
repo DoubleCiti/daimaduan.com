@@ -8,7 +8,7 @@ from bottle import jinja2_view
 
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
-from daimaduan.bootstrap import oauth_google
+from daimaduan.bootstrap import oauth_services
 from daimaduan.bootstrap import logger
 
 from daimaduan.models import User
@@ -24,28 +24,40 @@ from daimaduan.utils import get_session
 
 @app.get('/oauth/<provider>', name='oauth.signin')
 def oauth_signin(provider):
-    redirect_url = app.config['oauth.google.callback_url']
-    url = oauth_google.get_authorize_url(scope='email profile',
-                                         response_type='code',
-                                         redirect_uri=redirect_url)
+    oauth_service = oauth_services[provider]
+    redirect_uri = app.config['oauth.%s.callback_url' % provider]
+    scope = app.config['oauth.%s.scope' % provider]
+
+    url = oauth_service.get_authorize_url(scope=scope,
+                                          response_type='code',
+                                          redirect_uri=redirect_uri)
     redirect(url)
 
 
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
 @jinja2_view('oauths/callback.html')
 def oauth_callback(provider):
+    logger.info("Oauth callback for %s" % provider)
+    redirect_uri = app.config['oauth.%s.callback_url' % provider]
+    oauth_service = oauth_services[provider]
     session = get_session(request)
 
     data = dict(code=request.params.get('code'),
                 grant_type='authorization_code',
-                redirect_uri=app.config['oauth.google.callback_url'])
-    oauth_session = oauth_google.get_auth_session(data=data, decoder=json.loads)
+                redirect_uri=redirect_uri)
+
+    if provider == 'google':
+        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
+        user_info = oauth_session.get('userinfo').json()
+    else:
+        oauth_session = oauth_service.get_auth_session(data=data)
+        user_info = oauth_session.get('user').json()
 
     access_token = oauth_session.access_token
-    logger.info("%s oauth access token is: %s" % (provider, access_token))
+    user_info['id'] = str(user_info['id'])
 
-    user_info = oauth_session.get('userinfo').json()
-    logger.info('%s oauth user info is: %s' % (provider, user_info))
+    logger.info("%s oauth access token is: %s" % (provider, access_token))
+    logger.info("%s oauth user info is %s" % (provider, user_info))
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:

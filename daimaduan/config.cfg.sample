@@ -15,3 +15,14 @@ authorize_url = https://accounts.google.com/o/oauth2/auth
 access_token_url = https://accounts.google.com/o/oauth2/token
 base_url = https://www.googleapis.com/oauth2/v1/
 callback_url = http://daimaduan.dev:8080/oauth/google/callback
+scope = email profile
+
+[oauth.github]
+name = github
+client_id = 1f8813d6e0535fbfff98
+client_secret = 085d8ac899e236e12feaceb528c9de63aa601d39
+authorize_url = https://github.com/login/oauth/authorize
+access_token_url = https://github.com/login/oauth/access_token
+base_url = https://api.github.com/
+callback_url = http://daimaduan.dev:8080/oauth/github/callback
+scope = user:email
