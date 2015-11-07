@@ -1,14 +1,47 @@
-"""
-    daimaduan.jinja_ext
-    -------------------
-
-    A bottle plugin to setup and extend jinaja enviroment.
-
-"""
+# coding: utf-8
+import time
+from datetime import datetime
 
 from bottle import request
 from bottle import DEBUG
 from bottle import TEMPLATE_PATH, Jinja2Template
+
+
+MINUTE = 60
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+MONTH = 30 * DAY
+YEAR = 12 * MONTH
+
+
+def datetimeformat(value):
+    """filter for Jinja2"""
+    return value.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def time_passed(value):
+    """filter for Jinjia2"""
+    time_diff = int(time.time() - time.mktime(value.timetuple()))
+    if time_diff < MINUTE:
+        quantity = time_diff
+        unit = u'秒'
+    if time_diff >= MINUTE and time_diff < HOUR:
+        quantity = time_diff / MINUTE
+        unit = u'分'
+    if time_diff >= HOUR and time_diff < DAY:
+        quantity = time_diff / HOUR
+        unit = u'小时'
+    if time_diff >= DAY and time_diff < MONTH:
+        quantity = time_diff / DAY
+        unit = u'天'
+    if time_diff >= MONTH and time_diff < YEAR:
+        quantity = time_diff / MONTH
+        unit = u'月'
+    if time_diff >= YEAR:
+        quantity = time_diff / YEAR
+        unit = u'年'
+
+    return u'%s %s前' % (quantity, unit)
 
 
 def view_name():
@@ -57,6 +90,8 @@ class JinajaPlugin(object):
 
         Jinja2Template.settings = {
             'autoescape': True,
+            'filters': {'datetimeformat': datetimeformat,
+                        'time_passed': time_passed}
         }
 
         Jinja2Template.defaults = {
