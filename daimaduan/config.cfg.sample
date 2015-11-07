@@ -5,7 +5,7 @@ database = daimaduan
 [site]
 debug = true
 secret_key = "youdon'tneedtoknow"
-disqus = daimaduan
+disqus = daimaduan-dev
 
 [oauth.google]
 name = google
