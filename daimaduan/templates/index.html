@@ -9,7 +9,7 @@
 			{% include ('items/_paste.html') %}
 		{% endfor %}
 		<li class="list-group-item" id="more_button_li">
-			<button class="btn btn-default btn-block" id="more_button" data-page="2">更多</button>
+			<button class="btn btn-default btn-block" id="more_button" data-page="2" {% if not has_more_pastes %}disabled="disabled"{% endif %}>更多</button>
 		</li>
 	</ul>
 </div>

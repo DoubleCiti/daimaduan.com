@@ -6,6 +6,8 @@ import mongoengine
 
 from bottle import request
 
+from daimaduan.jinja_ext import time_passed
+
 
 class BaseDocument(mongoengine.Document):
     meta = {'abstract': True, 'strict': False}
@@ -54,7 +56,8 @@ class User(BaseDocument):
         return paste in self.favourites
 
     def to_json(self):
-        return {'username': self.username}
+        return {'username': self.username,
+                'gravatar_url': self.gravatar_url(width=38)}
 
 
 class UserOauth(BaseDocument):
@@ -72,11 +75,6 @@ class Code(BaseDocument):
     title = mongoengine.StringField()
     content = mongoengine.StringField(required=True)
     tag = mongoengine.StringField()
-
-    def save(self, *args, **kwargs):
-        # TODO: needs to make sure hash_id is unique
-        self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
-        super(Code, self).save(*args, **kwargs)
 
     def name(self):
         if len(self.title):
@@ -98,7 +96,11 @@ class Paste(BaseDocument):
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique
         if not self.hash_id:
-            self.hash_id = hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:10]
+            def generate_hash_id():
+                return hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:11]
+            self.hash_id = generate_hash_id()
+            while(Paste.objects(hash_id=self.hash_id).first() is not None):
+                self.hash_id = generate_hash_id()
         if not self.title:
             self.title = u'代码集合: %s' % self.hash_id
         super(Paste, self).save(*args, **kwargs)
@@ -107,6 +109,8 @@ class Paste(BaseDocument):
         return {'hash_id': self.hash_id,
                 'title': self.title,
                 'tags': self.tags,
+                'num_codes': len(self.codes),
+                'time_passed': time_passed(self.updated_at),
                 'user': self.user.to_json()}
 
     def is_user_favourited(self):

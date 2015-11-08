@@ -20,7 +20,8 @@ from daimaduan.utils import jsontify
 @jinja2_view('index.html')
 def index():
     return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:20],
-            'tags': Tag.objects().order_by('-popularity')[:10]}
+            'tags': Tag.objects().order_by('-popularity')[:10],
+            'has_more_pastes': Paste.objects(is_private=False).count() > 20}
 
 
 @app.route('/pastes/more', name="pastes.more")
