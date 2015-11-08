@@ -26,7 +26,7 @@ def time_passed(value):
         unit = u'秒'
     if time_diff >= MINUTE and time_diff < HOUR:
         quantity = time_diff / MINUTE
-        unit = u'分'
+        unit = u'分钟'
     if time_diff >= HOUR and time_diff < DAY:
         quantity = time_diff / HOUR
         unit = u'小时'
