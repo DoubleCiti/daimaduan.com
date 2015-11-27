@@ -1,8 +1,10 @@
+import sys
 from fabric.context_managers import cd
+from fabric.context_managers import lcd
 from fabric.operations import local
-from fabric.operations import sudo
-from fabric.operations import run
 from fabric.operations import put
+from fabric.operations import run
+from fabric.operations import sudo
 from fabric.state import env
 
 
@@ -12,11 +14,7 @@ env.hosts = ['daimaduan.com']
 # the user to use for the remote commands
 env.user = 'daimaduan'
 # application data
-APP_ENV = 'preview'
 APP_NAME = 'daimaduan'
-APP_PATH = '/var/www/%s/%s' % (APP_NAME, APP_ENV)
-TEMP_PATH = '/tmp/%s/%s' % (APP_NAME, APP_ENV)
-LOG_PATH = '/var/log/%s/%s' % (APP_NAME, APP_ENV)
 
 
 def pack():
@@ -24,30 +22,48 @@ def pack():
     local('python setup.py sdist --formats=gztar', capture=False)
 
 
-def bootstrap():
-    sudo('mkdir -p %s' % APP_PATH)
-    sudo('chown %s:%s %s' % (env.user, env.user, APP_PATH))
-    sudo('mkdir -p %s' % LOG_PATH)
-    sudo('chown %s:%s %s' % (env.user, env.user, LOG_PATH))
-    with cd(APP_PATH):
+def bootstrap(app_env):
+    if not app_env:
+        print "fab pack deploy:<ENV>"
+        sys.exit(1)
+
+    app_path = '/var/www/%s/%s' % (APP_NAME, app_env)
+    log_path = '/var/log/%s/%s' % (APP_NAME, app_env)
+    sudo('mkdir -p %s' % app_path)
+    sudo('chown %s:%s %s' % (env.user, env.user, app_path))
+    sudo('mkdir -p %s' % log_path)
+    sudo('chown %s:%s %s' % (env.user, env.user, log_path))
+    with cd(app_path):
         run('virtualenv --distribute venv')
 
 
-def deploy():
+def deploy(app_env):
+    if not app_env:
+        print "fab pack deploy:<ENV>"
+        sys.exit(1)
+
+    app_path = '/var/www/%s/%s' % (APP_NAME, app_env)
     # figure out the release name and version
     dist = local('python setup.py --fullname', capture=True).strip()
     # upload the source tarball to the temporary folder on the server
-    put('dist/%s.tar.gz' % dist, '%s/%s.tar.gz' % (APP_PATH, dist))
-    with cd(APP_PATH):
+    put('dist/%s.tar.gz' % dist, '%s/%s.tar.gz' % (app_path, dist))
+    with cd(app_path):
         run('tar xzf %s.tar.gz' % dist)
-    with cd('%s/%s' % (APP_PATH, dist)):
-        run('%s/venv/bin/python setup.py install > /dev/null 2>&1' % APP_PATH)
-    run('rm -f %s/current' % APP_PATH)
-    run('ln -s %s/%s/daimaduan %s/current' % (APP_PATH, dist, APP_PATH))
-    run('cp %s/shared/config.cfg %s/current' % (APP_PATH, APP_PATH))
-    run('cp %s/shared/deploy.wsgi %s/current' % (APP_PATH, APP_PATH))
+    with cd('%s/%s' % (app_path, dist)):
+        run('%s/venv/bin/python setup.py install > /dev/null 2>&1' % app_path)
+    run('rm -f %s/current' % app_path)
+    run('ln -s %s/%s/daimaduan %s/current' % (app_path, dist, app_path))
+    run('cp %s/shared/config.cfg %s/current' % (app_path, app_path))
+    run('cp %s/shared/deploy.wsgi %s/current' % (app_path, app_path))
 
     # last step, touch uwsgi ini file to force reload uwsgi
-    sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % APP_ENV)
+    sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % app_env)
 
-    run('rm -f %s/%s.tar.gz' % (APP_PATH, dist))
+    run('rm -f %s/%s.tar.gz' % (app_path, dist))
+
+
+def run_server():
+    local('python setup.py develop')
+    with lcd('daimaduan'):
+        local('cp config.cfg.sample config.cfg')
+        local('python runserver.py')

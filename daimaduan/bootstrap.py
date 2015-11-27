@@ -16,7 +16,7 @@ logger = logging.getLogger('daimaduan')
 
 # Auto cast `site.debug` to boolean type.
 app.config.load_config('config.cfg')
-app.config['SECRET_KEY'] = app.config['site.secret_key']
+app.config['SECRET_KEY'] = app.config['site.validate_key']
 
 jinja = JinajaPlugin(template_path='templates')
 login = LoginPlugin()
