@@ -1,0 +1,13 @@
+mongo:
+  image: mongo
+
+app:
+  build: .
+  volumes:
+    - .:/app
+  links:
+    - mongo:mongo
+  ports:
+    - 8080:8080
+  working_dir: /app
+  command: fab run_server

@@ -5,9 +5,9 @@ import daimaduan.views
 
 
 session_opts = {
-    'session.type': 'file',
+    'session.type': 'cookie',
     'session.cookie_expires': 7 * 24 * 3600,
-    'session.data_dir': '/tmp/sessions',
-    'session.auto': True
+    'session.auto': True,
+    'session.validate_key': app.config['site.validate_key']
 }
 application = SessionMiddleware(app, session_opts)

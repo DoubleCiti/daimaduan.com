@@ -1,10 +1,10 @@
 [mongodb]
-host = 127.0.0.1
+host = mongo
 database = daimaduan
 
 [site]
 debug = true
-secret_key = "youdon'tneedtoknow"
+validate_key = "youdon'tneedtoknow"
 disqus = daimaduan-dev
 
 [oauth.google]
