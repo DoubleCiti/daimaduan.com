@@ -92,6 +92,7 @@ class Paste(BaseDocument):
     codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
     tags = mongoengine.ListField(mongoengine.StringField())
     rate = mongoengine.IntField(default=0)
+    views = mongoengine.IntField(default=0)
 
     def save(self, *args, **kwargs):
         # TODO: needs to make sure hash_id is unique

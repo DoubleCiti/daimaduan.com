@@ -80,6 +80,8 @@ def view(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
     if not paste:
         abort(404)
+    paste.views += 1
+    paste.save()
     return {'paste': paste}
 
 
