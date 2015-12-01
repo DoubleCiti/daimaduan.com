@@ -44,3 +44,7 @@ pre {
 pre code {
     white-space: pre;
 }
+
+.tag {
+    margin-bottom: 3px;
+}

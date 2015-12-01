@@ -95,7 +95,6 @@ class Paste(BaseDocument):
     views = mongoengine.IntField(default=0)
 
     def save(self, *args, **kwargs):
-        # TODO: needs to make sure hash_id is unique
         if not self.hash_id:
             def generate_hash_id():
                 return hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:11]

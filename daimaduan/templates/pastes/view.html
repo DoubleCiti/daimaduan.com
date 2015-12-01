@@ -14,7 +14,7 @@
   {% endfor %}
 
   <div class="panel-footer">
-    {% include 'items/_comments.html' %}    
+    {% include 'items/_comments.html' %}
   </div>
 </div>
 {% endblock %}
@@ -29,7 +29,10 @@
     <div>分享者: <a href="/user/{{ paste.user.username }}"><img src="{{ paste.user.gravatar_url(width=20) }}" />{{ paste.user.username }}</a></div>
     <div>最后修改时间: {{ paste.updated_at | datetimeformat }}</div>
     <div>{% for tag in paste.tags %}<a href="/tag/{{ tag }}" title="{{ tag }}" class="btn btn-xs btn-warning">{{ tag }}</a>{% endfor %}</div>
-    <div id="rate" data-score="{{ paste.rate }}" data-id="{{ paste.hash_id }}"></div>
+    <!-- <div>
+      <a href="javascript:;" id="paste_like" data-id="{{ paste.hash_id }}"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+      <a href="javascript:;" id="paste_dislike" data-id="{{ paste.hash_id }}"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+    </div> -->
   </div>
 </div>
 {% endblock %}
