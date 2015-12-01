@@ -17,24 +17,6 @@
     });
   }
 
-  function initRate() {
-    $('#rate').raty({
-      score: function() {
-        return $(this).attr('data-score');
-      },
-      click: function(score, evt) {
-        $.ajax({
-          data: 'score=' + score,
-          type: 'POST',
-          url: '/rate/' + $(this).attr('data-id'),
-          success: function() {
-            return true;
-          }
-        });
-      }
-    });
-  }
-
 function initGetMore() {
   $(document).on('click', '#more_button', function(event) {
     var p = $(this).attr('data-page');
@@ -59,7 +41,6 @@ function initGetMore() {
 
   $(document).ready(function() {
     initCodes();
-    initRate();
     initGetMore();
   });
 })();

@@ -142,30 +142,6 @@ def edit_post(hash_id):
     return {'form': form, 'paste': paste}
 
 
-@app.post('/rate/<hash_id>', name='rate.post')
-@login.login_required
-@jsontify
-def rate_post(hash_id):
-    score = request.forms.get('score', None)
-    if not score:
-        abort(404)
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
-    user = login.get_user()
-    rate = Rate.objects(paste=paste, user=user).first()
-    if not rate:
-        rate = Rate(paste=paste, user=user, score=request.forms.get('score', score))
-        rate.save()
-    rates = 0
-    rate_objects = Rate.objects(paste=paste)
-    for t in rate_objects:
-        rates += t.score
-    paste.rate = int(rates / len(rate_objects))
-    paste.save()
-    return {'status': 'ok'}
-
-
 @app.route('/tags', name='tags.index')
 @jinja2_view('tags/index.html')
 def tags():
