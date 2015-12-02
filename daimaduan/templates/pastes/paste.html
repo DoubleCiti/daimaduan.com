@@ -1,0 +1,55 @@
+{%- from 'macros/users.html' import render_user_avatar -%}
+{%- from 'macros/tags.html' import render_tag %}
+
+<div class="paste" id="paste-{{ paste.id }}">
+  <div class="media">
+    <div class="media-left">
+      {{ render_user_avatar(paste.user, size=38) }}
+    </div>
+    <div class="media-body">
+      <div class="paste-metas pull-right">
+        <a href="/paste/{{ paste.hash_id }}" class="text-muted">
+          <span class="fa fa-file-code-o"></span>
+          {{ paste.codes | length }}段代码
+        </a>
+        <a href="/paste/{{ paste.hash_id }}#comments" class="text-muted">
+          <span class="fa fa-file-code-o"></span>
+          <span class="disqus-comment-count"
+                data-disqus-identifier="{{ paste.to_disqus_identifier() }}">
+            0条评论
+          </span>
+        </a>
+      </div>
+
+      <h5 class="media-heading">
+        <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">
+          {{ paste.title | truncate(25) }}
+        </a>
+      </h5>
+
+      <p class="text-muted">
+        <small>{{ paste.updated_at | time_passed }}</small>
+      </p>
+
+    </div>
+
+    <p class="pull-right">
+      <a href="/paste/{{ paste.hash_id }}#code-{{ paste.codes[0].id }}">
+        查看完整代码
+        <span class="fa fa-caret-right"></span>
+      </a>  
+    </p>
+
+    <p class="paste-tags">
+      {% for tag in paste.tags %}
+        {{ render_tag(tag) }}
+      {% endfor %}
+    </p>
+
+    <div class="clearfix"></div>
+
+    <pre><code>{{ paste.codes[0].content_head() }}</code></pre>
+  </div>
+
+  <h5>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h5>
+</div>

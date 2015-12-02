@@ -1,0 +1,8 @@
+{% macro render_user_avatar(user, size=36) %}
+<a href="/user/{{ user.username }}" title="{{ user.username }}">
+  <img src="{{ user.gravatar_url(width=size) }}"
+       width="{{ size }}" height="{{ size }}"
+       alt="{{ user.username }}"
+       class="img-rounded"/>
+</a>
+{% endmacro %}

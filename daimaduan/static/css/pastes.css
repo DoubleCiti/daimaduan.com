@@ -1,0 +1,15 @@
+.paste {
+  margin-bottom: 30px;
+}
+.paste-metas a {
+  display: inline-block;
+  margin-left: 10px;
+  text-decoration: none;
+  width: 100px;
+}
+.paste-metas a:hover {
+  color: #555;
+}
+.paste-metas a .fa {
+  margin-right: 3px;
+}

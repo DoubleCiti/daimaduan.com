@@ -14,12 +14,13 @@
   {% endfor %}
 
   <div class="panel-footer">
+    <script>{{ }}</script>
     {% include 'items/_comments.html' %}
   </div>
 </div>
 {% endblock %}
 {% block sidebar %}
-<div class="panel panel-default">
+<div class="panel panel-default" id="comments">
   <div class="panel-heading">
     <h3 class="panel-title">{{ paste.title }}</h3>
   </div>
