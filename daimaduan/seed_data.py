@@ -41,6 +41,7 @@ syntax_list = [
     "Text"
 ]
 
+
 def find_or_create_syntax(name):
     syntax = Syntax.objects(name=name).first()
     if syntax is None:
