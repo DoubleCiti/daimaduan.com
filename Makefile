@@ -1,2 +1,2 @@
 check:
-	tox -e pep8
+	@tox -e pep8

@@ -83,9 +83,8 @@ class Code(BaseDocument):
             return u'代码段: %s' % self.hash_id
 
     def content_head(self, n=10):
-        lines = self.content.splitlines()[:n] 
+        lines = self.content.splitlines()[:n]
         return '\n'.join(lines)
-
 
 
 class Paste(BaseDocument):
@@ -125,7 +124,6 @@ class Paste(BaseDocument):
 
     def to_disqus_identifier(self):
         return 'paste-%s' % self.hash_id
-
 
 
 class Tag(BaseDocument):
