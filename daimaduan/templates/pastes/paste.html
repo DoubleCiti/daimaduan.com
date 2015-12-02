@@ -1,5 +1,6 @@
 {%- from 'macros/users.html' import render_user_avatar -%}
 {%- from 'macros/tags.html' import render_tag %}
+{%- from 'macros/pastes.html' import render_source_code %}
 
 <div class="paste" id="paste-{{ paste.id }}">
   <div class="media">
@@ -23,7 +24,7 @@
 
       <h5 class="media-heading">
         <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">
-          {{ paste.title | truncate(25) }}
+          {{ paste.title | truncate(30) }}
         </a>
       </h5>
 
@@ -48,7 +49,7 @@
 
     <div class="clearfix"></div>
 
-    <pre><code>{{ paste.codes[0].content_head() }}</code></pre>
+    {{ render_source_code(paste.codes[0].content_head()) }}
   </div>
 
   <h5>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h5>

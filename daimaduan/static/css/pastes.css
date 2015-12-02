@@ -13,3 +13,9 @@
 .paste-metas a .fa {
   margin-right: 3px;
 }
+.code .panel-body pre {
+  margin: -15px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
