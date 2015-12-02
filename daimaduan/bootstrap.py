@@ -29,3 +29,4 @@ app.install(jinja)
 oauth_services = {}
 oauth_services['google'] = OAuth2Service(**oauth_config(app.config, 'google'))
 oauth_services['github'] = OAuth2Service(**oauth_config(app.config, 'github'))
+oauth_services['weibo']  = OAuth2Service(**oauth_config(app.config, 'weibo'))

@@ -49,15 +49,23 @@ def oauth_callback(provider):
     if provider == 'google':
         oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
         user_info = oauth_session.get('userinfo').json()
+    elif provider == 'weibo':
+        access_token = oauth_session.access_token
+        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
+        access_token = oauth_session.access_token
+        user_info = oauth_session.get('account/get_uid.json').json()
+        print '-------------'
+        print user_info
+        print '-------------'
     else:
         oauth_session = oauth_service.get_auth_session(data=data)
         user_info = oauth_session.get('user').json()
 
+    logger.info("%s oauth user info is %s" % (provider, user_info))
+
     access_token = oauth_session.access_token
     user_info['id'] = str(user_info['id'])
-
     logger.info("%s oauth access token is: %s" % (provider, access_token))
-    logger.info("%s oauth user info is %s" % (provider, user_info))
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:
