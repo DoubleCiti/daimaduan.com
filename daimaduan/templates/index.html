@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="panel panel-default">
-	<div class="panel-heading">最新代码</div>
+{%- from 'macros/tags.html' import render_tag %}
 
-	<ul class="list-group" id="paste_list">
-		{% for paste in pastes %}
-			{% include ('items/_paste.html') %}
-		{% endfor %}
-		<li class="list-group-item" id="more_button_li">
-			<button class="btn btn-default btn-block" id="more_button" data-page="2" {% if not has_more_pastes %}disabled="disabled"{% endif %}>更多</button>
-		</li>
-	</ul>
-</div>
+{% block content %}
+<h3 class="page-header">最新代码</h3>
+
+<section class="pastes">
+	{% for paste in pastes %}
+		{% include ('pastes/paste.html') %}
+	{% endfor %}
+
+	<div id="more_button_li">
+		<button class="btn btn-default btn-block" id="more_button" data-page="2" {% if not has_more_pastes %}disabled="disabled"{% endif %}>更多</button>
+	</div>
+</section><!-- .pastes -->
 {% endblock %}
+
 {% block sidebar %}
 <div class="panel panel-default">
 	<div class="panel-heading">热门标签</div>
 	<div class="panel-body">
 	{% for tag in tags %}
-	{% include('items/_tag.html') %}
+		{{ render_tag(tag.name) }}
 	{% endfor %}
 	</div>
 </div>

@@ -1,25 +1,30 @@
 {% extends 'base.html' %}
+{% from 'macros/pastes.html' import render_code %}
+{% from 'macros/common.html' import render_comment_form with context %}
+
 {% block title %}{{ paste.title }}{% endblock %}
+
 {% block content %}
-<div class="panel panel-default">
-  {% for code in paste.codes %}
-  <div class="panel-heading">
-    <div class="panel-title">
-      <h4><span class="glyphicon {% if paste.is_user_favourited() %}glyphicon-star{% else %}glyphicon-star-empty{% endif %}" aria-hidden="true"></span> {{ code.title }}{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h4>
-    </div>
-    <a href="/tag/{{ code.tag }}" title="{{ code.tag }}" class="btn btn-xs btn-warning">{{ code.tag }}</a>
-  </div>
+<h3 class="page-header">
+  <span class="fa {% if paste.is_user_favourited() %}fa-star{% else %}fa-star-empty{% endif %}" aria-hidden="true"></span>
 
-  <pre class="panel-body"><code>{{ code.content }}</code></pre>
-  {% endfor %}
+  {% if paste.is_private %}
+    <span class="fa fa-lock text-warning" title="私有"></span>
+  {% endif %}
 
-  <div class="panel-footer">
-    {% include 'items/_comments.html' %}
-  </div>
-</div>
+  {{ paste.title }}
+</h3>
+
+{% for code in paste.codes %}
+  {{ render_code(code) }}
+{% endfor %}
+
+{{ render_comment_form(paste.to_disqus_identifier()) }}
+
 {% endblock %}
+
 {% block sidebar %}
-<div class="panel panel-default">
+<div class="panel panel-default" id="comments">
   <div class="panel-heading">
     <h3 class="panel-title">{{ paste.title }}</h3>
   </div>

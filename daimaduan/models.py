@@ -82,6 +82,10 @@ class Code(BaseDocument):
         else:
             return u'代码段: %s' % self.hash_id
 
+    def content_head(self, n=10):
+        lines = self.content.splitlines()[:n]
+        return '\n'.join(lines)
+
 
 class Paste(BaseDocument):
     user = mongoengine.ReferenceField(User)
@@ -117,6 +121,9 @@ class Paste(BaseDocument):
         if request.user:
             return request.user.is_in_favourites(self)
         return False
+
+    def to_disqus_identifier(self):
+        return 'paste-%s' % self.hash_id
 
 
 class Tag(BaseDocument):
