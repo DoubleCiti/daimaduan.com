@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 import bottle
 import logging
 import mongoengine
@@ -14,8 +15,14 @@ app = bottle.default_app()
 logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO)
 logger = logging.getLogger('daimaduan')
 
-# Auto cast `site.debug` to boolean type.
 app.config.load_config('config.cfg')
+# Check if there's a key in env variables
+# if you want to set config on the fly, use env var
+# a.b.c in config => A_B_C in env var
+for key in app.config.keys():
+    k = key.replace('.', '_').upper()
+    if k in os.environ:
+        app.config[key] = os.environ[k]
 app.config['SECRET_KEY'] = app.config['site.validate_key']
 
 jinja = JinajaPlugin(template_path='templates')

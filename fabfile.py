@@ -67,3 +67,11 @@ def run_server():
     with lcd('daimaduan'):
         local('cp config.cfg.sample config.cfg')
         local('python runserver.py')
+
+
+def seed():
+    local('python setup.py develop')
+    local('cp daimaduan/config.cfg config.cfg')
+    from daimaduan.seed_data import seed_data
+    seed_data()
+    local('rm -f config.cfg')
