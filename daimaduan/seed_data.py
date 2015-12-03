@@ -52,6 +52,3 @@ def find_or_create_syntax(name):
 def seed_data():
     for syntax in syntax_list:
         find_or_create_syntax(syntax)
-
-if __name__ == '__main__':
-    seed_data()

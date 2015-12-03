@@ -9,5 +9,7 @@ app:
     - mongo:mongo
   ports:
     - 8080:8080
+  environment:
+    - MONGODB_HOST=mongo
   working_dir: /app
   command: fab run_server
