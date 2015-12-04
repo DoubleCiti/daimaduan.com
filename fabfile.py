@@ -65,7 +65,6 @@ def deploy(app_env):
 def run_server():
     local('python setup.py develop')
     with lcd('daimaduan'):
-        local('cp config.cfg.sample config.cfg')
         local('python runserver.py')
 
 
