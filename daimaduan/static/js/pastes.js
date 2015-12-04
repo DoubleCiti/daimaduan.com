@@ -43,6 +43,38 @@
       }
 
     });
+    $(this).attr('data-page', parseInt(p) + 1);
+  }
+
+  function renderLikePasteAction(data) {
+    data.text = data.liked ? '取消喜欢' : '喜欢';
+    data.class_name = data.liked ? 'unlike' : 'like';
+
+    var template = ''
+      + '<a href="javascript:;" title="<%= text %>"'
+      + '   class="btn btn-default btn-xs action action-<%= class_name %>"'
+      + '   data-id="<%= paste_id %>">'
+      + '  <i class="fa fa-heart"></i> <span><%= text %></span>'
+      + '  <%= paste_likes %>'
+      + '</a>'
+    var compiled = _.template(template);
+    return compiled(data);
+  }
+
+  function togglePasteLike() {
+    var $action = $(this);
+    var pasteId = $action.data('id');
+    var action  = $action.is('.action-like') ? 'like' : 'unlike';
+    var url     = '/paste/' + pasteId + '/' + action;
+
+    $.post(url).then(function(data) {
+      // Update paste likes count
+      $action.replaceWith(renderLikePasteAction(data));
+
+      // Update user paste likes count
+      var $user = $('[data-user="' + app.current_user.id + '"]');
+      $user.find('.paste-likes-count').html(data.user_like);
+    });
   }
 
   function initGetMore() {
@@ -85,5 +117,7 @@
     initCodes();
     initGetMore();
     initSearchGetMore();
+
+    $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
   });
 })();

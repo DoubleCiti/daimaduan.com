@@ -1,0 +1,32 @@
+{% from 'macros/common.html' import panel_tag %}
+{% from 'macros/common.html' import fa_icon %}
+{% from 'macros/users.html' import render_user_avatar %}
+
+<div class="panel panel-default"
+     id="panel-paste-user"
+     data-user={{ user.id }}>
+  <div class="panel-heading text-center">
+    <div class="avatar-wrapper">
+      {{ render_user_avatar(user, size=80) }}  
+    </div>
+    
+    <h4>{{ user.username }}</h4>
+  </div>
+
+  <div class="list-group">
+    <a href="/user/{{ user.username }}" class="list-group-item">
+      <span class="badge">
+        {% if request.user and request.user == user %}
+          {{ user.pastes_count }}
+        {% else %}
+          {{ user.public_pastes_count }}
+        {% endif %}
+      </span>
+      发布的代码段
+    </a>
+    <a href="/user/{{ user.username }}/likes" class="list-group-item">
+      <span class="badge paste-likes-count">{{ user.paste_likes_count }}</span>
+      喜欢的代码段
+    </a>
+  </div>
+</div>

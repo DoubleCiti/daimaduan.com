@@ -1,43 +1,43 @@
 {% extends 'base.html' %}
+{% from 'macros/users.html' import render_user_panel with context %}
 {% from 'macros/tags.html' import render_tag %}
 {% from 'macros/pastes.html' import render_code %}
-{% from 'macros/comments.html' import render_comment_form with context %}
+{% from 'macros/pastes.html' import render_private %}
+{% from 'macros/pastes.html' import like_paste_button %}
+{% from 'macros/pastes.html' import edit_paste_button %}
+{% from 'macros/pastes.html' import del_paste_button %}
+{% from 'macros/common.html' import render_comment_form with context %}
 
 {% block title %}{{ paste.title }}{% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h4>
-    <span class="fa {% if paste.is_user_favourited() %}fa-star{% else %}fa-star-empty{% endif %}" aria-hidden="true"></span>
-    {% if paste.is_private %}
-      <span class="fa fa-lock text-warning" title="私有"></span>
-    {% endif %}
-    {{ paste.title }}</h4>
-</div>
+  <div class="pull-right paste-actions">
+    {{ edit_paste_button(paste) }}
+    {{ del_paste_button(paste) }}
+    {{ like_paste_button(request.user, paste) }}
+  </div>
 
-{% for code in paste.codes %}
-  {{ render_code(code) }}
-{% endfor %}
+  <h3 class="page-header">
+    {{ paste.title }}
+    {{ render_private(paste) }}
+  </h3>
 
-{{ render_comment_form(paste.disqus_identifier) }}
+  <div class="page-sub-header">
+    <div class="actions pull-right">
+    </div>
 
+    <span class="text-muted">
+      最后更新于 {{ paste.updated_at | time_passed }}
+    </span>
+  </div>
+
+  {% for code in paste.codes %}
+    {{ render_code(code) }}
+  {% endfor %}
+
+  {{ render_comment_form(paste.disqus_identifier) }}
 {% endblock %}
 
 {% block sidebar %}
-<div class="panel panel-default" id="comments">
-  <div class="panel-heading">
-    <h3 class="panel-title">{{ paste.title }}</h3>
-  </div>
-  <div class="panel-body">
-    <div>{% if paste.user.id == request.user.id %}<a href="/paste/{{ paste.hash_id }}/edit" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-pencil">修改</i></a> <a href="/paste/{{ paste.hash_id }}/delete" class="btn btn-danger btn-xs"  id="delete-paste"><i class="glyphicon glyphicon-remove">删除</i></a>{% endif %}</div>
-    {% if request.user %}<div>{% if request.user.is_in_favourites(paste) %}<a href="/unfavourite/{{ paste.hash_id }}">取消加入收藏</a>{% else %}<a href="/favourite/{{ paste.hash_id }}">加入收藏</a>{% endif %}</div>{% endif %}
-    <div>分享者: <a href="/user/{{ paste.user.username }}"><img src="{{ paste.user.gravatar_url(width=20) }}" />{{ paste.user.username }}</a></div>
-    <div>最后修改时间: {{ paste.updated_at | datetimeformat }}</div>
-    <div>{% for tag in paste.tags %}{{ render_tag(tag) }}{% endfor %}</div>
-    <!-- <div>
-      <a href="javascript:;" id="paste_like" data-id="{{ paste.hash_id }}"><span class="glyphicon glyphicon-thumbs-up"></span></a>
-      <a href="javascript:;" id="paste_dislike" data-id="{{ paste.hash_id }}"><span class="glyphicon glyphicon-thumbs-down"></span></a>
-    </div> -->
-  </div>
-</div>
+  {{ render_user_panel(paste.user) }}
 {% endblock %}

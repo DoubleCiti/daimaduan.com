@@ -1,6 +1,8 @@
-{%- from 'macros/users.html' import render_user_avatar -%}
-{%- from 'macros/tags.html' import render_tag -%}
-{% for paste in pastes %}
+{% from 'macros/users.html' import render_user_avatar -%}
+{% from 'macros/tags.html' import render_tag -%}
+{% from 'macros/pastes.html' import render_source_code -%}
+{% from 'macros/pastes.html' import render_private -%}
+
 <div class="paste" id="paste-{{ paste.id }}">
   <div class="media">
     <div class="media-left">
@@ -11,6 +13,10 @@
         <a href="/paste/{{ paste.hash_id }}" class="text-muted">
           <span class="fa fa-file-code-o"></span>
           {{ paste.codes | length }}段代码
+        </a>
+        <a href="javascript:;" class="text-muted">
+          <span class="fa fa-heart-o"></span>
+          {{ paste.likes_count }}次喜欢
         </a>
         <a href="/paste/{{ paste.hash_id }}#comments" class="text-muted">
           <span class="fa fa-file-code-o"></span>
@@ -23,12 +29,13 @@
 
       <h5 class="media-heading">
         <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">
-          {{ paste.title | truncate(30) }}{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}
+          {{ paste.title | truncate(30) }}
+          {{ render_private(paste) }}
         </a>
       </h5>
 
       <p class="text-muted">
-        <small>{{ paste.updated_at | time_passed }}</small>
+        <small>最后更新于{{ paste.updated_at | time_passed }}</small>
       </p>
 
     </div>
@@ -49,4 +56,3 @@
     <div class="clearfix"></div>
   </div>
 </div>
-{% endfor %}
