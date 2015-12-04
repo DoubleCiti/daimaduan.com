@@ -17,12 +17,15 @@ from daimaduan.models import Tag
 
 from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
+from daimaduan.forms import EmailForm
+from daimaduan.forms import PasswordForm
 
 from daimaduan.utils import user_bind_oauth, jsontify
 from daimaduan.utils import get_session
 
 from daimaduan.utils import validate_token
-from daimaduan.utils import send_confirm_mail
+from daimaduan.utils import send_confirm_email
+from daimaduan.utils import send_reset_password_email
 from daimaduan.utils import logger
 
 
@@ -79,7 +82,7 @@ def oauth_callback(provider):
 
 
 @app.get('/signin', name='users.signin')
-@jinja2_view('signin.html')
+@jinja2_view('user/signin.html')
 def signin_get():
     if request.user:
         redirect('/')
@@ -88,7 +91,7 @@ def signin_get():
 
 
 @app.post('/signin', name='users.signin')
-@jinja2_view('signin.html')
+@jinja2_view('user/signin.html')
 def signin_post():
     session = get_session(request)
 
@@ -111,7 +114,7 @@ def signout_delete():
 
 
 @app.get('/signup', name='users.signup')
-@jinja2_view('signup.html')
+@jinja2_view('user/signup.html')
 def signup_get():
     if request.user:
         redirect('/')
@@ -120,7 +123,7 @@ def signup_get():
 
 
 @app.post('/signup', name='users.signup')
-@jinja2_view('signup.html')
+@jinja2_view('user/signup.html')
 def signup_post():
     form = SignupForm(request.forms)
     if form.validate():
@@ -128,14 +131,69 @@ def signup_post():
         form.populate_obj(user)
         user.save()
         login.login_user(user.id)
-        send_confirm_mail(app.config, user.email)
-
+        send_confirm_email(app.config, user.email)
         return redirect('/active_email')
     return {'form': form}
 
 
+@app.get('/lost_password', name='users.lost_password')
+@jinja2_view('user/lost_password.html')
+def lost_password_get():
+    return {'form': EmailForm()}
+
+
+@app.post('/lost_password', name='users.lost_password')
+@jinja2_view('user/lost_password.html')
+def lost_password_post():
+    form = EmailForm(request.forms)
+    if form.validate():
+        user = User.objects(email=form.email.data).first()
+        send_reset_password_email(app.config, user.email)
+        return redirect('/reset_password_email_sent')
+    return {'form': form}
+
+
+@app.get('/reset_password_email_sent')
+@jinja2_view('error.html')
+def reset_password_email_sent():
+    return {'title': u"重置密码的邮件已经发出", 'message': u"重置密码的邮件已经发出, 请查收邮件并重置密码"}
+
+
+@app.get('/reset_password/<token>')
+@jinja2_view('user/reset_password.html')
+def reset_password_get(token):
+    email = validate_token(app.config, token)
+    if email:
+        user = User.objects(email=email).first()
+        if user:
+            return {'form': PasswordForm(), 'token': token}
+    abort(404)
+
+
+@app.post('/reset_password/<token>')
+@jinja2_view('user/reset_password.html')
+def reset_password_post(token):
+    email = validate_token(app.config, token)
+    if email:
+        user = User.objects(email=email).first()
+        if user:
+            form = PasswordForm(request.forms)
+            if form.validate():
+                user.password = user.generate_password(form.password.data)
+                user.save()
+                redirect('/reset_password_success')
+            return {'form': PasswordForm(), 'token': token}
+    abort(404)
+
+
+@app.get('/reset_password_success')
+@jinja2_view('error.html')
+def reset_password_success():
+    return {'title': u"重置密码成功", 'message': u"您的密码已经重置, 请重新登录"}
+
+
 @app.get('/user/<username>')
-@jinja2_view('user.html')
+@jinja2_view('user/user.html')
 def user_index(username):
     user = User.objects(username=username).first()
     if user:
@@ -190,6 +248,6 @@ def active_email():
 def send_mail(email):
     user = User.objects(email=email).first()
     if user:
-        send_confirm_mail(app.config, email)
+        send_confirm_email(app.config, email)
         return {'title': u'发送成功'}
     return abort(404)
