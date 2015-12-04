@@ -1,16 +1,30 @@
+# coding: utf-8
+
 """
     daimaduan.utils
     ---------------
 
     A set of utilities.
 """
+from bottle import request
+from bottle import abort
 from functools import wraps
-
 from json import dumps
+import logging
 
 from bottle import response
+from itsdangerous import URLSafeTimedSerializer
+from mailthon import email
+from mailthon.postman import Postman
+from mailthon.middleware import TLS
+from mailthon.middleware import Auth
 
 from daimaduan.models import UserOauth
+from daimaduan.models import User
+
+# Setup logger
+logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO)
+logger = logging.getLogger('daimaduan')
 
 
 def oauth_config(config, provider):
@@ -53,3 +67,62 @@ def jsontify(func):
         response.content_type = 'application/json'
         return dumps(result)
     return jsontify_function
+
+
+def generate_confirmation_token(config, email):
+    """generate confirmation token using user's email via itsdangerous"""
+    serializer = URLSafeTimedSerializer(config['site.secret_key'])
+    return serializer.dumps(email, salt=config['site.token_salt'])
+
+
+def validate_token(config, token, expire_time=3600):
+    """from token and expire_time to confirm user's email"""
+    serializer = URLSafeTimedSerializer(config['site.secret_key'])
+    try:
+        confirmed_email = serializer.loads(token, max_age=expire_time, salt=config['site.token_salt'])
+    except Exception:
+        return False
+    return confirmed_email
+
+
+SENDER = 'noreply.daimaduan@gmail.com'
+SUBJECT = u'请激活您在代码段注册的邮箱地址'
+CONTENT = u"<p>你好 %s,</p> \
+    <p>非常感谢注册代码段. 请点击<a href=\"http://preview.daimaduan.com/confirm/%s\">链接</a>来激活您的邮箱地址.</p> \
+            <p>或者您可以拷贝下面这个地址到您的浏览器中访问来激活邮箱地址 http://preview.daimaduan.com/confirm/%s </p> \
+            <br> \
+            <p>此致！</p> \
+            <p>代码段团队</p>"
+
+
+def send_confirm_mail(config, user_email):
+    token = generate_confirmation_token(config, user_email)
+    user = User.objects(email=user_email).first()
+    envelope = email(
+        sender=SENDER,
+        receivers=[user_email],
+        subject=SUBJECT,
+        content=CONTENT % (user.username, token, token),
+    )
+
+    postman = Postman(host=config['mail.host'],
+                      port=int(config['mail.port']),
+                      middlewares=[TLS(force=True),
+                                   Auth(username=config['mail.username'], password=config['mail.password'])])
+    try:
+        response = postman.send(envelope)
+        if response.ok:
+            logger.info("Successfully send confirm email to %s" % user.email)
+        else:
+            logger.error("Failed to send confirm email to %s" % user.email)
+    except Exception, e:
+        logger.error("Exception occured when send email: %s" % e)
+
+
+def user_active_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if request.user.is_email_confirmed:
+            return func(*args, **kwargs)
+        return abort(403)
+    return wrapper

@@ -1,7 +1,6 @@
 # coding: utf-8
 import os
 import bottle
-import logging
 import mongoengine
 
 from bottle_login import LoginPlugin
@@ -11,10 +10,7 @@ from rauth import OAuth2Service
 
 app = bottle.default_app()
 
-# Setup logger
-logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO)
-logger = logging.getLogger('daimaduan')
-
+# Auto cast `site.debug` to boolean type.
 app.config.load_config('config.cfg')
 # Check if there's a key in env variables
 # if you want to set config on the fly, use env var

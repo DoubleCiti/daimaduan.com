@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+{% if email %}
+    <span>
+        恭喜您, 注册成功! 我们已经向您的注册邮箱发送了激活邮件, 请检查并激活您的账户.
+    </span>
+    <br>
+    <span>
+        如果您没有收到邮件,请点击<a href="/sendmail/{{email}}">重新发送</a>.
+    </span>
+{% else %}
+    <span>
+        激活邮件已经重新发送, 请检查并激活您的账户.
+    </span>
+{% endif %}
+{% endblock %}
