@@ -204,7 +204,7 @@ def user_index(username):
 
 @app.get('/user/favourites', name='users.favourites')
 @login.login_required
-@jinja2_view('favourites.html')
+@jinja2_view('user/favourites.html')
 def favourites_get():
     return {'pastes': request.user.get_favourites_by_page(1),
             'tags': Tag.objects().order_by('-popularity')[:10]}
