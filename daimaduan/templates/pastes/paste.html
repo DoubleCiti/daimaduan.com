@@ -1,6 +1,5 @@
 {%- from 'macros/users.html' import render_user_avatar -%}
-{%- from 'macros/tags.html' import render_tag %}
-{%- from 'macros/pastes.html' import render_source_code %}
+{%- from 'macros/tags.html' import render_tag -%}
 
 <div class="paste" id="paste-{{ paste.id }}">
   <div class="media">
@@ -16,7 +15,7 @@
         <a href="/paste/{{ paste.hash_id }}#comments" class="text-muted">
           <span class="fa fa-file-code-o"></span>
           <span class="disqus-comment-count"
-                data-disqus-identifier="{{ paste.to_disqus_identifier() }}">
+                data-disqus-identifier="{{ paste.disqus_identifier }}">
             0条评论
           </span>
         </a>
@@ -48,8 +47,6 @@
     </p>
 
     <div class="clearfix"></div>
-
-    {{ render_source_code(paste.codes[0].content_head()) }}
   </div>
 
   <h5>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h5>

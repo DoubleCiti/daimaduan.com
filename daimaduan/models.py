@@ -114,9 +114,12 @@ class Paste(BaseDocument):
     def to_json(self):
         return {'hash_id': self.hash_id,
                 'title': self.title,
+                'short_title': self.title[:30],
                 'tags': self.tags,
                 'num_codes': len(self.codes),
                 'time_passed': time_passed(self.updated_at),
+                'disqus_identifier': self.disqus_identifier,
+                'is_private': self.is_private,
                 'user': self.user.to_json()}
 
     def is_user_favourited(self):
@@ -124,7 +127,8 @@ class Paste(BaseDocument):
             return request.user.is_in_favourites(self)
         return False
 
-    def to_disqus_identifier(self):
+    @property
+    def disqus_identifier(self):
         return 'paste-%s' % self.hash_id
 
 
