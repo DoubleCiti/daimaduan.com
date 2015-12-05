@@ -8,6 +8,7 @@ validate_key = "youdon'tneedtoknow"
 secret_key = "ddf4FP4U&VydAq"
 disqus = daimaduan-dev
 token_salt = "iamDavid"
+domain = daimaduan.com
 
 [oauth.google]
 name = google
