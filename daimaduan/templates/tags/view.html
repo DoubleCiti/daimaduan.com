@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}{{ tag.name }}{% endblock %}
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-heading">{{ tag.name }}代码</div>
+<h3 class="page-header">{{ tag.name }}代码</h3>
 
-	<ul class="list-group">
-		{% for paste in pastes %}
-			{% include ('items/_paste.html') %}
-		{% endfor %}
-		<li class="list-group-item" id="more_button_li">
-			<button class="btn btn-default btn-block" id="more_button" data-page="2" data-tag="{{ tag.name }}">更多</button>
-		</li>
-	</ul>
-</div>
+<section class="pastes">
+	{% for paste in pastes %}
+		{% include ('pastes/paste.html') %}
+	{% endfor %}
+
+	<div id="more_button_li">
+		<button class="btn btn-default btn-block" id="more_button" data-page="2" data-tag="{{ tag.name }}">更多</button>
+	</div>
+</section>
 {% endblock %}

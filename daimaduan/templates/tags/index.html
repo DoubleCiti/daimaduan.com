@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{%- from 'macros/tags.html' import render_tag -%}
 {% block title %}所有标签{% endblock %}
 {% block content %}
 <h2 class="new-paste-title pl10">
@@ -7,7 +8,7 @@
 </h2>
 <div id="tag_view" class="mt10 pt10 pl20 pr20">
 	{% for tag in tags %}
-		{% include 'items/_tag.html' %}
+		{{ render_tag(tag.name) }}
 	{% endfor %}
 </div>
 {% endblock %}
