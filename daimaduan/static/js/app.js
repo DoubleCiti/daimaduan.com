@@ -9,23 +9,46 @@ function signoutHandler() {
 }
 
 function createLi(paste) {
-      var li = '<li class="list-group-item">';
-      li += '<div class="pull-right">';
-      li += '<a href="/user/' + paste.user.username + '" class="text-muted" title="' + paste.user.username + '">';
-      li += '<img src="' + paste.user.gravatar_url + '" alt="' + paste.user.username + '" class="img-rounded"/></a>';
-      li += '</div>';
-      li += '<h5>';
-      li += '<a href="/paste/' + paste.hash_id + '" title="' + paste.title + '">' + paste.title + '</a> ';
-      li += '<span class="label label-default">' + paste.time_passed + '</span> ';
-      li += '<span class="label label-primary">有' + paste.num_codes + '段代码</span>';
-      li += '<a href="/paste/' + paste.hash_id + '#disqus_thread" class="label label-info"></a>'
-      li += '</h5>';
+      var elem = '<div class="paste" id="paste-' + paste.hash_id + '">';
+      elem += '<div class="media">';
+      elem += '<div class="media-left">';
+      elem += '<a href="/user/' + paste.user.username + '" title="' + paste.user.username + '">';
+      elem += '<img src="' + paste.user.gravatar_url + '" width="38" height="38" alt="' + paste.user.username + '" class="img-rounded" />';
+      elem += '</a>';
+      elem += '</div>';
+
+      elem += '<div class="media-body">';
+      elem += '<div class="paste-metas pull-right">';
+      elem += '<a href="/paste/' + paste.hash_id + '" class="text-muted"><span class="fa fa-title-code-o"></span>' + paste.num_codes + '段代码</a>';
+      elem += '<a href="/paste/' + paste.hash_id + '#comments" class="text-muted"><span class="fa fa-file-code-o"></span>';
+      elem += '<span class="disqus-comment-count" data-disqus-identifier="' + paste.disqus_identifier + '">0条评论</span>';
+      elem += '</a>';
+      elem += '</div>';
+
+      elem += '<h5 class="media-heading">';
+      elem += '<a href="/paste/' + paste.hash_id + '" title="' + paste.title + '">' + paste.short_title + '</a>';
+      elem += '</h5>';
+
+      elem += '<p class="text-muted"><small>' + paste.time_passed + '</small></p>';
+      elem += '</div>';
+
+      elem += '<p class="pull-right"><a href="/paste/' + paste.hash_id + '">查看完整代码<span class="fa fa-caret-right"></span></a></p>';
+
+      elem += '<p class="paste-tags">';
       $.each(paste.tags, function(i, tag) {
-        li += '<a href="/tag/' + tag + '" class="btn btn-xs btn-warning" title="' + tag + '">' + tag + '</a>';
+        elem += '<a href="/tag/' + tag + '" class="label label-warning tag" title="' + tag + '">' + tag + '</a>';
       });
-      li += '<div class="clearfix"></div>';
-      li += '</li>';
-      return li;
+      elem += '</p>';
+
+      elem += '<div class="clearfix"></div>';
+      elem += '</div>';
+
+      elem += '<h5>';
+      if (paste.is_private) {
+        elem += '<span class="label label-default">私有</span>';
+      }
+      elem += '</h5>';
+      return elem;
  }
 
 $(document).ready(function() {
