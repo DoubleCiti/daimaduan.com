@@ -46,9 +46,7 @@ pre code {
 }
 
 .tag {
-  margin-top: 3px;
   margin-bottom: 3px;
-  display: inline-block;
 }
 
 /* Bootstrap Override */

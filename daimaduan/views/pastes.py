@@ -122,8 +122,9 @@ def edit_post(hash_id):
         paste.title = form.title.data
         paste.is_private = form.is_private.data
         tags = []
-        for code in paste.codes:
-            paste.codes.remove(code)
+        codes = [code for code in paste.codes]
+        paste.codes = []
+        for code in codes:
             code.delete()
         for i, c in enumerate(form.codes):
             tag_name = c.tag.data.lower()
