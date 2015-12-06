@@ -227,13 +227,14 @@ def confirm_email(token):
     if email:
         user = User.objects(email=email).first()
         if user:
-            if user.is_email_confirmed:
-                return {'title': u"Email已经激活过了", 'message': u"对不起，您的email已经激活过了。"}
-            else:
-                user.is_email_confirmed = True
-                user.email_confirmed_on = datetime.datetime.now()
-                user.save()
-                return {'title': u'Email已经激活', 'message': u'您的email已经激活，请点击登录查看最新代码段。'}
+            if (request.user is not None and user == request.user) or request.user is None:
+                if user.is_email_confirmed:
+                    return {'title': u"Email已经激活过了", 'message': u"对不起，您的email已经激活过了。"}
+                else:
+                    user.is_email_confirmed = True
+                    user.email_confirmed_on = datetime.datetime.now()
+                    user.save()
+                    return {'title': u'Email已经激活', 'message': u'您的email已经激活，请点击登录查看最新代码段。'}
     return {'title': u'Email验证链接错误', 'message': u'对不起，您的验证链接无效或者已经过期。'}
 
 
