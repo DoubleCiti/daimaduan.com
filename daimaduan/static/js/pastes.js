@@ -1,4 +1,14 @@
 (function() {
+  function initPaste() {
+    $(document).on('click', '#delete-paste', function(event) {
+      event.preventDefault();
+      var r = confirm("确定删除这个代码集合吗?");
+      if  (r == true) {
+        location.href = $(this).attr('href');
+      }
+    })
+  }
+
   function initCodes() {
     $(document).on('click', '#one_more', function(event) {
       event.preventDefault();
@@ -56,6 +66,7 @@ function initGetMore() {
 }
 
   $(document).ready(function() {
+    initPaste();
     initCodes();
     initGetMore();
   });

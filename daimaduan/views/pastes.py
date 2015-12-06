@@ -149,6 +149,18 @@ def edit_post(hash_id):
     return {'form': form, 'paste': paste}
 
 
+@app.get('/paste/<hash_id>/delete', name='pastes.delete')
+@login.login_required
+def delete(hash_id):
+    paste = Paste.objects(hash_id=hash_id).first()
+    if not paste:
+        abort(404)
+    if paste.user.id != request.user.id:
+        abort(404)
+    paste.delete()
+    return redirect('/')
+
+
 @app.route('/tags', name='tags.index')
 @jinja2_view('tags/index.html')
 def tags():

@@ -30,7 +30,7 @@
     <h3 class="panel-title">{{ paste.title }}</h3>
   </div>
   <div class="panel-body">
-    <div>{% if paste.user.id == request.user.id %}<span><a href="/paste/{{ paste.hash_id }}/edit">修改</a></span>{% endif %}</div>
+    <div>{% if paste.user.id == request.user.id %}<a href="/paste/{{ paste.hash_id }}/edit" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-pencil">修改</i></a> <a href="/paste/{{ paste.hash_id }}/delete" class="btn btn-danger btn-xs"  id="delete-paste"><i class="glyphicon glyphicon-remove">删除</i></a>{% endif %}</div>
     {% if request.user %}<div>{% if request.user.is_in_favourites(paste) %}<a href="/unfavourite/{{ paste.hash_id }}">取消加入收藏</a>{% else %}<a href="/favourite/{{ paste.hash_id }}">加入收藏</a>{% endif %}</div>{% endif %}
     <div>分享者: <a href="/user/{{ paste.user.username }}"><img src="{{ paste.user.gravatar_url(width=20) }}" />{{ paste.user.username }}</a></div>
     <div>最后修改时间: {{ paste.updated_at | datetimeformat }}</div>
