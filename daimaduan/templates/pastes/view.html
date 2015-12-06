@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
+{% from 'macros/tags.html' import render_tag %}
 {% from 'macros/pastes.html' import render_code %}
 {% from 'macros/common.html' import render_comment_form with context %}
 
 {% block title %}{{ paste.title }}{% endblock %}
 
 {% block content %}
-<h3 class="page-header">
+<div class="page-header">
   <span class="fa {% if paste.is_user_favourited() %}fa-star{% else %}fa-star-empty{% endif %}" aria-hidden="true"></span>
 
   {% if paste.is_private %}
     <span class="fa fa-lock text-warning" title="私有"></span>
   {% endif %}
 
-  {{ paste.title }}
-</h3>
+  <h4>{{ paste.title }}</h4>
+</div>
 
 {% for code in paste.codes %}
   {{ render_code(code) }}
@@ -33,7 +34,7 @@
     {% if request.user %}<div>{% if request.user.is_in_favourites(paste) %}<a href="/unfavourite/{{ paste.hash_id }}">取消加入收藏</a>{% else %}<a href="/favourite/{{ paste.hash_id }}">加入收藏</a>{% endif %}</div>{% endif %}
     <div>分享者: <a href="/user/{{ paste.user.username }}"><img src="{{ paste.user.gravatar_url(width=20) }}" />{{ paste.user.username }}</a></div>
     <div>最后修改时间: {{ paste.updated_at | datetimeformat }}</div>
-    <div>{% for tag in paste.tags %}<a href="/tag/{{ tag }}" title="{{ tag }}" class="btn btn-xs btn-warning">{{ tag }}</a>{% endfor %}</div>
+    <div>{% for tag in paste.tags %}{{ render_tag(tag) }}{% endfor %}</div>
     <!-- <div>
       <a href="javascript:;" id="paste_like" data-id="{{ paste.hash_id }}"><span class="glyphicon glyphicon-thumbs-up"></span></a>
       <a href="javascript:;" id="paste_dislike" data-id="{{ paste.hash_id }}"><span class="glyphicon glyphicon-thumbs-down"></span></a>
