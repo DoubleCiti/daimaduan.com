@@ -3,3 +3,4 @@ from .signin_form import SigninForm
 from .paste_form import PasteForm
 from .email_form import EmailForm
 from .password_form import PasswordForm
+from .user_info_form import UserInfoForm
