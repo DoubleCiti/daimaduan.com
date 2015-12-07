@@ -12,6 +12,7 @@ from daimaduan.bootstrap import login
 from daimaduan.bootstrap import oauth_services
 
 from daimaduan.models import User
+from daimaduan.models import UserOauth
 from daimaduan.models import Paste
 from daimaduan.models import Tag
 
@@ -19,6 +20,7 @@ from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
 from daimaduan.forms import EmailForm
 from daimaduan.forms import PasswordForm
+from daimaduan.forms import UserInfoForm
 
 from daimaduan.utils import user_bind_oauth, jsontify
 from daimaduan.utils import get_session
@@ -42,12 +44,11 @@ def oauth_signin(provider):
 
 
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
-@jinja2_view('oauths/callback.html')
+@jinja2_view('user/manage.html')
 def oauth_callback(provider):
     logger.info("Oauth callback for %s" % provider)
     redirect_uri = app.config['oauth.%s.callback_url' % provider]
     oauth_service = oauth_services[provider]
-    session = get_session(request)
 
     data = dict(code=request.params.get('code'),
                 grant_type='authorization_code',
@@ -56,9 +57,13 @@ def oauth_callback(provider):
     if provider == 'google':
         oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
         user_info = oauth_session.get('userinfo').json()
-    else:
+        email = user_info['email']
+        username = user_info['given_name']
+    elif provider == 'github':
         oauth_session = oauth_service.get_auth_session(data=data)
         user_info = oauth_session.get('user').json()
+        email = user_info['email']
+        username = user_info['login']
 
     access_token = oauth_session.access_token
     user_info['id'] = str(user_info['id'])
@@ -72,13 +77,30 @@ def oauth_callback(provider):
         login.login_user(str(user.id))
         return redirect('/')
     else:
-        session['oauth_provider'] = provider
-        session['oauth_openid'] = user_info['id']
-        session['oauth_name'] = user_info['name']
-        session['oauth_token'] = access_token
-        session.save()
+        user = User.objects(email=email).first()
+        if user:
+            user_oauth = UserOauth(provider=provider, openid=user_info['id'], token=access_token)
+            user_oauth.save()
+            login.login_user(str(user.id))
+            return redirect('/')
+        else:
+            return {'form': UserInfoForm(email=email, username=username)}
 
-        return {'user_info': user_info}
+
+@app.post('/user/manage', name='users.manage')
+@jinja2_view('user/manage.html')
+def manage():
+    form = UserInfoForm(request.forms)
+    if form.validate():
+        if request.user:
+            request.user.username = form.username.data
+            return redirect('/')
+        else:
+            user = User(email=form.email.data, username=form.username.data)
+            user.save()
+            login.login_user(str(user.id))
+            return redirect('/')
+    return {'form': form}
 
 
 @app.get('/signin', name='users.signin')
