@@ -249,6 +249,8 @@ def active_email():
 def send_mail(email):
     user = User.objects(email=email).first()
     if user:
-        send_confirm_email(app.config, email)
-        return {'title': u'发送成功'}
+        if user.is_email_confirmed is False:
+            if request.user is None or request.user.email == user.email:
+                send_confirm_email(app.config, email)
+                return {'title': u'发送成功'}
     return abort(404)
