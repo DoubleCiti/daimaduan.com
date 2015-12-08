@@ -13,6 +13,7 @@ from json import dumps
 import logging
 
 from bottle import response
+from bottle import jinja2_template
 from itsdangerous import URLSafeTimedSerializer
 from mailthon import email
 from mailthon.postman import Postman
@@ -143,5 +144,5 @@ def user_active_required(func):
     def wrapper(*args, **kwargs):
         if request.user.is_email_confirmed:
             return func(*args, **kwargs)
-        return abort(403)
+        return jinja2_template('email/active.html', email=request.user.email, title=u"邮箱需要激活", reactive=True)
     return wrapper
