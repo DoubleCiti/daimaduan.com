@@ -19,9 +19,3 @@ def error_500(error):
 @jinja2_view('error.html')
 def error_401(error):
     return {'title': u'请登录', 'message': u'请登录后再执行此操作!'}
-
-
-@error(403)
-@jinja2_view('error.html')
-def error_403(error):
-    return {'title': u'请激活email', 'message': u'请激活您在代码段注册的邮箱地址再进行操作!'}

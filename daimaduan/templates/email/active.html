@@ -2,12 +2,19 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 {% if email %}
+    {% if reactive == True %}
+        <span>
+            您的邮箱没有激活，暂时不能分享代码，请激活您的email。
+        </span>
+        <br>
+    {% else %}
+        <span>
+            恭喜您, 注册成功! 我们已经向您的注册邮箱发送了激活邮件, 请检查并激活您的账户.
+        </span>
+        <br>
+    {% endif %}
     <span>
-        恭喜您, 注册成功! 我们已经向您的注册邮箱发送了激活邮件, 请检查并激活您的账户.
-    </span>
-    <br>
-    <span>
-        如果您没有收到邮件,请点击<a href="/sendmail/{{email}}">重新发送</a>.
+        如果您没有收到激活邮件,请点击<a href="/sendmail/{{email}}">重新发送</a>.
     </span>
 {% else %}
     <span>
