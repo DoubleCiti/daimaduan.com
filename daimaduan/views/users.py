@@ -7,6 +7,9 @@ from bottle import redirect
 from bottle import abort
 from bottle import jinja2_view
 
+from bottle_utils.csrf import csrf_protect
+from bottle_utils.csrf import csrf_token
+
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
 from daimaduan.bootstrap import oauth_services
@@ -45,6 +48,7 @@ def oauth_signin(provider):
 
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
 @jinja2_view('user/manage.html')
+@csrf_token
 def oauth_callback(provider):
     logger.info("Oauth callback for %s" % provider)
     redirect_uri = app.config['oauth.%s.callback_url' % provider]
@@ -84,11 +88,13 @@ def oauth_callback(provider):
             login.login_user(str(user.id))
             return redirect('/')
         else:
-            return {'form': UserInfoForm(email=email, username=username)}
+            return {'form': UserInfoForm(email=email, username=username), 'token': request.csrf_token}
 
 
 @app.post('/user/manage', name='users.manage')
 @jinja2_view('user/manage.html')
+@csrf_token
+@csrf_protect
 def manage():
     form = UserInfoForm(request.forms)
     if form.validate():
@@ -96,24 +102,27 @@ def manage():
             request.user.username = form.username.data
             return redirect('/')
         else:
-            user = User(email=form.email.data, username=form.username.data)
+            user = User(email=form.email.data, username=form.username.data,
+                        is_email_confirmed=True)
             user.save()
             login.login_user(str(user.id))
             return redirect('/')
-    return {'form': form}
+    return {'form': form, 'token': request.csrf_token}
 
 
 @app.get('/signin', name='users.signin')
 @jinja2_view('user/signin.html')
+@csrf_token
 def signin_get():
     if request.user:
         redirect('/')
     else:
-        return {'form': SigninForm()}
+        return {'form': SigninForm(), 'token': request.csrf_token}
 
 
 @app.post('/signin', name='users.signin')
 @jinja2_view('user/signin.html')
+@csrf_protect
 def signin_post():
     session = get_session(request)
 
@@ -137,15 +146,18 @@ def signout_delete():
 
 @app.get('/signup', name='users.signup')
 @jinja2_view('user/signup.html')
+@csrf_token
 def signup_get():
     if request.user:
         redirect('/')
     else:
-        return {'form': SignupForm()}
+        return {'form': SignupForm(), 'token': request.csrf_token}
 
 
 @app.post('/signup', name='users.signup')
 @jinja2_view('user/signup.html')
+@csrf_token
+@csrf_protect
 def signup_post():
     form = SignupForm(request.forms)
     if form.validate():
@@ -155,7 +167,7 @@ def signup_post():
         login.login_user(user.id)
         send_confirm_email(app.config, user.email)
         return redirect('/active_email')
-    return {'form': form}
+    return {'form': form, 'token': request.csrf_token}
 
 
 @app.get('/lost_password', name='users.lost_password')
