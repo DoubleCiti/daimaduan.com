@@ -4,6 +4,9 @@ from bottle import request
 from bottle import redirect
 from bottle import jinja2_view
 
+from bottle_utils.csrf import csrf_protect
+from bottle_utils.csrf import csrf_token
+
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
 
@@ -42,15 +45,18 @@ def pastes_more():
 @login.login_required
 @user_active_required
 @jinja2_view('pastes/create.html')
+@csrf_token
 def create_get():
     form = PasteForm(data={'codes': [{'title': '', 'content': ''}]})
-    return {'form': form}
+    return {'form': form, 'token': request.csrf_token}
 
 
 @app.post('/create', name='pastes.create')
 @login.login_required
 @user_active_required
 @jinja2_view('pastes/create.html')
+@csrf_token
+@csrf_protect
 def create_post():
     form = PasteForm(request.POST)
     if form.validate():
@@ -77,7 +83,7 @@ def create_post():
         paste.tags = list(set(tags))
         paste.save()
         return redirect('/paste/%s' % paste.hash_id)
-    return {'form': form}
+    return {'form': form, 'token': request.csrf_token}
 
 
 @app.route('/paste/<hash_id>', name='pastes.show')
@@ -94,6 +100,7 @@ def view(hash_id):
 @app.route('/paste/<hash_id>/edit', name='pastes.update')
 @login.login_required
 @jinja2_view('pastes/edit.html')
+@csrf_token
 def edit_get(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
     if not paste:
@@ -104,12 +111,14 @@ def edit_get(hash_id):
             'is_private': paste.is_private,
             'codes': [{'title': code.title, 'content': code.content, 'tag': code.tag} for code in paste.codes]}
     form = PasteForm(data=data)
-    return {'form': form, 'paste': paste}
+    return {'form': form, 'paste': paste, 'token': request.csrf_token}
 
 
 @app.post('/paste/<hash_id>/edit', name='pastes.update')
 @login.login_required
 @jinja2_view('pastes/edit.html')
+@csrf_token
+@csrf_protect
 def edit_post(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
     if not paste:
@@ -146,7 +155,7 @@ def edit_post(hash_id):
         paste.tags = list(set(tags))
         paste.save()
         return redirect('/paste/%s' % paste.hash_id)
-    return {'form': form, 'paste': paste}
+    return {'form': form, 'paste': paste, 'token': request.csrf_token}
 
 
 @app.get('/paste/<hash_id>/delete', name='pastes.delete')

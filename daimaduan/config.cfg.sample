@@ -10,6 +10,12 @@ disqus = daimaduan-dev
 token_salt = "iamDavid"
 domain = daimaduan.com
 
+[csrf]
+secret = "shouldbeasecret"
+token_name = _csrf_token
+path = /
+expires = 600
+
 [oauth.google]
 name = google
 client_id = 572596272656-9urgn16qjoj36c439pecjcjmsogs76au.apps.googleusercontent.com
