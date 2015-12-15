@@ -6,13 +6,11 @@
         event.preventDefault();
         $.ajax({
           data: 'p=' + p,
+          dataType: 'html',
           type: 'GET',
           url: '/tag/' + tag + '/more',
           success: function(data) {
-            $.each(data.pastes, function(i, paste) {
-              var li = createLi(paste);
-              $(li).insertBefore('#more_button_li');
-            });
+            $(data).insertBefore('#more_button_li');
           }
         });
         $(this).attr('data-page', parseInt(p) + 1);

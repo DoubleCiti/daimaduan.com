@@ -6,9 +6,7 @@
 <h3 class="page-header">最新代码</h3>
 
 <section class="pastes">
-	{% for paste in pastes %}
-		{% include ('pastes/paste.html') %}
-	{% endfor %}
+	{% include ('pastes/pastes.html') %}
 
 	<div id="more_button_li">
 		<button class="btn btn-default btn-block" id="more_button" data-page="2" {% if not has_more_pastes %}disabled="disabled"{% endif %}>更多</button>

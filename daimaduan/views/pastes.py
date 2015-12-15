@@ -20,7 +20,7 @@ from daimaduan.utils import jsontify
 from daimaduan.utils import user_active_required
 
 
-ITEMS_PER_PAGE = 20
+ITEMS_PER_PAGE = 1
 
 
 @app.route('/', name='pastes.index')
@@ -32,13 +32,12 @@ def index():
 
 
 @app.route('/pastes/more', name="pastes.more")
-@jsontify
+@jinja2_view('pastes/pastes.html')
 def pastes_more():
     p = int(request.query.p)
     if not p:
         return {}
-    pastes_objects = Paste.objects(is_private=False).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]
-    return {'pastes': [paste.to_json() for paste in pastes_objects]}
+    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]}
 
 
 @app.get('/create', name='pastes.create')
@@ -184,13 +183,12 @@ def tag(tag_name):
 
 
 @app.route('/tag/<tag_name>/more')
-@jsontify
+@jinja2_view('pastes/pastes.html')
 def tag_more(tag_name):
     p = int(request.query.p)
     if not p:
         return {}
-    pastes_objects = Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]
-    return {'pastes': [paste.to_json() for paste in pastes_objects]}
+    return {'pastes': Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]}
 
 
 @app.route('/favourite/<hash_id>', name='favourites.add')

@@ -1,6 +1,6 @@
 {%- from 'macros/users.html' import render_user_avatar -%}
 {%- from 'macros/tags.html' import render_tag -%}
-
+{% for paste in pastes %}
 <div class="paste" id="paste-{{ paste.id }}">
   <div class="media">
     <div class="media-left">
@@ -51,3 +51,4 @@
 
   <h5>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h5>
 </div>
+{% endfor %}
