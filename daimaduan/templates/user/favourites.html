@@ -3,9 +3,8 @@
 <h3 class="page-header">我的收藏</h3>
 
 <section class="pastes">
-	{% for paste in pastes %}
-		{% include ('pastes/paste.html') %}
-	{% endfor %}
+	{% include ('pastes/pastes.html') %}
+
 	<div id="more_button_li">
 		<button class="btn btn-default btn-block" id="more_button" data-page="2">更多</button>
 	</div>

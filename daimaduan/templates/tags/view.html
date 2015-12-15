@@ -4,9 +4,7 @@
 <h3 class="page-header">{{ tag.name }}代码</h3>
 
 <section class="pastes">
-	{% for paste in pastes %}
-		{% include ('pastes/paste.html') %}
-	{% endfor %}
+	{% include ('pastes/pastes.html') %}
 
 	<div id="more_button_li">
 		<button class="btn btn-default btn-block" id="more_button" data-page="2" data-tag="{{ tag.name }}">更多</button>

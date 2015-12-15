@@ -246,12 +246,12 @@ def favourites_get():
 
 @app.get('/user/favourites/more')
 @login.login_required
-@jsontify
+@jinja2_view('pastes/pastes.html')
 def favourites_more():
     p = int(request.query.p)
     if not p:
         return {}
-    return {'pastes': [paste.to_json() for paste in request.user.get_favourites_by_page(p)]}
+    return {'pastes': request.user.get_favourites_by_page(p)}
 
 
 @app.get('/confirm/<token>')

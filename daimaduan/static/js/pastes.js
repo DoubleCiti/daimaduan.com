@@ -49,16 +49,11 @@ function initGetMore() {
     event.preventDefault();
     $.ajax({
       data: 'p=' + p,
+      dataType: 'html',
       type: 'GET',
       url: '/pastes/more',
       success: function(data) {
-        if (data.pastes.length < 20) {
-            $('#more_button').attr('disabled', 'disabled');
-        }
-        $.each(data.pastes, function(i, paste) {
-          var li = createLi(paste);
-          $(li).insertBefore('#more_button_li');
-        });
+        $(data).insertBefore('#more_button_li');
       }
     });
     $(this).attr('data-page', parseInt(p) + 1);
