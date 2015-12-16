@@ -23,7 +23,7 @@
 
       <h5 class="media-heading">
         <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">
-          {{ paste.title | truncate(30) }}
+          {{ paste.title | truncate(30) }}{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}
         </a>
       </h5>
 
@@ -45,10 +45,8 @@
         {{ render_tag(tag) }}
       {% endfor %}
     </p>
-
+    <hr />
     <div class="clearfix"></div>
   </div>
-
-  <h5>{% if paste.is_private %} <span class="label label-default">私有</span>{% endif %}</h5>
 </div>
 {% endfor %}

@@ -7,13 +7,12 @@
 
 {% block content %}
 <div class="page-header">
-  <span class="fa {% if paste.is_user_favourited() %}fa-star{% else %}fa-star-empty{% endif %}" aria-hidden="true"></span>
-
-  {% if paste.is_private %}
-    <span class="fa fa-lock text-warning" title="私有"></span>
-  {% endif %}
-
-  <h4>{{ paste.title }}</h4>
+  <h4>
+    <span class="fa {% if paste.is_user_favourited() %}fa-star{% else %}fa-star-empty{% endif %}" aria-hidden="true"></span>
+    {% if paste.is_private %}
+      <span class="fa fa-lock text-warning" title="私有"></span>
+    {% endif %}
+    {{ paste.title }}</h4>
 </div>
 
 {% for code in paste.codes %}
