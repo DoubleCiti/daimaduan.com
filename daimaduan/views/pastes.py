@@ -20,7 +20,7 @@ from daimaduan.utils import jsontify
 from daimaduan.utils import user_active_required
 
 
-ITEMS_PER_PAGE = 1
+ITEMS_PER_PAGE = 20
 
 
 @app.route('/', name='pastes.index')

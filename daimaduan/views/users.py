@@ -231,7 +231,10 @@ def reset_password_success():
 def user_index(username):
     user = User.objects(username=username).first()
     if user:
-        pastes = Paste.objects(user=user, is_private=False).order_by('-updated_at')
+        if request.user:
+            pastes = Paste.objects(user=user).order_by('-updated_at')
+        else:
+            pastes = Paste.objects(user=user, is_private=False).order_by('-updated_at')
         return {'user': user, 'pastes': pastes}
     return abort(404)
 
