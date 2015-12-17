@@ -53,6 +53,7 @@ def oauth_callback(provider):
     logger.info("Oauth callback for %s" % provider)
     redirect_uri = app.config['oauth.%s.callback_url' % provider]
     oauth_service = oauth_services[provider]
+    session = get_session(request)
 
     data = dict(code=request.params.get('code'),
                 grant_type='authorization_code',
@@ -66,7 +67,7 @@ def oauth_callback(provider):
     elif provider == 'github':
         oauth_session = oauth_service.get_auth_session(data=data)
         user_info = oauth_session.get('user').json()
-        email = user_info['email']
+        email = session['email'] = user_info['email']
         username = user_info['login']
 
     access_token = oauth_session.access_token
@@ -102,11 +103,15 @@ def manage():
             request.user.username = form.username.data
             return redirect('/')
         else:
-            user = User(email=form.email.data, username=form.username.data,
-                        is_email_confirmed=True)
-            user.save()
-            login.login_user(str(user.id))
-            return redirect('/')
+            session = get_session(request)
+            if session['email'] and session['email'] != form.email.data:
+                form.errors['email'] = u'不能修改email地址'
+            else:
+                user = User(email=form.email.data, username=form.username.data,
+                            is_email_confirmed=True)
+                user.save()
+                login.login_user(str(user.id))
+                return redirect('/')
     return {'form': form, 'token': request.csrf_token}
 
 

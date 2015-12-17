@@ -7,7 +7,11 @@
   <div class="panel panel-default">
     <div class="panel-heading">修改个人信息</div>
     <div class="panel-body">
-      {{ f.render_field(form.email, placeholder='Email', type='email', readonly='readonly') }}
+      {% if session['email'] %}
+        {{ f.render_field(form.email, placeholder='Email', type='email', readonly='readonly') }}
+      {% else %}
+        {{ f.render_field(form.email, placeholder='Email', type='email') }}
+      {% endif %}
       {{ f.render_field(form.username, placeholder='Username', type='text') }}
     </div>
     <div class="panel-footer">
