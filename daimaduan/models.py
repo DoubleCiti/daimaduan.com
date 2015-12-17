@@ -40,7 +40,7 @@ class User(BaseDocument):
         return self.generate_password(password) == self.password
 
     def gravatar_url(self, width=80):
-        return "http://cn.gravatar.com/avatar/%s?s=%d" % (hashlib.md5(self.email).hexdigest(), width)
+        return "https://cn.gravatar.com/avatar/%s?s=%d" % (hashlib.md5(self.email).hexdigest(), width)
 
     @classmethod
     def find_by_oauth(cls, provider, openid):
