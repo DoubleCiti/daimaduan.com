@@ -62,7 +62,7 @@ def oauth_callback(provider):
     if provider == 'google':
         oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
         user_info = oauth_session.get('userinfo').json()
-        email = user_info['email']
+        email = session['email'] = user_info['email']
         username = user_info['given_name']
     elif provider == 'github':
         oauth_session = oauth_service.get_auth_session(data=data)
@@ -103,15 +103,14 @@ def manage():
             request.user.username = form.username.data
             return redirect('/')
         else:
+            user = User(email=form.email.data, username=form.username.data,
+                        is_email_confirmed=True)
+            user.save()
+            login.login_user(str(user.id))
             session = get_session(request)
-            if session['email'] and session['email'] != form.email.data:
-                form.errors['email'] = u'不能修改email地址'
-            else:
-                user = User(email=form.email.data, username=form.username.data,
-                            is_email_confirmed=True)
-                user.save()
-                login.login_user(str(user.id))
-                return redirect('/')
+            if 'email' in session:
+                del(session['email'])
+            return redirect('/')
     return {'form': form, 'token': request.csrf_token}
 
 
