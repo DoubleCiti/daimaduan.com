@@ -7,10 +7,9 @@
 		<meta name="keywords" content="代码, 开发, 平台, 分享">
 		<title>{% block title %}最新代码{% endblock %} - 代码段</title>
 		<link rel="shortcut icon" href="/static/images/favicon.ico" />
-
-		<link href="//cdn.bootcss.com/bootswatch/3.3.5/lumen/bootstrap.min.css" rel="stylesheet">
-		<link href="//cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-		<link href="//yandex.st/highlightjs/8.0/styles/github.min.css" rel="stylesheet">
+		<link href="//cdn.staticfile.org/bootswatch/3.3.6/lumen/bootstrap.min.css" rel="stylesheet">
+		<link href="//cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="//cdn.staticfile.org/highlight.js/8.9.1/styles/github.min.css" rel="stylesheet">
 		<link href="/static/css/app.css" rel="stylesheet">
 	</head>
 	<body class="view_{{ view_name() }} func_{{ view_func() }}">
@@ -24,9 +23,9 @@
 
 		{% include 'shared/footer.html' %}
 
-		<script src="//yandex.st/highlightjs/8.0/highlight.min.js"></script>
-		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="//cdn.staticfile.org/highlight.js/8.9.1/highlight.min.js"></script>
+		<script src="//cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+		<script src="//cdn.staticfile.org/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<script src="/static/js/highlightjs.line.numbers.min.js"></script>
 		<script src="/static/js/app.js"></script>
 		<script src="/static/js/{{ view_name() }}.js"></script>
