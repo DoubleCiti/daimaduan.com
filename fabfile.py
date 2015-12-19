@@ -54,7 +54,7 @@ def deploy(app_env):
     run('rm -f %s/current' % app_path)
     run('ln -s %s/%s/daimaduan %s/current' % (app_path, dist, app_path))
     run('cp %s/shared/config.cfg %s/current' % (app_path, app_path))
-    run('cp %s/shared/deploy.wsgi %s/current' % (app_path, app_path))
+    run('cp %s/shared/deploy.py %s/current' % (app_path, app_path))
 
     # last step, touch uwsgi ini file to force reload uwsgi
     sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % app_env)

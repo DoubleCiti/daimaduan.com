@@ -26,3 +26,4 @@ bottle-rauth==0.1.1
 itsdangerous==0.24
 mailthon==0.1.1
 bottle-utils==0.8
+newrelic==2.60.0.46
