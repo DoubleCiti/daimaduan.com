@@ -59,5 +59,6 @@ sessions
 config.cfg
 .idea/
 .venv/
+.newrelic_key
 
 .DS_Store

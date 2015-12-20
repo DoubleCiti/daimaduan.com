@@ -15,6 +15,14 @@ env.hosts = ['daimaduan.com']
 env.user = 'daimaduan'
 # application data
 APP_NAME = 'daimaduan'
+TEST_WEBSITE = {
+    'preview': 'https://preview.daimaduan.com',
+    'production': 'https://daimaduan.com'
+}
+NEWRELIC_APPLICATION_ID = {
+    'preview': '13327736',
+    'production': '13331097'
+}
 
 
 def pack():
@@ -42,6 +50,13 @@ def deploy(app_env):
         print "fab pack deploy:<ENV>"
         sys.exit(1)
 
+    newrelic_key = None
+    with open('.newrelic_key') as f:
+        newrelic_key = f.read().strip()
+    if not newrelic_key:
+        print "cannot find newrelic_key in .newrelic_key file"
+        sys.exit(1)
+
     app_path = '/var/www/%s/%s' % (APP_NAME, app_env)
     # figure out the release name and version
     dist = local('python setup.py --fullname', capture=True).strip()
@@ -56,10 +71,19 @@ def deploy(app_env):
     run('cp %s/shared/config.cfg %s/current' % (app_path, app_path))
     run('cp %s/shared/deploy.py %s/current' % (app_path, app_path))
 
-    # last step, touch uwsgi ini file to force reload uwsgi
+    # touching uwsgi ini file will reload this app
     sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % app_env)
 
     run('rm -f %s/%s.tar.gz' % (app_path, dist))
+
+    # after deploying, we need to test if deployment succeed
+    local('curl %s > /dev/null' % TEST_WEBSITE[app_env])
+
+    # send deployments notification to newrelic
+    version = local('python setup.py --version', capture=True).strip()
+    local('curl -H "x-api-key:%s" -d "deployment[application_id]=%s" '
+          '-d "deployment[revision]=%s" -d "deployment[user]=David Xie" '
+          'https://api.newrelic.com/deployments.xml' % (newrelic_key, NEWRELIC_APPLICATION_ID[app_env], version))
 
 
 def run_server():
