@@ -31,6 +31,26 @@ def index():
             'has_more_pastes': Paste.objects(is_private=False).count() > ITEMS_PER_PAGE}
 
 
+@app.get('/search', name='pastes.search')
+@jinja2_view('search.html')
+def search_get():
+    keyword = request.query.keyword
+    pastes = Paste.objects(title__contains=keyword).order_by('-updated_at')[:ITEMS_PER_PAGE]
+    return {'keyword': keyword,
+            'pastes': pastes}
+
+
+@app.post('/search')
+@jinja2_view('pastes/pastes.html')
+def search_post():
+    p = int(request.query.p)
+    if not p:
+        p = 2
+    keyword = request.query.keyword
+    pastes = Paste.objects(title__contains=keyword).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]
+    return {'pastes': pastes}
+
+
 @app.route('/pastes/more', name="pastes.more")
 @jinja2_view('pastes/pastes.html')
 def pastes_more():
