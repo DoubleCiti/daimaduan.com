@@ -30,6 +30,8 @@
 		<script src="/static/js/app.js"></script>
 		<script src="/static/js/{{ view_name() }}.js"></script>
 		{% include 'shared/script_disqus.html' %}
+
+		{% if config['site.analytics'] %}{% include 'shared/analytics.html' %}{% endif %}
 		<script type="text/javascript">
 		(function() {
 			var po = document.createElement('script');
