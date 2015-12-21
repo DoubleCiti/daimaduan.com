@@ -38,6 +38,7 @@ def index():
 @jinja2_view('search.html')
 def search_get():
     query_string = request.query.q
+
     def get_string_by_keyword(keyword, query_string):
         string = ''
         result = re.search('\s*%s:([a-zA-Z+-_#]+)\s*' % keyword, query_string)

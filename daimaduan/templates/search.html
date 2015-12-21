@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-
-{%- from 'macros/tags.html' import render_tag %}
-
+{% block title %}搜索代码段{% endblock %}
 {% block content %}
-<h3 class="page-header">查询条件 "{{ query_string }}"</h3>
+<h3 class="page-header">查询条件: "{{ query_string }}"</h3>
 
 <section class="pastes">
 	{% include ('pastes/pastes.html') %}
@@ -16,11 +14,13 @@
 
 {% block sidebar %}
 <div class="panel panel-default">
-	<div class="panel-heading">热门标签</div>
+	<div class="panel-heading">查询优化</div>
 	<div class="panel-body">
-	{% for tag in tags %}
-		{{ render_tag(tag.name) }}
-	{% endfor %}
+		<ul>
+			<li>在查询条件里加上'tag:TAG'可以只查询标签为TAG的代码集合</li>
+			<li>在查询条件里加上'user:USER'可以只查询该用户的代码集合</li>
+			<li>例如: "uwsgi tag:python user:david-xie"</li>
+		</ul>
 	</div>
 </div>
 {% endblock %}
