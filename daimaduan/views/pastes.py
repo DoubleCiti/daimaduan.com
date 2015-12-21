@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 from bottle import abort
 from bottle import request
 from bottle import redirect
@@ -16,6 +18,7 @@ from daimaduan.models import Code
 from daimaduan.models import Paste
 from daimaduan.models import Rate
 from daimaduan.models import Tag
+from daimaduan.models import User
 from daimaduan.utils import jsontify
 from daimaduan.utils import user_active_required
 
@@ -34,13 +37,34 @@ def index():
 @app.get('/search', name='pastes.search')
 @jinja2_view('search.html')
 def search_get():
-    keyword = request.query.keyword
-    pastes = Paste.objects(title__contains=keyword).order_by('-updated_at')[:ITEMS_PER_PAGE]
-    return {'keyword': keyword,
+    query_string = request.query.q
+    def get_string_by_keyword(keyword, query_string):
+        string = ''
+        result = re.search('\s*%s:([a-zA-Z+-_#]+)\s*' % keyword, query_string)
+        if result:
+            if len(result.groups()) == 1:
+                string = result.groups()[0]
+        query_string = query_string.replace('%s:%s' % (keyword, string), '')
+        return string, query_string
+
+    tag, query_string = get_string_by_keyword('tag', query_string)
+    user, query_string = get_string_by_keyword('user', query_string)
+    keyword = query_string.strip()
+
+    criteria = {'title__contains': keyword}
+    if tag:
+        criteria['tags'] = tag
+    if user:
+        user_object = User.objects(username=user).first()
+        criteria['user'] = user_object
+
+    pastes = Paste.objects(**criteria).order_by('-updated_at')[:ITEMS_PER_PAGE]
+    return {'query_string': request.query.q,
+            'keyword': keyword,
             'pastes': pastes}
 
 
-@app.post('/search')
+@app.post('/search_more')
 @jinja2_view('pastes/pastes.html')
 def search_post():
     p = int(request.query.p)
