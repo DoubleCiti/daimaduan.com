@@ -23,6 +23,8 @@
       $code.find('textarea').first().attr('name', 'codes-' + i + '-content');
       $code.find('textarea').first().val('');
 
+      $code.find('div.form-group').last().css('display', 'block');
+
       $code.appendTo('#codes');
     });
 
