@@ -16,6 +16,7 @@ from daimaduan.models import Code
 from daimaduan.models import Paste
 from daimaduan.models import Rate
 from daimaduan.models import Tag
+from daimaduan.models import Syntax
 from daimaduan.utils import jsontify
 from daimaduan.utils import user_active_required
 
@@ -27,7 +28,7 @@ ITEMS_PER_PAGE = 20
 @jinja2_view('index.html')
 def index():
     return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE],
-            'tags': Tag.objects().order_by('-popularity')[:10],
+            'tags': Syntax.objects(),
             'has_more_pastes': Paste.objects(is_private=False).count() > ITEMS_PER_PAGE}
 
 
@@ -178,7 +179,7 @@ def tags():
 @app.route('/tag/<tag_name>', name='tags.show')
 @jinja2_view('tags/view.html')
 def tag(tag_name):
-    return {'tag': Tag.objects(name=tag_name).first(),
+    return {'tag': Syntax.objects(name=tag_name).first(),
             'pastes': Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE]}
 
 

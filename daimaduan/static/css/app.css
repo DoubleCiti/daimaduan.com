@@ -46,7 +46,8 @@ pre code {
 }
 
 .tag {
-  margin-bottom: 3px;
+  margin-bottom: 7px;
+  margin-right: 5px;
 }
 
 /* Bootstrap Override */
