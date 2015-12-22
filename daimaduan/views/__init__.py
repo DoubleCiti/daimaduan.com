@@ -29,7 +29,6 @@ def after_request():
 
 
 @app.get('/status')
-@jinja2_view('status.html')
 def status():
     return {'pastes_count': Paste.objects().count(),
             'codes_count': Code.objects().count(),
