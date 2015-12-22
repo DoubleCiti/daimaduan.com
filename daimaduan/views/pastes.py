@@ -50,15 +50,12 @@ def get_pastes_from_search(p=1):
     user, query_string = get_string_by_keyword('user', query_string)
     keyword = query_string.strip()
 
-    print keyword
-
     criteria = {'title__contains': keyword, 'is_private': False}
     if tag:
         criteria['tags'] = tag
     if user:
         user_object = User.objects(username=user).first()
         criteria['user'] = user_object
-    print criteria
 
     return keyword, Paste.objects(**criteria).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]
 
