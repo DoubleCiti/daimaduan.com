@@ -7,8 +7,10 @@ debug = true
 validate_key = "youdon'tneedtoknow"
 secret_key = "ddf4FP4U&VydAq"
 disqus = daimaduan-dev
+disqus_secret_key = yki3SAkvy8libhO777QVdhnDWG3DoHcpZxzDDeBiB2gl5e1omXuRQbd4y6A8HYgR
+disqus_public_key = UZxH4ZUXPoDVA4OMSzdczgh4PXmPR73wJEnV2SxpFYXDP5CMSxOg4upzAJu2hqSU
 token_salt = "iamDavid"
-domain = daimaduan.com
+domain = daimaduan.dev:8080
 
 [csrf]
 secret = "shouldbeasecret"
