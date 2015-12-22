@@ -68,9 +68,10 @@
       var keyword = $(this).attr('data-keyword');
       event.preventDefault();
       $.ajax({
+        data: 'q=' + keyword + '&p=' + p,
         dataType: 'html',
-        type: 'POST',
-        url: '/search?keyword=' + keyword + '&p=' + p,
+        type: 'GET',
+        url: '/search_more',
         success: function(data) {
           $(data).insertBefore('#more_button_li');
         }

@@ -34,9 +34,7 @@ def index():
             'has_more_pastes': Paste.objects(is_private=False).count() > ITEMS_PER_PAGE}
 
 
-@app.get('/search', name='pastes.search')
-@jinja2_view('search.html')
-def search_get():
+def get_pastes_from_search(p=1):
     query_string = request.query.q
 
     def get_string_by_keyword(keyword, query_string):
@@ -52,27 +50,36 @@ def search_get():
     user, query_string = get_string_by_keyword('user', query_string)
     keyword = query_string.strip()
 
-    criteria = {'title__contains': keyword}
+    print keyword
+
+    criteria = {'title__contains': keyword, 'is_private': False}
     if tag:
         criteria['tags'] = tag
     if user:
         user_object = User.objects(username=user).first()
         criteria['user'] = user_object
+    print criteria
 
-    pastes = Paste.objects(**criteria).order_by('-updated_at')[:ITEMS_PER_PAGE]
+    return keyword, Paste.objects(**criteria).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]
+
+
+@app.get('/search', name='pastes.search')
+@jinja2_view('search.html')
+def search_get():
+    keyword, pastes = get_pastes_from_search()
     return {'query_string': request.query.q,
             'keyword': keyword,
             'pastes': pastes}
 
 
-@app.post('/search_more')
+@app.get('/search_more')
 @jinja2_view('pastes/pastes.html')
 def search_post():
     p = int(request.query.p)
     if not p:
         p = 2
-    keyword = request.query.keyword
-    pastes = Paste.objects(title__contains=keyword).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]
+
+    keyword, pastes = get_pastes_from_search(p=p)
     return {'pastes': pastes}
 
 
