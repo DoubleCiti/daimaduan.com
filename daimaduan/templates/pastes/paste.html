@@ -52,7 +52,9 @@
         {{ render_tag(tag) }}
       {% endfor %}
     </p>
-    <hr />
+
     <div class="clearfix"></div>
+
+    {{ render_source_code(paste.codes[0].content_head()) }}
   </div>
 </div>
