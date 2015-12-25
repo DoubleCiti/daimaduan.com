@@ -43,7 +43,7 @@
       }
 
     });
-    $(this).attr('data-page', parseInt(p) + 1);
+    
   }
 
   function renderLikePasteAction(data) {
