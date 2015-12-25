@@ -28,7 +28,8 @@ from daimaduan.models import User
 from daimaduan.utils import jsontify
 from daimaduan.utils import logger
 from daimaduan.utils import user_active_required
-
+from daimaduan.utils import paginate
+from daimaduan.utils import get_page
 
 ITEMS_PER_PAGE = 20
 
@@ -41,9 +42,13 @@ def get_paste(hash_id):
 @app.route('/', name='pastes.index')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE],
-            'tags': Tag.objects().order_by('-popularity')[:10],
-            'has_more_pastes': Paste.objects(is_private=False).count() > ITEMS_PER_PAGE}
+    page = get_page()
+    pastes = Paste.objects(is_private=False).order_by('-updated_at')
+    pastes, summary = paginate(pastes, page, per_page=2)
+
+    return {'pastes': pastes,
+            'page_summary': summary,
+            'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
 def get_pastes_from_search(p=1):

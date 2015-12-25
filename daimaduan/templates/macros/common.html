@@ -54,3 +54,26 @@
         {% if with_body %}</div>{% endif %}
     </div>
 {%- endmacro %}
+
+
+{% macro paginate_for(base_url, summary) -%}
+<nav>
+  <ul class="pager">
+    <li class="previous {{ summary['is_first_page'] | ternary('disabled', '') }}">
+        {% if summary['is_first_page'] %}
+        <a href="javascript:;">上一页</a>
+        {% else %}
+        <a href="{{ base_url }}?page={{ summary['previous_page'] }}">上一页</a>
+        {% endif %}
+    </li>
+
+    <li class="next {{ summary['is_last_page'] | ternary('disabled', '') }}">
+        {% if summary['is_last_page'] %}
+        <a href="javascript:;">下一页</a>
+        {% else %}
+        <a href="{{ base_url }}?page={{ summary['next_page'] }}">下一页</a>
+        {% endif %}
+    </li>
+  </ul>
+</nav>
+{%- endmacro %}

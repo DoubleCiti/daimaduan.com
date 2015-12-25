@@ -2,6 +2,7 @@
 
 {%- from 'macros/tags.html' import render_tag %}
 {%- from 'macros/pastes.html' import render_paste_item %}
+{%- from 'macros/common.html' import paginate_for %}
 
 {% block content %}
 <h4 class="page-header">最新代码</h4>
@@ -11,9 +12,9 @@
 		{{ render_paste_item(paste) }}
 	{% endfor %}
 
-	<div id="more_button_li">
-		<button class="btn btn-default btn-block" id="more_button" data-page="2" {% if not has_more_pastes %}disabled="disabled"{% endif %}>更多</button>
-	</div>
+  <hr />
+
+  {{ paginate_for('/', page_summary) }}
 </section><!-- .pastes -->
 {% endblock %}
 
