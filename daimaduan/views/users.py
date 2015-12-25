@@ -33,6 +33,8 @@ from daimaduan.utils import validate_token
 from daimaduan.utils import send_confirm_email
 from daimaduan.utils import send_reset_password_email
 from daimaduan.utils import logger
+from daimaduan.utils import paginate
+from daimaduan.utils import get_page
 
 
 # Get user by username or raise 404 error.
@@ -239,32 +241,34 @@ def reset_password_success():
 @app.get('/user/<username>')
 @jinja2_view('user/user.html')
 def user_index(username):
+    page = get_page()
     user = get_user(username)
 
-    pastes = Paste.objects(user=user).order_by('-updated_at')
+    pastes = user.pastes.order_by('-updated_at')
     if not (request.user and request.user == user):
         pastes = pastes(is_private=False)
 
-    return {'user': user,
-            'pastes': pastes}
+    pastes, summary = paginate(pastes, page)
 
-
-@app.get('/user/<username>/likes', name='users.likes')
-@jinja2_view('user/likes.html')
-def favourites_get(username):
-    user = get_user(username)
     return {'user': user,
-            'likes': user.get_likes_by_page(1),
+            'pastes': pastes,
+            'page_summary': summary,
             'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
-@app.get('/user/favourites/more')
-@jsontify
-def favourites_more():
-    p = int(request.query.p)
-    if not p:
-        return {}
-    return {'pastes': request.user.get_favourites_by_page(p)}
+@app.get('/user/<username>/likes', name='users.likes')
+@jinja2_view('likes.html')
+def likes_get(username):
+    user = get_user(username)
+
+    page = get_page()
+    likes = user.likes.order_by('-updated_at')
+    likes, summary = paginate(likes, page)
+
+    return {'user': user,
+            'likes': likes,
+            'page_summary': summary,
+            'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
 @app.get('/confirm/<token>')

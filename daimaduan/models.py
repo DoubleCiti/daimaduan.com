@@ -126,9 +126,6 @@ class User(BaseDocument):
         if oauth and oauth.user:
             return oauth.user
 
-    def get_likes_by_page(self, p):
-        return self.likes[(p - 1) * 20:p * 20]
-
     def is_in_favourites(self, paste):
         return paste in self.favourites
 
@@ -247,6 +244,10 @@ signals.post_delete.connect(Paste.post_delete, sender=Paste)
 class Tag(BaseDocument):
     name = mongoengine.StringField(required=True, unique=True)
     popularity = mongoengine.IntField(default=1)
+
+    @property
+    def pastes(self):
+        return Paste.objects(tags=self.name)
 
 
 class Syntax(BaseDocument):

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {%- from 'macros/pastes.html' import render_paste_item %}
+{%- from 'macros/common.html' import paginate_for %}
 
 {% block title %}{{ tag.name }}{% endblock %}
 {% block content %}
@@ -11,8 +12,8 @@
 		{{ render_paste_item(paste) }}
 	{% endfor %}
 
-	<div id="more_button_li">
-		<button class="btn btn-default btn-block" id="more_button" data-page="2" data-tag="{{ tag.name }}">更多</button>
-	</div>
+  <hr />
+
+  {{ paginate_for('/', page_summary) }}
 </section>
 {% endblock %}

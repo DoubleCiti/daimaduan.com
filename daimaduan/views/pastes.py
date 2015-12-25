@@ -28,7 +28,8 @@ from daimaduan.models import User
 from daimaduan.utils import jsontify
 from daimaduan.utils import logger
 from daimaduan.utils import user_active_required
-
+from daimaduan.utils import paginate
+from daimaduan.utils import get_page
 
 ITEMS_PER_PAGE = 20
 
@@ -41,9 +42,13 @@ def get_paste(hash_id):
 @app.route('/', name='pastes.index')
 @jinja2_view('index.html')
 def index():
-    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE],
-            'tags': Tag.objects().order_by('-popularity')[:10],
-            'has_more_pastes': Paste.objects(is_private=False).count() > ITEMS_PER_PAGE}
+    page = get_page()
+    pastes = Paste.objects(is_private=False).order_by('-updated_at')
+    pastes, summary = paginate(pastes, page)
+
+    return {'pastes': pastes,
+            'page_summary': summary,
+            'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
 def get_pastes_from_search(p=1):
@@ -90,15 +95,6 @@ def search_post():
 
     keyword, pastes = get_pastes_from_search(p=p)
     return {'pastes': pastes}
-
-
-@app.route('/pastes/more', name="pastes.more")
-@jinja2_view('pastes/pastes.html')
-def pastes_more():
-    p = int(request.query.p)
-    if not p:
-        return {}
-    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]}
 
 
 @app.get('/create', name='pastes.create')
@@ -259,8 +255,15 @@ def tags():
 @app.route('/tag/<tag_name>', name='tags.show')
 @jinja2_view('tags/view.html')
 def tag(tag_name):
-    return {'tag': Tag.objects(name=tag_name).first(),
-            'pastes': Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE]}
+    tag = Tag.objects.get_or_404(name=tag_name)
+    page = get_page()
+
+    pastes = tag.pastes(is_private=False).order_by('-updated_at')
+    pastes, summary = paginate(pastes, page)
+
+    return {'tag': tag,
+            'pastes': pastes,
+            'page_summary': summary}
 
 
 @app.route('/tag/<tag_name>/more')
