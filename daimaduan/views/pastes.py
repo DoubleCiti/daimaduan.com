@@ -255,8 +255,15 @@ def tags():
 @app.route('/tag/<tag_name>', name='tags.show')
 @jinja2_view('tags/view.html')
 def tag(tag_name):
-    return {'tag': Tag.objects(name=tag_name).first(),
-            'pastes': Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE]}
+    tag = Tag.objects.get_or_404(name=tag_name)
+    page = get_page()
+
+    pastes = tag.pastes(is_private=False).order_by('-updated_at')
+    pastes, summary = paginate(pastes, page)
+
+    return {'tag': tag,
+            'pastes': pastes,
+            'page_summary': summary}
 
 
 @app.route('/tag/<tag_name>/more')
