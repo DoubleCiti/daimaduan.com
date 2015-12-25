@@ -32,7 +32,7 @@ ITEMS_PER_PAGE = 20
 
 
 @app.route('/', name='pastes.index')
-@jinja2_view('index.html')
+@jinja2_view('index.html.j2')
 def index():
     return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE],
             'tags': Tag.objects().order_by('-popularity')[:10],
@@ -66,7 +66,7 @@ def get_pastes_from_search(p=1):
 
 
 @app.get('/search', name='pastes.search')
-@jinja2_view('search.html')
+@jinja2_view('search.html.j2')
 def search_get():
     keyword, pastes = get_pastes_from_search()
     return {'query_string': request.query.q,
@@ -75,7 +75,7 @@ def search_get():
 
 
 @app.get('/search_more')
-@jinja2_view('pastes/pastes.html')
+@jinja2_view('pastes/pastes.html.j2')
 def search_post():
     p = int(request.query.p)
     if not p:
@@ -86,7 +86,7 @@ def search_post():
 
 
 @app.route('/pastes/more', name="pastes.more")
-@jinja2_view('pastes/pastes.html')
+@jinja2_view('pastes/pastes.html.j2')
 def pastes_more():
     p = int(request.query.p)
     if not p:
@@ -97,7 +97,7 @@ def pastes_more():
 @app.get('/create', name='pastes.create')
 @login.login_required
 @user_active_required
-@jinja2_view('pastes/create.html')
+@jinja2_view('pastes/create.html.j2')
 @csrf_token
 def create_get():
     form = PasteForm(data={'codes': [{'title': '', 'content': ''}]})
@@ -107,7 +107,7 @@ def create_get():
 @app.post('/create', name='pastes.create')
 @login.login_required
 @user_active_required
-@jinja2_view('pastes/create.html')
+@jinja2_view('pastes/create.html.j2')
 @csrf_token
 @csrf_protect
 def create_post():
@@ -140,7 +140,7 @@ def create_post():
 
 
 @app.route('/paste/<hash_id>', name='pastes.show')
-@jinja2_view('pastes/view.html')
+@jinja2_view('pastes/view.html.j2')
 def view(hash_id):
     sig = message = timestamp = None
     user = login.get_user()
@@ -164,7 +164,7 @@ def view(hash_id):
 
 @app.route('/paste/<hash_id>/edit', name='pastes.update')
 @login.login_required
-@jinja2_view('pastes/edit.html')
+@jinja2_view('pastes/edit.html.j2')
 @csrf_token
 def edit_get(hash_id):
     paste = Paste.objects(hash_id=hash_id).first()
@@ -181,7 +181,7 @@ def edit_get(hash_id):
 
 @app.post('/paste/<hash_id>/edit', name='pastes.update')
 @login.login_required
-@jinja2_view('pastes/edit.html')
+@jinja2_view('pastes/edit.html.j2')
 @csrf_token
 @csrf_protect
 def edit_post(hash_id):
@@ -236,20 +236,20 @@ def delete(hash_id):
 
 
 @app.route('/tags', name='tags.index')
-@jinja2_view('tags/index.html')
+@jinja2_view('tags/index.html.j2')
 def tags():
     return {'tags': Tag.objects().order_by('-popularity')}
 
 
 @app.route('/tag/<tag_name>', name='tags.show')
-@jinja2_view('tags/view.html')
+@jinja2_view('tags/view.html.j2')
 def tag(tag_name):
     return {'tag': Tag.objects(name=tag_name).first(),
             'pastes': Paste.objects(tags=tag_name, is_private=False).order_by('-updated_at')[:ITEMS_PER_PAGE]}
 
 
 @app.route('/tag/<tag_name>/more')
-@jinja2_view('pastes/pastes.html')
+@jinja2_view('pastes/pastes.html.j2')
 def tag_more(tag_name):
     p = int(request.query.p)
     if not p:

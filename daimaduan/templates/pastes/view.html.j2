@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
-{% from 'macros/tags.html' import render_tag %}
-{% from 'macros/pastes.html' import render_code %}
-{% from 'macros/comments.html' import render_comment_form with context %}
+{% extends 'base.html.j2' %}
+{% from 'macros/tags.html.j2' import render_tag %}
+{% from 'macros/pastes.html.j2' import render_code %}
+{% from 'macros/comments.html.j2' import render_comment_form with context %}
 
 {% block title %}{{ paste.title }}{% endblock %}
 

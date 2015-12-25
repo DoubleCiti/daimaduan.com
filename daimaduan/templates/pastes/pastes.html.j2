@@ -1,5 +1,5 @@
-{%- from 'macros/users.html' import render_user_avatar -%}
-{%- from 'macros/tags.html' import render_tag -%}
+{%- from 'macros/users.html.j2' import render_user_avatar -%}
+{%- from 'macros/tags.html.j2' import render_tag -%}
 {% for paste in pastes %}
 <div class="paste" id="paste-{{ paste.id }}">
   <div class="media">

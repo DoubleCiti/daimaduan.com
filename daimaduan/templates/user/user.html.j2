@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block content %}
 <h3 class="page-header">{{ user.username }} 的代码</h3>
 
 <section class="pastes">
-	{% include ('pastes/pastes.html') %}
+	{% include ('pastes/pastes.html.j2') %}
 
 	<div id="more_button_li">
 		<button class="btn btn-default btn-block" id="more_button" page="2">更多</button>

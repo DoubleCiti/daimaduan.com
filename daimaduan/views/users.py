@@ -47,7 +47,7 @@ def oauth_signin(provider):
 
 
 @app.route('/oauth/<provider>/callback', name='oauth.callback')
-@jinja2_view('user/manage.html')
+@jinja2_view('user/finish.html.j2')
 @csrf_token
 def oauth_callback(provider):
     logger.info("Oauth callback for %s" % provider)
@@ -92,11 +92,19 @@ def oauth_callback(provider):
             return {'form': UserInfoForm(email=email, username=username), 'token': request.csrf_token}
 
 
-@app.post('/user/manage', name='users.manage')
-@jinja2_view('user/manage.html')
+@app.get('/user/manage', name='users.manage')
+@jinja2_view('user/manage.html.j2')
+@login.login_required
+def manage_get():
+    form = UserInfoForm()
+    return {'form': form}
+
+
+@app.post('/user/finish', name='users.manage')
+@jinja2_view('user/finish.html.j2')
 @csrf_token
 @csrf_protect
-def manage():
+def finish_post():
     form = UserInfoForm(request.forms)
     if form.validate():
         if request.user:
@@ -115,7 +123,7 @@ def manage():
 
 
 @app.get('/signin', name='users.signin')
-@jinja2_view('user/signin.html')
+@jinja2_view('user/signin.html.j2')
 @csrf_token
 def signin_get():
     if request.user:
@@ -125,7 +133,7 @@ def signin_get():
 
 
 @app.post('/signin', name='users.signin')
-@jinja2_view('user/signin.html')
+@jinja2_view('user/signin.html.j2')
 @csrf_protect
 def signin_post():
     session = get_session(request)
@@ -149,7 +157,7 @@ def signout_delete():
 
 
 @app.get('/signup', name='users.signup')
-@jinja2_view('user/signup.html')
+@jinja2_view('user/signup.html.j2')
 @csrf_token
 def signup_get():
     if request.user:
@@ -159,7 +167,7 @@ def signup_get():
 
 
 @app.post('/signup', name='users.signup')
-@jinja2_view('user/signup.html')
+@jinja2_view('user/signup.html.j2')
 @csrf_token
 @csrf_protect
 def signup_post():
@@ -175,13 +183,13 @@ def signup_post():
 
 
 @app.get('/lost_password', name='users.lost_password')
-@jinja2_view('user/lost_password.html')
+@jinja2_view('user/lost_password.html.j2')
 def lost_password_get():
     return {'form': EmailForm()}
 
 
 @app.post('/lost_password', name='users.lost_password')
-@jinja2_view('user/lost_password.html')
+@jinja2_view('user/lost_password.html.j2')
 def lost_password_post():
     form = EmailForm(request.forms)
     if form.validate():
@@ -192,13 +200,13 @@ def lost_password_post():
 
 
 @app.get('/reset_password_email_sent')
-@jinja2_view('error.html')
+@jinja2_view('error.html.j2')
 def reset_password_email_sent():
     return {'title': u"重置密码的邮件已经发出", 'message': u"重置密码的邮件已经发出, 请查收邮件并重置密码"}
 
 
 @app.get('/reset_password/<token>')
-@jinja2_view('user/reset_password.html')
+@jinja2_view('user/reset_password.html.j2')
 def reset_password_get(token):
     email = validate_token(app.config, token)
     if email:
@@ -209,7 +217,7 @@ def reset_password_get(token):
 
 
 @app.post('/reset_password/<token>')
-@jinja2_view('user/reset_password.html')
+@jinja2_view('user/reset_password.html.j2')
 def reset_password_post(token):
     email = validate_token(app.config, token)
     if email:
@@ -225,13 +233,13 @@ def reset_password_post(token):
 
 
 @app.get('/reset_password_success')
-@jinja2_view('error.html')
+@jinja2_view('error.html.j2')
 def reset_password_success():
     return {'title': u"重置密码成功", 'message': u"您的密码已经重置, 请重新登录"}
 
 
 @app.get('/user/<username>')
-@jinja2_view('user/user.html')
+@jinja2_view('user/user.html.j2')
 def user_index(username):
     user = User.objects(username=username).first()
     if user:
@@ -245,7 +253,7 @@ def user_index(username):
 
 @app.get('/user/favourites', name='users.favourites')
 @login.login_required
-@jinja2_view('user/favourites.html')
+@jinja2_view('user/favourites.html.j2')
 def favourites_get():
     return {'pastes': request.user.get_favourites_by_page(1),
             'tags': Tag.objects().order_by('-popularity')[:10]}
@@ -253,7 +261,7 @@ def favourites_get():
 
 @app.get('/user/favourites/more')
 @login.login_required
-@jinja2_view('pastes/pastes.html')
+@jinja2_view('pastes/pastes.html.j2')
 def favourites_more():
     p = int(request.query.p)
     if not p:
@@ -262,7 +270,7 @@ def favourites_more():
 
 
 @app.get('/confirm/<token>')
-@jinja2_view('email/confirm.html')
+@jinja2_view('email/confirm.html.j2')
 def confirm_email(token):
     email = validate_token(app.config, token)
     if email:
@@ -281,13 +289,13 @@ def confirm_email(token):
 
 @app.get('/active_email')
 @csrf_token
-@jinja2_view('email/active.html')
+@jinja2_view('email/active.html.j2')
 def active_email():
     return {'email': request.user.email, 'title': u'注册成功', 'token': request.csrf_token}
 
 
 @app.get('/success_sendmail')
-@jinja2_view('email/confirm.html')
+@jinja2_view('email/confirm.html.j2')
 def sendmail_success():
     return {'title': u"激活邮件发送成功", 'message': u"激活邮件发送成功, 请检查并激活您的账户。"}
 

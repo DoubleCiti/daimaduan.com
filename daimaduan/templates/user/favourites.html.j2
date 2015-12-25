@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 {% block content %}
 <h3 class="page-header">我的收藏</h3>
 
 <section class="pastes">
-	{% include ('pastes/pastes.html') %}
+	{% include ('pastes/pastes.html.j2') %}
 
 	<div id="more_button_li">
 		<button class="btn btn-default btn-block" id="more_button" data-page="2">更多</button>
@@ -11,7 +11,7 @@
 </section>
 {% endblock %}
 {% block sidebar %}
-{%- from 'macros/tags.html' import render_tag -%}
+{%- from 'macros/tags.html.j2' import render_tag -%}
 <div class="panel panel-default">
 	<div class="panel-heading">热门标签</div>
 	<div class="panel-body">

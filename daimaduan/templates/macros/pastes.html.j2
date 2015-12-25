@@ -1,4 +1,4 @@
-{% from 'macros/tags.html' import render_tag %}
+{% from 'macros/tags.html.j2' import render_tag %}
 
 {% macro render_code(code) %}
 <div class="code panel panel-default" id="code-{{ code.id }}">

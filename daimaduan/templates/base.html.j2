@@ -13,7 +13,7 @@
 		<link href="/static/css/app.css" rel="stylesheet">
 	</head>
 	<body class="view_{{ view_name() }} func_{{ view_func() }}">
-		{% include 'shared/header.html' %}
+		{% include 'shared/header.html.j2' %}
 
 		<div class="container">
 			<div class="col-md-12">{% block full_content %}{% endblock %}</div>
@@ -21,7 +21,7 @@
 			<div class="col-md-3">{% block sidebar %}{% endblock %}</div>
 		</div>
 
-		{% include 'shared/footer.html' %}
+		{% include 'shared/footer.html.j2' %}
 
 		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -29,9 +29,9 @@
 		<script src="/static/js/highlightjs.line.numbers.min.js"></script>
 		<script src="/static/js/app.js"></script>
 		<script src="/static/js/{{ view_name() }}.js"></script>
-		{% include 'shared/script_disqus.html' %}
+		{% include 'shared/script_disqus.html.j2' %}
 
-		{% if config['site.analytics'] %}{% include 'shared/analytics.html' %}{% endif %}
+		{% if config['site.analytics'] %}{% include 'shared/analytics.html.j2' %}{% endif %}
 		<script type="text/javascript">
 		(function() {
 			var po = document.createElement('script');

@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 {% block title %}粘贴新代码{% endblock %}
 
 {% block content %}
-{% include 'shared/form_errors.html' %}
+{% include 'shared/form_errors.html.j2' %}
 <form class="form-horizontal" action="/create" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="_csrf_token" value="{{ token }}">
   <div class="panel panel-default">

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 {% block title %}绑定账号{% endblock %}
 
 {% block content %}
@@ -6,7 +6,7 @@
     <div class="panel-heading">绑定账号</div>
     <div class="panel-body">
       尊敬的用户 <strong>{{ session['oauth_name'] }}</strong>，您之前未使用 {{ session['oauth_provider'] }} 账号登录过，
-      请<a href="/signin">登录已有账号</a>或者<a href="/signup">注册新账号</a>以完成绑定。  
+      请<a href="/signin">登录已有账号</a>或者<a href="/signup">注册新账号</a>以完成绑定。
     </div>
   </div>
 {% endblock %}

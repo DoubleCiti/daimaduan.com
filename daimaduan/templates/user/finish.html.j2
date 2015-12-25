@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
-{% import 'wtf.html' as f %}
+{% extends 'base.html.j2' %}
+{% import 'wtf.html.j2' as f %}
 {% block title %}修改信息{% endblock %}
 {% block full_content %}
-<form action="/user/manage" method="POST" id="form-signup">
+<form action="/user/finish" method="POST" id="form-signup">
   <input type="hidden" name="_csrf_token" value="{{ token }}">
   <div class="panel panel-default">
     <div class="panel-heading">修改个人信息</div>

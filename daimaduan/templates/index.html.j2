@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'base.html.j2' %}
 
-{%- from 'macros/tags.html' import render_tag %}
+{%- from 'macros/tags.html.j2' import render_tag %}
 
 {% block content %}
 <h5 class="page-header">最新代码</h5>
 
 <section class="pastes">
-	{% include ('pastes/pastes.html') %}
+	{% include ('pastes/pastes.html.j2') %}
 
 	<div id="more_button_li">
 		<button class="btn btn-default btn-block" id="more_button" data-page="2" {% if not has_more_pastes %}disabled="disabled"{% endif %}>更多</button>
