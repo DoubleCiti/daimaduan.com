@@ -1,6 +1,6 @@
 {% from 'macros/users.html' import render_user_avatar -%}
 {% from 'macros/tags.html' import render_tag -%}
-{% from 'macros/pastes.html' import render_source_code -%}
+{% from 'macros/pastes.html' import render_source_code_preview -%}
 {% from 'macros/pastes.html' import render_private -%}
 
 <div class="paste" id="paste-{{ paste.id }}">
@@ -42,7 +42,7 @@
 
     <p class="pull-right">
       <a href="/paste/{{ paste.hash_id }}#code-{{ paste.codes[0].id }}">
-        查看完整代码
+        查看完整代码集合
         <span class="fa fa-caret-right"></span>
       </a>
     </p>
@@ -55,6 +55,6 @@
 
     <div class="clearfix"></div>
 
-    {{ render_source_code(paste.codes[0].content_head()) }}
+    {{ render_source_code_preview(paste.codes[0].content) }}
   </div>
 </div>

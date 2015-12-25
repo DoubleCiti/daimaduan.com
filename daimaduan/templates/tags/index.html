@@ -2,10 +2,10 @@
 {%- from 'macros/tags.html' import render_tag -%}
 {% block title %}所有标签{% endblock %}
 {% block content %}
-<h2 class="new-paste-title pl10">
+<h4 class="new-paste-title pl10">
 	<span></span>
 		热门标签
-</h2>
+</h4>
 <div id="tag_view" class="mt10 pt10 pl20 pr20">
 	{% for tag in tags %}
 		{{ render_tag(tag.name) }}

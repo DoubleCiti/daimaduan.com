@@ -28,13 +28,22 @@ function createLi(paste) {
       return li;
  }
 
-app.faIcon = function(icon, text) {
-  var template = _.template('<i class="fa fa-<%= icon %>"></i> <%= text %>');
-  return template({ icon: icon, text: text });
-};
+  app.faIcon = function(icon, text) {
+    var template = _.template('<i class="fa fa-<%= icon %>"></i> <%= text %>');
+    return template({ icon: icon, text: text });
+  };
+
+  function initToggleFullCode() {
+    $(document).on('click', '.full-code-toggle', function(event) {
+      event.preventDefault();
+      console.log($(this).prev());
+      $(this).prev().toggleClass('code_preview');
+    });
+  }
 
 $(document).ready(function() {
     hljs.initHighlightingOnLoad();
     hljs.initLineNumbersOnLoad();
+    initToggleFullCode();
     $(document).on('click', '.action-signout', signoutHandler);
 });
