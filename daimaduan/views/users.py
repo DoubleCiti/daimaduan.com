@@ -257,21 +257,18 @@ def user_index(username):
 
 
 @app.get('/user/<username>/likes', name='users.likes')
-@jinja2_view('user/likes.html')
-def favourites_get(username):
+@jinja2_view('likes.html')
+def likes_get(username):
     user = get_user(username)
+
+    page = get_page()
+    likes = user.likes.order_by('-updated_at')
+    likes, summary = paginate(likes, page)
+
     return {'user': user,
-            'likes': user.get_likes_by_page(1),
+            'likes': likes,
+            'page_summary': summary,
             'tags': Tag.objects().order_by('-popularity')[:10]}
-
-
-@app.get('/user/favourites/more')
-@jsontify
-def favourites_more():
-    p = int(request.query.p)
-    if not p:
-        return {}
-    return {'pastes': request.user.get_favourites_by_page(p)}
 
 
 @app.get('/confirm/<token>')
