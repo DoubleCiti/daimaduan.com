@@ -250,7 +250,7 @@ def user_index(username):
 
 
 @app.get('/user/<username>/likes', name='users.likes')
-@jinja2_view('likes.html')
+@jinja2_view('user/likes.html')
 def favourites_get(username):
     user = get_user(username)
     return {'user': user,

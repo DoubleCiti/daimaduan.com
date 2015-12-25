@@ -126,6 +126,14 @@ pre code {
   background: none;
 }
 
+pre.code_preview {
+  max-height: 300px;
+}
+
+.avatar-wrapper {
+  margin-top: 10px;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   .paste-actions .action span {

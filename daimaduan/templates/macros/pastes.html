@@ -27,6 +27,12 @@
 {% endmacro %}
 
 
+{% macro render_source_code_preview(source) %}
+  <pre class="code_preview"><code>{{ source }}</code></pre>
+  <a href="javascript:;" class="btn btn-link full-code-toggle">切换完整代码</a>
+{% endmacro %}
+
+
 {% macro render_source_code(source) %}
   <pre><code>{{ source }}</code></pre>
 {% endmacro %}
@@ -43,9 +49,9 @@
 
 
 {% macro del_paste_button(paste) %}
-  <a href="/paste/{{ paste.hash_id }}"
+  <a href="/paste/{{ paste.hash_id }}/delete"
      title="删除"
-     class="btn btn-default btn-xs action action-del"
+     class="btn btn-danger btn-xs action action-del"
      data-id="{{ paste.hash_id }}">
     {{ fa_icon('trash') }} <span>删除</span>
   </a>
@@ -57,7 +63,7 @@
   {% set text  = liked | ternary('取消喜欢', '喜欢') -%}
   <a href="javascript:;"
      title="{{ text }}"
-     class="btn btn-default btn-xs action action-{{ liked | ternary('unlike', 'like') }}"
+     class="btn btn-info btn-xs action action-{{ liked | ternary('unlike', 'like') }}"
      data-id="{{ paste.hash_id }}">
     {{ fa_icon('heart') }} <span>{{ text }}</span>
     {{ paste.likes_count }}

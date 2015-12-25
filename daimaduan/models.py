@@ -81,7 +81,10 @@ class User(BaseDocument):
     oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
 
     paste_likes_count = mongoengine.IntField(default=0)
-    pastes_count = mongoengine.IntField(default=0)
+
+    @property
+    def pastes_count(self):
+        return len(self.pastes)
 
     @property
     def private_pastes_count(self):
@@ -89,7 +92,7 @@ class User(BaseDocument):
 
     @property
     def public_pastes_count(self):
-        return max(0, self.pastes_count - len(self.pastes(is_private=True)))
+        return self.pastes_count - len(self.pastes(is_private=True))
 
     @property
     def likes(self):
