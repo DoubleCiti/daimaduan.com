@@ -280,18 +280,24 @@ def confirm_email(token):
 
 
 @app.get('/active_email')
+@csrf_token
 @jinja2_view('email/active.html')
 def active_email():
-    return {'email': request.user.email, 'title': u'注册成功'}
+    return {'email': request.user.email, 'title': u'注册成功', 'token': request.csrf_token}
 
 
-@app.get('/sendmail/<email>')
-@jinja2_view('email/active.html')
-def send_mail(email):
-    user = User.objects(email=email).first()
-    if user:
-        if user.is_email_confirmed is False:
-            if request.user is None or request.user.email == user.email:
-                send_confirm_email(app.config, email)
-                return {'title': u'发送成功'}
-    return abort(404)
+@app.get('/success_sendmail')
+@jinja2_view('email/confirm.html')
+def sendmail_success():
+    return {'title': u"激活邮件发送成功", 'message': u"激活邮件发送成功, 请检查并激活您的账户。"}
+
+
+@app.post('/sendmail')
+@csrf_protect
+def send_mail_post():
+    form = EmailForm(request.forms)
+    if form.validate():
+        user = User.objects(email=form.email.data).first()
+        send_confirm_email(app.config, user.email)
+        return redirect('/success_sendmail')
+    return {'form': form}

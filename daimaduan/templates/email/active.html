@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-{% if email %}
-    {% if reactive == True %}
-        <span>
-            您的邮箱没有激活，暂时不能分享代码，请激活您的email。
-        </span>
-        <br>
-    {% else %}
-        <span>
-            恭喜您, 注册成功! 我们已经向您的注册邮箱发送了激活邮件, 请检查并激活您的账户.
-        </span>
-        <br>
-    {% endif %}
+{% if reactive == True %}
     <span>
-        如果您没有收到激活邮件,请点击<a href="/sendmail/{{email}}">重新发送</a>.
+        您的邮箱没有激活，暂时不能分享代码，请激活您的email。
     </span>
+    <br>
 {% else %}
     <span>
-        激活邮件已经重新发送, 请检查并激活您的账户.
+        恭喜您, 注册成功! 我们已经向您的注册邮箱发送了激活邮件, 请检查并激活您的账户.
     </span>
+    <br>
 {% endif %}
+<span>
+    如果您没有收到激活邮件,请点击
+    <form action="/sendmail" method="POST" id="form-sendmail">
+        <input type="hidden" name="_csrf_token" value="{{ token }}">
+        <input type="hidden" name="email" value={{request.user.email}} />
+        <input type="submit" class="btn btn-primary" value="发送激活邮件" />
+    </form>
+</span>
 {% endblock %}
