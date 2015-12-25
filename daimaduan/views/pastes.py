@@ -44,7 +44,7 @@ def get_paste(hash_id):
 def index():
     page = get_page()
     pastes = Paste.objects(is_private=False).order_by('-updated_at')
-    pastes, summary = paginate(pastes, page, per_page=2)
+    pastes, summary = paginate(pastes, page)
 
     return {'pastes': pastes,
             'page_summary': summary,
@@ -95,15 +95,6 @@ def search_post():
 
     keyword, pastes = get_pastes_from_search(p=p)
     return {'pastes': pastes}
-
-
-@app.route('/pastes/more', name="pastes.more")
-@jinja2_view('pastes/pastes.html')
-def pastes_more():
-    p = int(request.query.p)
-    if not p:
-        return {}
-    return {'pastes': Paste.objects(is_private=False).order_by('-updated_at')[(p - 1) * ITEMS_PER_PAGE:p * ITEMS_PER_PAGE]}
 
 
 @app.get('/create', name='pastes.create')
