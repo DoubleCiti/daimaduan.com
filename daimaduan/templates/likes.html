@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 
+{%- from 'macros/users.html' import render_user_panel with context %}
 {%- from 'macros/tags.html' import render_tag %}
 {%- from 'macros/pastes.html' import render_paste_item %}
 
+{% block title %}{{ user.username }} 喜欢的代码段{% endblock %}
+
 {% block content %}
-<h5 class="page-header">最新代码</h5>
+<h3 class="page-header">{{ user.username }} 喜欢的代码段</h3>
 
 <section class="pastes">
-	{% for paste in pastes %}
-		{{ render_paste_item(paste) }}
+	{% for like in likes %}
+		{{ render_paste_item(like.likeable) }}
 	{% endfor %}
 
 	<div id="more_button_li">
@@ -18,6 +21,7 @@
 {% endblock %}
 
 {% block sidebar %}
+	{{ render_user_panel(user) }}
 <div class="panel panel-default">
 	<div class="panel-heading">热门标签</div>
 	<div class="panel-body">
@@ -26,14 +30,4 @@
 	{% endfor %}
 	</div>
 </div>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- daimaduan -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3454978138774752"
-     data-ad-slot="1880156223"
-     data-ad-format="auto"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
 {% endblock %}

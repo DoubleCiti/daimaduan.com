@@ -22,13 +22,20 @@ from daimaduan.forms import PasteForm
 from daimaduan.models import Code
 from daimaduan.models import Paste
 from daimaduan.models import Rate
+from daimaduan.models import Like
 from daimaduan.models import Tag
 from daimaduan.models import User
 from daimaduan.utils import jsontify
+from daimaduan.utils import logger
 from daimaduan.utils import user_active_required
 
 
 ITEMS_PER_PAGE = 20
+
+
+# Get paste by hash id or raise 404 error.
+def get_paste(hash_id):
+    return Paste.objects.get_or_404(hash_id=hash_id)
 
 
 @app.route('/', name='pastes.index')
@@ -142,6 +149,9 @@ def create_post():
 @app.route('/paste/<hash_id>', name='pastes.show')
 @jinja2_view('pastes/view.html')
 def view(hash_id):
+    paste = get_paste(hash_id)
+    paste.increase_views()
+
     sig = message = timestamp = None
     user = login.get_user()
     if user:
@@ -154,12 +164,21 @@ def view(hash_id):
         # generate our hmac signature
         sig = hmac.HMAC(app.config['site.disqus_secret_key'], '%s %s' % (message, timestamp), hashlib.sha1).hexdigest()
 
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
-    paste.views += 1
-    paste.save()
     return {'paste': paste, 'message': message, 'timestamp': timestamp, 'sig': sig}
+
+
+@app.post('/paste/<hash_id>/like')
+@login.login_required
+def like(hash_id):
+    paste = get_paste(hash_id)
+    return paste.toggle_like_by(request.user, True)
+
+
+@app.post('/paste/<hash_id>/unlike')
+@login.login_required
+def unlike(hash_id):
+    paste = get_paste(hash_id)
+    return paste.toggle_like_by(request.user, False)
 
 
 @app.route('/paste/<hash_id>/edit', name='pastes.update')
@@ -167,9 +186,7 @@ def view(hash_id):
 @jinja2_view('pastes/edit.html')
 @csrf_token
 def edit_get(hash_id):
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
+    paste = get_paste(hash_id)
     if paste.user.id != request.user.id:
         abort(404)
     data = {'title': paste.title,
@@ -185,9 +202,7 @@ def edit_get(hash_id):
 @csrf_token
 @csrf_protect
 def edit_post(hash_id):
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
+    paste = get_paste(hash_id)
     if paste.user.id != request.user.id:
         abort(404)
     form = PasteForm(request.POST)
@@ -259,9 +274,7 @@ def tag_more(tag_name):
 
 @app.route('/favourite/<hash_id>', name='favourites.add')
 def favourites_add(hash_id):
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
+    paste = get_paste(hash_id)
     if paste not in request.user.favourites:
         request.user.favourites.append(paste)
         request.user.save()
@@ -270,9 +283,7 @@ def favourites_add(hash_id):
 
 @app.route('/unfavourite/<hash_id>', name='favourites.remove')
 def favourites_remove(hash_id):
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
+    paste = get_paste(hash_id)
     if paste in request.user.favourites:
         request.user.favourites.remove(paste)
         request.user.save()

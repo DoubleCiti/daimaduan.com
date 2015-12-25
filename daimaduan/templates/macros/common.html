@@ -1,0 +1,42 @@
+{% macro render_comment_form(identifier) -%}
+    <div id="disqus_thread"></div>
+    <script>
+        /**
+         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+         */
+
+        var disqus_config = function () {
+            this.page.identifier = '{{ identifier }}';
+        };
+
+        (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+            var d = document, s = d.createElement('script');
+
+            s.src = '//{{ config['site.disqus'] }}.disqus.com/embed.js';  // IMPORTANT: Replace EXAMPLE with your forum shortname!
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+{%- endmacro %}
+
+{# 快速添加 fa 图标的标签 #}
+{% macro fa_icon(icon, text='', right=False) -%}
+    {% if right %}
+        {{ text }} <i class="fa fa-{{ icon }}"></i>
+    {% else %}
+        <i class="fa fa-{{ icon }}"></i> {{ text }}
+    {% endif %}
+{% endmacro %}
+
+{% macro panel_tag(title, class='', id='', with_body=True) -%}
+    <div class="panel panel-default {{ class }}"
+         {% if id %}id="{{ id }}"{% endif %}>
+        <div class="panel-heading">{{ title }}</div>
+        {% if with_body %}<div class="panel-body">{% endif %}
+            {{ caller() }}
+        {% if with_body %}</div>{% endif %}
+    </div>
+{%- endmacro %}

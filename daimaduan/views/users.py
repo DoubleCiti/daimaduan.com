@@ -18,6 +18,7 @@ from daimaduan.models import User
 from daimaduan.models import UserOauth
 from daimaduan.models import Paste
 from daimaduan.models import Tag
+from daimaduan.models import Like
 
 from daimaduan.forms import SignupForm
 from daimaduan.forms import SigninForm
@@ -32,6 +33,11 @@ from daimaduan.utils import validate_token
 from daimaduan.utils import send_confirm_email
 from daimaduan.utils import send_reset_password_email
 from daimaduan.utils import logger
+
+
+# Get user by username or raise 404 error.
+def get_user(username):
+    return User.objects.get_or_404(username=username)
 
 
 @app.get('/oauth/<provider>', name='oauth.signin')
@@ -233,27 +239,27 @@ def reset_password_success():
 @app.get('/user/<username>')
 @jinja2_view('user/user.html')
 def user_index(username):
-    user = User.objects(username=username).first()
-    if user:
-        if request.user:
-            pastes = Paste.objects(user=user).order_by('-updated_at')
-        else:
-            pastes = Paste.objects(user=user, is_private=False).order_by('-updated_at')
-        return {'user': user, 'pastes': pastes}
-    return abort(404)
+    user = get_user(username)
+
+    pastes = Paste.objects(user=user).order_by('-updated_at')
+    if not (request.user and request.user == user):
+        pastes = pastes(is_private=False)
+
+    return {'user': user,
+            'pastes': pastes}
 
 
-@app.get('/user/favourites', name='users.favourites')
-@login.login_required
-@jinja2_view('user/favourites.html')
-def favourites_get():
-    return {'pastes': request.user.get_favourites_by_page(1),
+@app.get('/user/<username>/likes', name='users.likes')
+@jinja2_view('likes.html')
+def favourites_get(username):
+    user = get_user(username)
+    return {'user': user,
+            'likes': user.get_likes_by_page(1),
             'tags': Tag.objects().order_by('-popularity')[:10]}
 
 
 @app.get('/user/favourites/more')
-@login.login_required
-@jinja2_view('pastes/pastes.html')
+@jsontify
 def favourites_more():
     p = int(request.query.p)
     if not p:

@@ -1,4 +1,18 @@
 {% from 'macros/tags.html' import render_tag %}
+{% from 'macros/common.html' import fa_icon %}
+
+
+{% macro render_paste_item(paste) %}
+  {% include 'pastes/paste.html' %}
+{% endmacro %}
+
+
+{% macro render_private(paste) %}
+  {% if paste.is_private -%}
+    <small><i class="fa fa-lock text-warning" title="私有"></i></small>
+  {% endif -%}
+{% endmacro %}
+
 
 {% macro render_code(code) %}
 <div class="code panel panel-default" id="code-{{ code.id }}">
@@ -12,6 +26,40 @@
 </div>
 {% endmacro %}
 
+
 {% macro render_source_code(source) %}
-<pre><code>{{ source }}</code></pre>
+  <pre><code>{{ source }}</code></pre>
+{% endmacro %}
+
+
+{% macro edit_paste_button(paste) %}
+  <a href="/paste/{{ paste.hash_id }}/edit"
+     title="编辑"
+     class="btn btn-default btn-xs action action-edit"
+     data-id="{{ paste.hash_id }}">
+    {{ fa_icon('pencil') }} <span>编辑</span>
+  </a>
+{% endmacro %}
+
+
+{% macro del_paste_button(paste) %}
+  <a href="/paste/{{ paste.hash_id }}"
+     title="删除"
+     class="btn btn-default btn-xs action action-del"
+     data-id="{{ paste.hash_id }}">
+    {{ fa_icon('trash') }} <span>删除</span>
+  </a>
+{% endmacro %}
+
+
+{% macro like_paste_button(user, paste) %}
+  {% set liked = user and user.liked(paste) -%}
+  {% set text  = liked | ternary('取消喜欢', '喜欢') -%}
+  <a href="javascript:;"
+     title="{{ text }}"
+     class="btn btn-default btn-xs action action-{{ liked | ternary('unlike', 'like') }}"
+     data-id="{{ paste.hash_id }}">
+    {{ fa_icon('heart') }} <span>{{ text }}</span>
+    {{ paste.likes_count }}
+  </a>
 {% endmacro %}

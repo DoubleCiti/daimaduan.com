@@ -5,12 +5,66 @@ import hashlib
 import mongoengine
 
 from bottle import request
+from bottle import abort
 
 from daimaduan.jinja_ext import time_passed
+from mongoengine import signals
+from mongoengine.base import ValidationError
+from mongoengine.queryset import MultipleObjectsReturned
+from mongoengine.queryset import DoesNotExist
+from mongoengine.queryset import QuerySet
+from mongoengine.queryset import queryset_manager
+
+
+# https://github.com/MongoEngine/flask-mongoengine/blob/master/flask_mongoengine/__init__.py
+class BaseQuerySet(QuerySet):
+    """
+    A base queryset with handy extras
+    """
+
+    def get_or_404(self, *args, **kwargs):
+        try:
+            return self.get(*args, **kwargs)
+        except (MultipleObjectsReturned, DoesNotExist, ValidationError):
+            abort(404)
+
+    def first_or_404(self):
+
+        obj = self.first()
+        if obj is None:
+            abort(404)
+
+        return obj
 
 
 class BaseDocument(mongoengine.Document):
-    meta = {'abstract': True, 'strict': False}
+    meta = {'abstract': True,
+            'strict': False,
+            'queryset_class': BaseQuerySet}
+
+    # Increase specific counter by `count`
+    def increase_counter(self, field, count=1):
+        counter_field = '%s_count' % field
+        counter_value = getattr(self, counter_field, 0) + count
+        if counter_value <= 0:
+            counter_value = 0
+
+        attributes = dict([(counter_field, counter_value)])
+        self.update(**attributes)
+
+    @classmethod
+    def find_or_create_by(cls, **attributes):
+        record = cls.objects(**attributes).first()
+        if record is None:
+            record = cls(**attributes).save()
+
+        return record
+
+    @classmethod
+    def find_and_delete_by(cls, **attributes):
+        record = cls.objects(**attributes).first()
+        if record:
+            record.delete()
 
     created_at = mongoengine.DateTimeField(default=datetime.datetime.now)
     updated_at = mongoengine.DateTimeField(default=datetime.datetime.now)
@@ -21,11 +75,29 @@ class User(BaseDocument):
     email = mongoengine.StringField(required=True)
     password = mongoengine.StringField()
     salt = mongoengine.StringField()
-    favourites = mongoengine.ListField(mongoengine.ReferenceField("Paste"))
     is_email_confirmed = mongoengine.BooleanField(default=False)
     email_confirmed_on = mongoengine.DateTimeField(default=None)
 
     oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
+
+    paste_likes_count = mongoengine.IntField(default=0)
+    pastes_count = mongoengine.IntField(default=0)
+
+    @property
+    def private_pastes_count(self):
+        return len(self.pastes(is_private=True))
+
+    @property
+    def public_pastes_count(self):
+        return max(0, self.pastes_count - len(self.pastes(is_private=True)))
+
+    @property
+    def likes(self):
+        return Like.objects(user=self)
+
+    @property
+    def pastes(self):
+        return Paste.objects(user=self)
 
     def save(self, *args, **kwargs):
         if not self.salt:
@@ -51,8 +123,8 @@ class User(BaseDocument):
         if oauth and oauth.user:
             return oauth.user
 
-    def get_favourites_by_page(self, p):
-        return self.favourites[(p - 1) * 20:p * 20]
+    def get_likes_by_page(self, p):
+        return self.likes[(p - 1) * 20:p * 20]
 
     def is_in_favourites(self, paste):
         return paste in self.favourites
@@ -60,6 +132,10 @@ class User(BaseDocument):
     def to_json(self):
         return {'username': self.username,
                 'gravatar_url': self.gravatar_url(width=38)}
+
+    def liked(self, paste):
+        like = Like.objects(likeable=paste, user=self).first()
+        return like is not None
 
 
 class UserOauth(BaseDocument):
@@ -100,6 +176,8 @@ class Paste(BaseDocument):
     rate = mongoengine.IntField(default=0)
     views = mongoengine.IntField(default=0)
 
+    likes_count = mongoengine.IntField(default=0)
+
     def save(self, *args, **kwargs):
         if not self.hash_id:
             def generate_hash_id():
@@ -110,6 +188,10 @@ class Paste(BaseDocument):
         if not self.title:
             self.title = u'代码集合: %s' % self.hash_id
         super(Paste, self).save(*args, **kwargs)
+
+    def increase_views(self):
+        self.views = self.views + 1
+        self.save()
 
     def to_json(self):
         return {'hash_id': self.hash_id,
@@ -131,6 +213,33 @@ class Paste(BaseDocument):
     def disqus_identifier(self):
         return 'paste-%s' % self.hash_id
 
+    def toggle_like_by(self, user, flag):
+        filters = dict(likeable=self, user=user)
+
+        if flag:
+            Like.find_or_create_by(**filters)
+        else:
+            Like.find_and_delete_by(**filters)
+
+        return {
+            'paste_id': self.hash_id,
+            'user_like': user.reload().paste_likes_count,
+            'paste_likes': self.reload().likes_count,
+            'liked': flag
+        }
+
+    @classmethod
+    def post_save(cls, sender, document, **kwargs):
+        if kwargs.get('created'):
+            document.user.increase_counter('pastes')
+
+    @classmethod
+    def post_delete(cls, sender, document, **kwargs):
+        document.user.increase_counter('pastes', -1)
+
+signals.post_save.connect(Paste.post_save, sender=Paste)
+signals.post_delete.connect(Paste.post_delete, sender=Paste)
+
 
 class Tag(BaseDocument):
     name = mongoengine.StringField(required=True, unique=True)
@@ -145,3 +254,24 @@ class Rate(BaseDocument):
     user = mongoengine.ReferenceField(User)
     paste = mongoengine.ReferenceField(Paste)
     score = mongoengine.IntField(default=0)
+
+
+class Like(BaseDocument):
+    user = mongoengine.ReferenceField('User')
+    likeable = mongoengine.GenericReferenceField('Paste')
+
+    @classmethod
+    def post_save(cls, sender, document, **kwargs):
+        if kwargs.get('created'):
+            field = document.likeable._cls.lower()
+            document.user.increase_counter('%s_likes' % field)
+            document.likeable.increase_counter('likes')
+
+    @classmethod
+    def post_delete(cls, sender, document, **kwargs):
+        field = document.likeable._cls.lower()
+        document.user.increase_counter('%s_likes' % field, -1)
+        document.likeable.increase_counter('likes', -1)
+
+signals.post_save.connect(Like.post_save, sender=Like)
+signals.post_delete.connect(Like.post_delete, sender=Like)

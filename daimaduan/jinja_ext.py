@@ -43,6 +43,24 @@ def time_passed(value):
     return u'%s %s前' % (quantity, unit)
 
 
+def ternary(value, x, y):
+    """Ternary operator simulator
+
+    This filter
+
+        {{ is_worked | ternary('Yes', 'No') }}
+
+    works as the following code in other language
+
+        is_worked ? 'Yes' : 'No'
+    """
+
+    if value:
+        return x
+    else:
+        return y
+
+
 def view_name():
     """Get request's view name
 
@@ -90,7 +108,8 @@ class JinajaPlugin(object):
         Jinja2Template.settings = {
             'autoescape': True,
             'filters': {'datetimeformat': datetimeformat,
-                        'time_passed': time_passed}
+                        'time_passed': time_passed,
+                        'ternary': ternary}
         }
 
         Jinja2Template.defaults = {
