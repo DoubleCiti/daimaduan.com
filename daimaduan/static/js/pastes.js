@@ -1,10 +1,9 @@
 (function() {
   function initPaste() {
     $(document).on('click', '.action-del', function(event) {
-      event.preventDefault();
-      var r = confirm("确定删除这个代码集合吗?");
-      if  (r == true) {
-        location.href = $(this).attr('href');
+      if (!confirm("确认删除吗?")) {
+        event.preventDefault();
+        return false;
       }
     })
   }
