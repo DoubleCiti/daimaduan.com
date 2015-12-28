@@ -1,5 +1,6 @@
 {% from 'macros/users.html' import render_user_avatar -%}
 {% from 'macros/tags.html' import render_tag -%}
+{% from 'macros/pastes.html' import render_source_code -%}
 {% from 'macros/pastes.html' import render_source_code_preview -%}
 {% from 'macros/pastes.html' import render_private -%}
 
@@ -55,6 +56,10 @@
 
     <div class="clearfix"></div>
 
+    {% if paste.codes[0].content.count('\n') > 10 %}
     {{ render_source_code_preview(paste.codes[0].content) }}
+    {% else %}
+    {{ render_source_code(paste.codes[0].content) }}
+    {% endif %}
   </div>
 </div>
