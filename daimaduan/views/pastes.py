@@ -234,16 +234,16 @@ def edit_post(hash_id):
     return {'form': form, 'paste': paste, 'token': request.csrf_token}
 
 
-@app.get('/paste/<hash_id>/delete', name='pastes.delete')
+@app.post('/paste/<hash_id>/delete')
 @login.login_required
 def delete(hash_id):
-    paste = Paste.objects(hash_id=hash_id).first()
-    if not paste:
-        abort(404)
-    if paste.user.id != request.user.id:
-        abort(404)
-    paste.delete()
-    return redirect('/')
+    paste = get_paste(hash_id)
+
+    if request.user.owns_record(paste):
+        paste.delete()
+        return redirect('/')
+    else:
+        abort(403)
 
 
 @app.route('/tags', name='tags.index')

@@ -33,6 +33,10 @@ pre.panel-body {
     padding: 20px 20px 20px 20px;
 }
 
+.inline {
+  display: inline;
+}
+
 /** this is for highlightjs.line.numbers **/
 .hljs-line-numbers {
     text-align: right;

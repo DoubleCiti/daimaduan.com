@@ -81,10 +81,7 @@ class User(BaseDocument):
     oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
 
     paste_likes_count = mongoengine.IntField(default=0)
-
-    @property
-    def pastes_count(self):
-        return len(self.pastes)
+    pastes_count = mongoengine.IntField(default=0)
 
     @property
     def private_pastes_count(self):
@@ -107,6 +104,9 @@ class User(BaseDocument):
             self.salt = hashlib.sha1(str(time.time())).hexdigest()
             self.password = self.generate_password(self.password)
         super(User, self).save(*args, **kwargs)
+
+    def owns_record(self, record):
+        return record.user == self
 
     def generate_password(self, string):
         return hashlib.sha1('%s%s' % (string, self.salt)).hexdigest()

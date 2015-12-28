@@ -49,12 +49,14 @@
 
 
 {% macro del_paste_button(paste) %}
-  <a href="/paste/{{ paste.hash_id }}/delete"
-     title="删除"
-     class="btn btn-danger btn-xs action action-del"
-     data-id="{{ paste.hash_id }}">
-    {{ fa_icon('trash') }} <span>删除</span>
-  </a>
+  <form class="inline"
+        action="/paste/{{ paste.hash_id }}/delete"
+        method="post">
+    <button type="submit"
+            class="btn btn-danger btn-xs action action-del">
+      {{ fa_icon('trash') }} <span>删除</span>
+    </button>
+  </form>
 {% endmacro %}
 
 
