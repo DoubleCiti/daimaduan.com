@@ -98,3 +98,12 @@ def seed():
     from daimaduan.seed_data import seed_data
     seed_data()
     local('rm -f config.cfg')
+
+
+def assets():
+    local('python setup.py develop')
+    local('cp daimaduan/config.cfg config.cfg')
+    from daimaduan.webassets_config import my_env
+    print my_env['js_all'].urls()
+    print my_env['css_all'].urls()
+    local('rm -f config.cfg')

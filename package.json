@@ -1,0 +1,23 @@
+{
+  "name": "daimaduan",
+  "version": "2.0.0",
+  "description": "daimaduan package.json",
+  "author": "David Xie <david.xie@me.com>",
+  "contributors": [
+    {"name": "Mario Qiu",
+     "email": "greatghoul@gmail.com"},
+    {"name": "Liang Liu",
+     "email": "liul85@gmail.com"}
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DoubleCiti/daimaduan.com"
+  },
+  "bugs": {
+    "url": "https://github.com/DoubleCiti/daimaduan.com/issues"
+  },
+  "dependencies": {
+    "uglifyjs": "~2.4.10"
+  },
+  "license": "GPL-2.0"
+}

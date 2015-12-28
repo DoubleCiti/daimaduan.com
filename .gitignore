@@ -63,3 +63,9 @@ config.cfg
 .newrelic_key
 
 .DS_Store
+
+# nodejs and assets
+node_modules/
+daimaduan/static/.webassets-cache/
+daimaduan/static/css/compiled.css
+daimaduan/static/js/compiled.js
