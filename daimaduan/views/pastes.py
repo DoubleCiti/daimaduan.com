@@ -183,7 +183,7 @@ def unlike(hash_id):
 @csrf_token
 def edit_get(hash_id):
     paste = get_paste(hash_id)
-    if paste.user.id != request.user.id:
+    if not paste.is_user_owned(request.user):
         abort(404)
     data = {'title': paste.title,
             'is_private': paste.is_private,
@@ -199,7 +199,7 @@ def edit_get(hash_id):
 @csrf_protect
 def edit_post(hash_id):
     paste = get_paste(hash_id)
-    if paste.user.id != request.user.id:
+    if not paste.is_user_owned(request.user):
         abort(404)
     form = PasteForm(request.POST)
     if form.validate():

@@ -11,13 +11,15 @@
 {% block title %}{{ paste.title }}{% endblock %}
 
 {% block content %}
-  {% if request.user %}
-    <div class="pull-right paste-actions">
+  <div class="pull-right paste-actions">
+  {% if paste.is_user_owned(request.user) %}
       {{ edit_paste_button(paste) }}
       {{ del_paste_button(paste) }}
-      {{ like_paste_button(request.user, paste) }}
-    </div>
   {% endif %}
+  {% if request.user %}
+      {{ like_paste_button(request.user, paste) }}
+  {% endif %}
+  </div>
 
   <h4 class="page-header">
     {{ paste.title }}
