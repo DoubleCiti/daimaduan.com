@@ -250,6 +250,7 @@ def embed(hash_id):
     response.content_type = 'text/javascript; charset=utf-8'
     return {'paste': paste}
 
+
 @app.route('/tags', name='tags.index')
 @jinja2_view('tags/index.html')
 def tags():
