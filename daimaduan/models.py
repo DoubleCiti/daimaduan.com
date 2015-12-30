@@ -228,6 +228,9 @@ class Paste(BaseDocument):
             'liked': flag
         }
 
+    def is_user_owned(self, user):
+        return self.user == user
+
     @classmethod
     def post_save(cls, sender, document, **kwargs):
         if kwargs.get('created'):
