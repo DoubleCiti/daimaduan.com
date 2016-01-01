@@ -4,6 +4,7 @@ import time
 from bottle import request
 from bottle import DEBUG
 from bottle import TEMPLATE_PATH, Jinja2Template
+from jinja2 import FileSystemBytecodeCache
 
 
 MINUTE = 60
@@ -109,7 +110,8 @@ class JinajaPlugin(object):
             'autoescape': True,
             'filters': {'datetimeformat': datetimeformat,
                         'time_passed': time_passed,
-                        'ternary': ternary}
+                        'ternary': ternary},
+            'bytecode_cache': FileSystemBytecodeCache(app.config['site.jinja2_cache'], '%s.cache')
         }
 
         Jinja2Template.defaults = {

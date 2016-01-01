@@ -4,6 +4,7 @@ database = daimaduan
 
 [site]
 debug = true
+jinja2_cache = /tmp/jinja2_cache
 validate_key = "youdon'tneedtoknow"
 secret_key = "ddf4FP4U&VydAq"
 disqus = daimaduan-dev
