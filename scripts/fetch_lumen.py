@@ -7,7 +7,7 @@ import re
 import os
 from distutils.file_util import copy_file
 
-BASE_URL = 'http://cdnjs.cloudflare.com/ajax/libs/bootswatch'
+BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch'
 VERSION = '3.3.6'
 THEME = 'lumen'
 PAT_URL = r"url\(\'(?P<URL>.+?)\'\)"
