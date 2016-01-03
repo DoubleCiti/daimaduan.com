@@ -1,3 +1,4 @@
+document.write('<link rel="stylesheet" href="http://{{ config['site.domain'] }}/static/css/embed.css" />');
 {% for code in paste.codes -%}
-document.write('<pre><code>{{ code.content | e | replace('\n', '\\n') | replace('\r', '') }}</code></pre>');
+document.write('{{ code.highlight_content | replace('\n', '\\n') | replace('\r', '') | safe }}');
 {% endfor -%}

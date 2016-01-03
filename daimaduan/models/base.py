@@ -64,6 +64,7 @@ class User(BaseDocument):
     @classmethod
     def find_by_oauth(cls, provider, openid):
         """Find user that has oauth info with given provider and openid"""
+
         oauth = UserOauth.objects(provider=provider, openid=openid).first()
 
         if oauth and oauth.user:
@@ -105,6 +106,12 @@ class Code(BaseDocument):
     def content_head(self, n=10):
         lines = self.content.splitlines()[:n]
         return '\n'.join(lines)
+
+    @property
+    def highlight_content(self):
+        lexer = get_lexer_by_name(self.tag, stripall=True)
+        formatter = HtmlFormatter(linenos=True, cssclass='codehilite')
+        return highlight(self.content, lexer, formatter)
 
 
 class Paste(BaseDocument):
