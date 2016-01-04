@@ -302,3 +302,19 @@ def send_mail_post():
         send_confirm_email(app.config, user.email)
         return redirect('/success_sendmail')
     return {'form': form}
+
+
+@app.post('/user/watch')
+def watch_user():
+    user = User.objects(username=request.params.get('user')).first_or_404()
+    request.user.watched_users.append(user)
+    request.user.save()
+    return {'watchedStatus': request.user.is_watched(user)}
+
+
+@app.post('/user/unwatch')
+def unwatch_user():
+    user = User.objects(username=request.params.get('user')).first_or_404()
+    request.user.watched_users.remove(user)
+    request.user.save()
+    return {'watchedStatus': request.user.is_watched(user)}

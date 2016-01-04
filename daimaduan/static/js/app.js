@@ -44,9 +44,35 @@ function createLi(paste) {
     });
   }
 
+function switchWatchAction(data) {
+    data.text = data.watchedStatus ? "取消关注" : "关注";
+    data.class_name = data.watchedStatus ? "unwatch" : "watch";
+
+    var new_html = '<button class="btn btn-info btn-xs action action-<%= class_name %>"><%= text %></button>';
+
+    var compiled = _.template(new_html);
+    return compiled(data);
+}
+
+function toggleUserWatch() {
+    var $action = $(this);
+    var action = $action.is(".action-watch") ? "watch" : "unwatch";
+    var user_name = $(".panel-heading h4").text();
+    var url = "/user/" + action;
+    $.ajax({
+        url: url,
+        data: "user=" + user_name,
+        type: 'POST',
+        success: function(data) {
+            $action.replaceWith(switchWatchAction(data));
+        }
+    });
+}
+
 $(document).ready(function() {
     hljs.initHighlightingOnLoad();
     hljs.initLineNumbersOnLoad();
     initToggleFullCode();
     $(document).on('click', '.action-signout', signoutHandler);
+    $(document).on('click', '.action-watch, .action-unwatch', toggleUserWatch);
 });

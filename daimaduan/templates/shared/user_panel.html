@@ -1,6 +1,7 @@
 {% from 'macros/common.html' import panel_tag %}
 {% from 'macros/common.html' import fa_icon %}
 {% from 'macros/users.html' import render_user_avatar %}
+{% from 'macros/users.html' import render_user_watch %}
 
 <div class="panel panel-default"
      id="panel-paste-user"
@@ -28,5 +29,8 @@
       <span class="badge paste-likes-count">{{ user.paste_likes_count }}</span>
       喜欢的代码段
     </a>
+    {% if request.user and (user != request.user) %}
+      {{ render_user_watch(request.user, user) }}
+    {% endif %}
   </div>
 </div>
