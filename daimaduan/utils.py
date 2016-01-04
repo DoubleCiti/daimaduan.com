@@ -6,24 +6,24 @@
 
     A set of utilities.
 """
-from bottle import request
-from bottle import abort
-from functools import wraps
-from json import dumps
 import logging
 import math
+from functools import wraps
+from json import dumps
 
-from bottle import response
 from bottle import jinja2_template
+from bottle import request
+from bottle import response
 from bottle_utils.csrf import generate_csrf_token
 from itsdangerous import URLSafeTimedSerializer
 from mailthon import email
-from mailthon.postman import Postman
-from mailthon.middleware import TLS
 from mailthon.middleware import Auth
+from mailthon.middleware import TLS
+from mailthon.postman import Postman
 
-from daimaduan.models import UserOauth
 from daimaduan.models import User
+from daimaduan.models import UserOauth
+
 
 # Setup logger
 logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO)
