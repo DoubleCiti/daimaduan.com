@@ -1,16 +1,14 @@
-from bottle import request
-from bottle import jinja2_view
 from bottle import Jinja2Template
-
-from daimaduan import app
-from daimaduan.bootstrap import login
-from daimaduan.models import Code
-from daimaduan.models import User
-from daimaduan.models import Paste
+from bottle import request
 
 import daimaduan.views.errors
 import daimaduan.views.pastes
 import daimaduan.views.users
+from daimaduan.bootstrap import app
+from daimaduan.bootstrap import login
+from daimaduan.models import User
+from daimaduan.models import Code
+from daimaduan.models import Paste
 
 
 @login.load_user

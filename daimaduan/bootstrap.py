@@ -1,18 +1,23 @@
 # coding: utf-8
+import logging
 import os
 
 import bottle
-import mongoengine
 from bottle_login import LoginPlugin
 from rauth import OAuth2Service
 
-from daimaduan.jinja_ext import JinajaPlugin
-from daimaduan.utils import oauth_config
+from daimaduan.extensions.jinja import JinajaPlugin
+from daimaduan.extensions.mongo import MongoenginePlugin
+from daimaduan.utils.oauth import oauth_config
 
 
 def get_current_path():
     file_name = os.path.dirname(__file__)
     return os.path.abspath(file_name)
+
+
+logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO)
+logger = logging.getLogger('daimaduan')
 
 
 app = bottle.default_app()
@@ -30,10 +35,9 @@ app.config['SECRET_KEY'] = app.config['site.validate_key']
 jinja = JinajaPlugin(template_path='%s/templates' % get_current_path())
 login = LoginPlugin()
 
-mongoengine.connect(app.config['mongodb.database'], host=app.config['mongodb.host'])
-
 app.install(login)
 app.install(jinja)
+app.install(MongoenginePlugin())
 
 oauth_services = {}
 oauth_services['google'] = OAuth2Service(**oauth_config(app.config, 'google'))

@@ -127,7 +127,6 @@ class User(BaseDocument):
     @classmethod
     def find_by_oauth(cls, provider, openid):
         """Find user that has oauth info with given provider and openid"""
-
         oauth = UserOauth.objects(provider=provider, openid=openid).first()
 
         if oauth and oauth.user:

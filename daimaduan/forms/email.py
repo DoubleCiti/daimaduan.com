@@ -1,9 +1,9 @@
 # coding: utf-8
 from wtforms import Form
 from wtforms import StringField
-from wtforms import PasswordField
-from wtforms.validators import InputRequired
 from wtforms.validators import Email
+from wtforms.validators import InputRequired
+
 from daimaduan.models import User
 
 

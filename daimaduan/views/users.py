@@ -1,40 +1,31 @@
 # coding: utf-8
-import json
 import datetime
+import json
 
-from bottle import request
-from bottle import redirect
 from bottle import abort
 from bottle import jinja2_view
-
+from bottle import redirect
+from bottle import request
 from bottle_utils.csrf import csrf_protect
 from bottle_utils.csrf import csrf_token
 
-from daimaduan.bootstrap import app
+from daimaduan.bootstrap import app, logger
 from daimaduan.bootstrap import login
 from daimaduan.bootstrap import oauth_services
-
+from daimaduan.forms.email import EmailForm
+from daimaduan.forms.password import PasswordForm
+from daimaduan.forms.signin import SigninForm
+from daimaduan.forms.signup import SignupForm
+from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models import User
-from daimaduan.models import UserOauth
-from daimaduan.models import Paste
 from daimaduan.models import Tag
-from daimaduan.models import Like
-
-from daimaduan.forms import SignupForm
-from daimaduan.forms import SigninForm
-from daimaduan.forms import EmailForm
-from daimaduan.forms import PasswordForm
-from daimaduan.forms import UserInfoForm
-
-from daimaduan.utils import user_bind_oauth, jsontify
-from daimaduan.utils import get_session
-
-from daimaduan.utils import validate_token
-from daimaduan.utils import send_confirm_email
-from daimaduan.utils import send_reset_password_email
-from daimaduan.utils import logger
-from daimaduan.utils import paginate
-from daimaduan.utils import get_page
+from daimaduan.models import UserOauth
+from daimaduan.utils.commons import get_session
+from daimaduan.utils.email_confirmation import send_confirm_email
+from daimaduan.utils.email_confirmation import send_reset_password_email
+from daimaduan.utils.email_confirmation import validate_token
+from daimaduan.utils.oauth import user_bind_oauth
+from daimaduan.utils.pagination import get_page, paginate
 
 
 # Get user by username or raise 404 error.
