@@ -1,7 +1,8 @@
 from fabric.decorators import task
 from fabric.operations import local
 
-from daimaduan.models import Syntax
+from daimaduan.models.syntax import Syntax
+
 
 syntax_list = [
     "CSS",

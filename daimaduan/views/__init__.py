@@ -6,9 +6,9 @@ import daimaduan.views.pastes
 import daimaduan.views.users
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
-from daimaduan.models import User
-from daimaduan.models import Code
-from daimaduan.models import Paste
+from daimaduan.models.base import User
+from daimaduan.models.base import Code
+from daimaduan.models.base import Paste
 
 
 @login.load_user
