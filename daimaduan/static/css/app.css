@@ -150,10 +150,27 @@ pre.code_preview {
   margin-top: 10px;
 }
 
-/* Small devices (tablets, 768px and up) */
-@media (min-width: 768px) {
+.input-group-embed {
+  max-width: 120px;
+  float: left;
+}
+
+
+@media (min-width: 480px) {
   .paste-actions .action span {
     display: inline;
+  }
+
+  .input-group-embed {
+    max-width: 200px;
+  }
+}
+
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .input-group-embed {
+    max-width: 250px;
   }
 }
 

@@ -24,9 +24,3 @@
 .action-unlike:active {
   color: #E5214A
 }
-
-
-.input-group-embed {
-  max-width: 250px;
-  float: left;
-}
