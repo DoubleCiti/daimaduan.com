@@ -120,6 +120,9 @@ pre code {
 .paste-actions .action {
   margin-left: 5px;
 }
+.paste-actions .action:first-child {
+  margin-left: 0;
+}
 .paste-actions .action span {
   display: none;
 }

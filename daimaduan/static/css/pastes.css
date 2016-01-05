@@ -7,6 +7,10 @@
 }
 
 .view_pastes.func_show .page-header {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+.view_pastes.func_show .page-header h4 {
   margin-bottom: 5px;
 }
 .view_pastes.func_show .page-sub-header {

@@ -49,7 +49,7 @@
 
 
 {% macro del_paste_button(paste) %}
-  <form class="inline"
+  <form class="inline action"
         action="/paste/{{ paste.hash_id }}/delete"
         method="post">
     <button type="submit"
@@ -65,7 +65,7 @@
   {% set text  = liked | ternary('取消喜欢', '喜欢') -%}
   <a href="javascript:;"
      title="{{ text }}"
-     class="btn btn-info btn-xs action action-{{ liked | ternary('unlike', 'like') }}"
+     class="btn btn-default btn-xs action action-{{ liked | ternary('unlike', 'like') }}"
      data-id="{{ paste.hash_id }}">
     {{ fa_icon('heart') }} <span>{{ text }}</span>
     {{ paste.likes_count }}
