@@ -111,12 +111,18 @@
     });
   }
 
+  function selectEmbedCode() {
+    $('.input-group-embed :text').select();
+  }
+
   $(document).ready(function() {
     initPaste();
     initCodes();
     initGetMore();
     initSearchGetMore();
 
+    $('.input-group-embed').on('click', selectEmbedCode);
+    $('.input-group-embed :text').on('focus', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
   });
 })();

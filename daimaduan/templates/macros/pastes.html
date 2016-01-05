@@ -71,3 +71,18 @@
     {{ paste.likes_count }}
   </a>
 {% endmacro %}
+
+
+{% macro embed_paste_button(paste) %}
+  {% set url = '//%s/paste/%s/embed.js' % (config['site.domain'], paste.hash_id) -%}
+  <div class="input-group input-group-xs input-group-embed">
+    <span class="input-group-btn">
+      <button class="btn btn-default btn-xs action" type="button">
+        {{ fa_icon('code') }}
+        引用
+      </button>
+    </span>
+    <input type="text" class="form-control input-xs"
+           value="<script type=&quot;text/javascript&quot; src=&quot;{{ url }}&quot;></script>">
+  </div><!-- /input-group -->
+{% endmacro %}

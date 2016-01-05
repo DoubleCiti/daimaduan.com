@@ -6,6 +6,7 @@
 {% from 'macros/pastes.html' import like_paste_button %}
 {% from 'macros/pastes.html' import edit_paste_button %}
 {% from 'macros/pastes.html' import del_paste_button %}
+{% from 'macros/pastes.html' import embed_paste_button with context  %}
 {% from 'macros/common.html' import render_comment_form with context %}
 
 {% block title %}{{ paste.title }}{% endblock %}
@@ -30,8 +31,9 @@
         {{ edit_paste_button(paste) }}
         {{ del_paste_button(paste) }}
       {% endif %}
-      
+
       <div class="pull-right">
+        {{ embed_paste_button(paste) }}
       {% if request.user %}
         {{ like_paste_button(request.user, paste) }}
       {% endif %}
