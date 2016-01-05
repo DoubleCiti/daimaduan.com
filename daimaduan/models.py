@@ -1,19 +1,18 @@
 # coding: utf-8
 import datetime
-import time
 import hashlib
+import time
+
 import mongoengine
-
-from bottle import request
 from bottle import abort
-
-from daimaduan.jinja_ext import time_passed
+from bottle import request
 from mongoengine import signals
 from mongoengine.base import ValidationError
-from mongoengine.queryset import MultipleObjectsReturned
 from mongoengine.queryset import DoesNotExist
+from mongoengine.queryset import MultipleObjectsReturned
 from mongoengine.queryset import QuerySet
-from mongoengine.queryset import queryset_manager
+
+from daimaduan.jinja_ext import time_passed
 
 
 # https://github.com/MongoEngine/flask-mongoengine/blob/master/flask_mongoengine/__init__.py
@@ -65,6 +64,14 @@ class BaseDocument(mongoengine.Document):
         record = cls.objects(**attributes).first()
         if record:
             record.delete()
+
+    def create_hash_id(self, salt, string):
+        if not self.hash_id:
+            def generate_hash_id():
+                return hashlib.sha1('%s%s%s' % (salt, string, str(time.time()))).hexdigest()[:11]
+            self.hash_id = generate_hash_id()
+            while(self.__class__.objects(hash_id=self.hash_id).first() is not None):
+                self.hash_id = generate_hash_id()
 
     created_at = mongoengine.DateTimeField(default=datetime.datetime.now)
     updated_at = mongoengine.DateTimeField(default=datetime.datetime.now)
@@ -149,10 +156,14 @@ class UserOauth(BaseDocument):
 class Code(BaseDocument):
     user = mongoengine.ReferenceField(User)
 
-    hash_id = mongoengine.StringField()
+    hash_id = mongoengine.StringField(unique=True)
     title = mongoengine.StringField()
     content = mongoengine.StringField(required=True)
     tag = mongoengine.StringField()
+
+    def save(self, *args, **kwargs):
+        self.create_hash_id(self.user.salt, 'code')
+        super(Code, self).save(*args, **kwargs)
 
     def name(self):
         if len(self.title):
@@ -169,7 +180,7 @@ class Paste(BaseDocument):
     user = mongoengine.ReferenceField(User)
 
     title = mongoengine.StringField()
-    hash_id = mongoengine.StringField()
+    hash_id = mongoengine.StringField(unique=True)
     is_private = mongoengine.BooleanField(default=False)
     codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
     tags = mongoengine.ListField(mongoengine.StringField())
@@ -179,12 +190,7 @@ class Paste(BaseDocument):
     likes_count = mongoengine.IntField(default=0)
 
     def save(self, *args, **kwargs):
-        if not self.hash_id:
-            def generate_hash_id():
-                return hashlib.sha1('%s%s' % (self.user.salt, str(time.time()))).hexdigest()[:11]
-            self.hash_id = generate_hash_id()
-            while(Paste.objects(hash_id=self.hash_id).first() is not None):
-                self.hash_id = generate_hash_id()
+        self.create_hash_id(self.user.salt, 'paste')
         if not self.title:
             self.title = u'代码集合: %s' % self.hash_id
         super(Paste, self).save(*args, **kwargs)
