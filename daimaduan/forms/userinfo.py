@@ -9,7 +9,7 @@ from wtforms.validators import Email
 from wtforms.validators import Regexp
 
 from daimaduan.models import User
-from daimaduan.utils import get_session
+from daimaduan.utils.commons import get_session
 
 
 class UserInfoForm(Form):

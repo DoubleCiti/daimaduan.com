@@ -1,35 +1,29 @@
 # coding: utf-8
-import re
 import base64
 import hashlib
 import hmac
 import json
+import re
 import time
 
 from bottle import abort
-from bottle import request
-from bottle import redirect
 from bottle import jinja2_view
-
+from bottle import redirect
+from bottle import request
 from bottle_utils.csrf import csrf_protect
 from bottle_utils.csrf import csrf_token
 
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
-
-from daimaduan.forms import PasteForm
-
+from daimaduan.forms.paste import PasteForm
+from daimaduan.models import User
 from daimaduan.models import Code
 from daimaduan.models import Paste
-from daimaduan.models import Rate
-from daimaduan.models import Like
 from daimaduan.models import Tag
-from daimaduan.models import User
-from daimaduan.utils import jsontify
-from daimaduan.utils import logger
-from daimaduan.utils import user_active_required
-from daimaduan.utils import paginate
-from daimaduan.utils import get_page
+from daimaduan.utils.decorators import user_active_required
+from daimaduan.utils.pagination import get_page
+from daimaduan.utils.pagination import paginate
+
 
 ITEMS_PER_PAGE = 20
 
