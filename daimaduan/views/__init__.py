@@ -2,7 +2,7 @@ from bottle import request
 from bottle import jinja2_view
 from bottle import Jinja2Template
 
-from daimaduan.bootstrap import app
+from daimaduan import app
 from daimaduan.bootstrap import login
 from daimaduan.models import Code
 from daimaduan.models import User

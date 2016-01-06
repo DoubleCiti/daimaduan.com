@@ -1,7 +1,7 @@
-# coding: utf-8
-
-from daimaduan.bootstrap import app
+from fabric.decorators import task
+from fabric.operations import local
 from daimaduan.models import Syntax
+
 
 syntax_list = [
     "CSS",
@@ -42,13 +42,16 @@ syntax_list = [
 ]
 
 
-def find_or_create_syntax(name):
-    syntax = Syntax.objects(name=name).first()
-    if syntax is None:
-        print "Seeding syntax: %s" % name
-        Syntax(name=name).save()
+@task
+def seed():
+    """Seed syntax data in MongoDB"""
+    local('python setup.py install')
 
+    def find_or_create_syntax(name):
+        syntax = Syntax.objects(name=name).first()
+        if syntax is None:
+            print "Seeding syntax: %s" % name
+            Syntax(name=name).save()
 
-def seed_data():
     for syntax in syntax_list:
         find_or_create_syntax(syntax)

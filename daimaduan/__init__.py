@@ -1,8 +1,7 @@
-from beaker.middleware import SessionMiddleware
-
 from daimaduan.bootstrap import app
-import daimaduan.views
 
+import daimaduan.views
+from beaker.middleware import SessionMiddleware
 
 session_opts = {
     'session.type': 'cookie',
