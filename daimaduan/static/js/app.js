@@ -36,8 +36,11 @@ function createLi(paste) {
   function initToggleFullCode() {
     $(document).on('click', '.full-code-toggle', function(event) {
       event.preventDefault();
-      console.log($(this).prev());
       $(this).prev().toggleClass('code_preview');
+      if ($(this).text() == '显示完整代码')
+        $(this).text('隐藏代码');
+      else
+        $(this).text('显示完整代码');
     });
   }
 

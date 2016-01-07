@@ -132,6 +132,7 @@ pre code {
 
 pre.code_preview {
   max-height: 200px;
+  overflow: hidden;
 }
 
 .avatar-wrapper {
