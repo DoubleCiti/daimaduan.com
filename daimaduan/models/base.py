@@ -25,6 +25,8 @@ class User(BaseDocument):
     paste_likes_count = mongoengine.IntField(default=0)
     pastes_count = mongoengine.IntField(default=0)
 
+    watched_users = mongoengine.ListField(mongoengine.ReferenceField('User'))
+
     @property
     def private_pastes_count(self):
         return len(self.pastes(is_private=True))
@@ -77,6 +79,9 @@ class User(BaseDocument):
     def liked(self, paste):
         like = Like.objects(likeable=paste, user=self).first()
         return like is not None
+
+    def is_watched(self, user):
+        return user in self.watched_users
 
 
 class Code(BaseDocument):
