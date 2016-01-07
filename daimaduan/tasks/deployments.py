@@ -73,7 +73,7 @@ def deploy(app_env):
     with cd(app_path):
         run('tar xzf %s.tar.gz' % dist)
     with cd('%s/%s' % (app_path, dist)):
-        run('%s/venv/bin/python setup.py install > /dev/null 2>&1' % app_path)
+        run('%s/venv/bin/python setup.py develop > /dev/null 2>&1' % app_path)
     run('rm -f %s/current' % app_path)
     run('ln -s %s/%s/daimaduan %s/current' % (app_path, dist, app_path))
     run('cp %s/shared/config.cfg %s/current' % (app_path, app_path))
@@ -86,15 +86,19 @@ def deploy(app_env):
 
     # after deploying, we need to test if deployment succeed
     is_deploy_succeed = True
-    resp = urllib2.urlopen(TEST_WEBSITE[app_env])
-    if resp.code != 200:
+    try:
+        resp = urllib2.urlopen(TEST_WEBSITE[app_env])
+    except Exception:
         is_deploy_succeed = False
-        if versions:
-            print "Deploy failed, switch back to previous version"
-            run('rm -f %s/current' % app_path)
-            run('ln -s %s/%s/daimaduan %s/current' % (app_path, versions[0], app_path))
-            sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % app_env)
-            sys.exit(1)
+    else:
+        if resp.code != 200:
+            is_deploy_succeed = False
+            if versions:
+                print "Deploy failed, switch back to previous version"
+                run('rm -f %s/current' % app_path)
+                run('ln -s %s/%s/daimaduan %s/current' % (app_path, versions[0], app_path))
+                sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % app_env)
+                sys.exit(1)
 
     # clean old versions
     if is_deploy_succeed:
