@@ -7,7 +7,7 @@ from wtforms.validators import InputRequired
 from wtforms.validators import Email
 from wtforms.validators import Regexp
 from wtforms.validators import EqualTo
-from daimaduan.models import User
+from daimaduan.models.base import User
 
 
 class SignupForm(Form):

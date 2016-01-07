@@ -8,7 +8,7 @@ from wtforms import SelectField
 from wtforms import BooleanField
 from wtforms.validators import InputRequired
 
-from daimaduan.models import Syntax
+from daimaduan.models.syntax import Syntax
 
 
 class CodeForm(Form):

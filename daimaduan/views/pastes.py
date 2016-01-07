@@ -16,10 +16,10 @@ from bottle_utils.csrf import csrf_token
 from daimaduan.bootstrap import app
 from daimaduan.bootstrap import login
 from daimaduan.forms.paste import PasteForm
-from daimaduan.models import User
-from daimaduan.models import Code
-from daimaduan.models import Paste
-from daimaduan.models import Tag
+from daimaduan.models.tag import Tag
+from daimaduan.models.base import User
+from daimaduan.models.base import Code
+from daimaduan.models.base import Paste
 from daimaduan.utils.decorators import user_active_required
 from daimaduan.utils.pagination import get_page
 from daimaduan.utils.pagination import paginate

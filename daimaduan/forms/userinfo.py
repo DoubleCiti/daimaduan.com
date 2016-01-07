@@ -8,7 +8,7 @@ from wtforms.validators import InputRequired
 from wtforms.validators import Email
 from wtforms.validators import Regexp
 
-from daimaduan.models import User
+from daimaduan.models.base import User
 from daimaduan.utils.commons import get_session
 
 

@@ -17,9 +17,9 @@ from daimaduan.forms.password import PasswordForm
 from daimaduan.forms.signin import SigninForm
 from daimaduan.forms.signup import SignupForm
 from daimaduan.forms.userinfo import UserInfoForm
-from daimaduan.models import User
-from daimaduan.models import Tag
-from daimaduan.models import UserOauth
+from daimaduan.models.tag import Tag
+from daimaduan.models.base import User
+from daimaduan.models.user_oauth import UserOauth
 from daimaduan.utils.commons import get_session
 from daimaduan.utils.email_confirmation import send_confirm_email
 from daimaduan.utils.email_confirmation import send_reset_password_email

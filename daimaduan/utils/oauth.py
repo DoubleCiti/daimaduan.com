@@ -1,4 +1,4 @@
-from daimaduan.models import UserOauth
+from daimaduan.models.user_oauth import UserOauth
 
 
 def oauth_config(config, provider):

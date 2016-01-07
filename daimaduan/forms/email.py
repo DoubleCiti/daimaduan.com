@@ -4,7 +4,7 @@ from wtforms import StringField
 from wtforms.validators import Email
 from wtforms.validators import InputRequired
 
-from daimaduan.models import User
+from daimaduan.models.base import User
 
 
 class EmailForm(Form):

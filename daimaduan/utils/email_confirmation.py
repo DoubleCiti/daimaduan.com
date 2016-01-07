@@ -5,7 +5,8 @@ from mailthon.middleware import TLS, Auth
 from mailthon.postman import Postman
 
 from daimaduan.bootstrap import logger
-from daimaduan.models import User
+from daimaduan.models.base import User
+
 
 SENDER = 'noreply.daimaduan@gmail.com'
 CONFIRMATION_SUBJECT = u'请激活您在代码段注册的邮箱地址'
