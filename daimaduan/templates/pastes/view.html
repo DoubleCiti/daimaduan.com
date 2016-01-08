@@ -14,7 +14,7 @@
 {% block content %}
   <div class="page-header">
     <h4>
-      {{ paste.title }}
+      {{ paste.title }}{{ request.method }}
       {{ render_private(paste) }}
     </h4>
 

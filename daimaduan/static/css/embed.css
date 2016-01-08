@@ -1,12 +1,15 @@
 .daimaduan-code { border: 1px solid #DDDDDD; border-radius: 3px; margin-bottom: 1em; }
-.daimaduan-code-meta { background: #F7F7F7; padding: 8px; border-top: 1px solid #EEEEEE; font-size: 12px; }
+.daimaduan-code-meta { background: #F7F7F7; padding: 8px; border-top: 1px solid #EEEEEE; font-size: 12px; text-align: right; }
 .daimaduan-code-meta a:link,
 .daimaduan-code-meta a:visited,
 .daimaduan-code-meta a:hover,
 .daimaduan-code-meta a:active { color: #666; text-decoration: none; } 
+.daimaduan-code-block { overflow-x: auto; overflow-y: none; }
 .daimaduan-code-block .linenos { background: #FFFFFF; padding: 5px 8px; border-right: 1px solid #EEEEEE; width: 1%; }
 .daimaduan-code-block .code { padding: 5px 8px; }
 .daimaduan-code-block pre { margin: 0; }
+.daimaduan-code-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 120px; }
+.daimaduan-copyright { float: right; }
 .codehilite .hll { background-color: #ffffcc }
 .codehilite .c { color: #999988; font-style: italic } /* Comment */
 .codehilite .err { color: #a61717; background-color: #e3d2d2 } /* Error */
