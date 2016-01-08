@@ -1,5 +1,9 @@
 .daimaduan-code { border: 1px solid #DDDDDD; border-radius: 3px; margin-bottom: 1em; }
 .daimaduan-code-meta { background: #F7F7F7; padding: 8px; border-top: 1px solid #EEEEEE; font-size: 12px; }
+.daimaduan-code-meta a:link,
+.daimaduan-code-meta a:visited,
+.daimaduan-code-meta a:hover,
+.daimaduan-code-meta a:active { color: #666; text-decoration: none; } 
 .daimaduan-code-block .linenos { background: #FFFFFF; padding: 5px 8px; border-right: 1px solid #EEEEEE; width: 1%; }
 .daimaduan-code-block .code { padding: 5px 8px; }
 .daimaduan-code-block pre { margin: 0; }
