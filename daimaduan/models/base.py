@@ -11,6 +11,10 @@ from daimaduan.models import BaseDocument
 from daimaduan.models.like import Like
 from daimaduan.models.user_oauth import UserOauth
 
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
+
 
 class User(BaseDocument):
     username = mongoengine.StringField(required=True)
