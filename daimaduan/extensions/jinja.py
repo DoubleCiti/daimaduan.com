@@ -94,6 +94,13 @@ def view_func():
         return 'error'
 
 
+def url_for(path=""):
+    """Get url related to domain root"""
+
+    urlparts = request.urlparts[0:2] + (path,)
+    return "%s://%s%s" % urlparts
+
+
 class JinajaPlugin(object):
     name = 'jinja_ext'
     api = 2
@@ -117,6 +124,7 @@ class JinajaPlugin(object):
         Jinja2Template.defaults = {
             'request': request,
             'view_name': view_name,
+            'url_for': url_for,
             'view_func': view_func,
             'config': app.config,
             'debug': DEBUG

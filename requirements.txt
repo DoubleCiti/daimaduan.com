@@ -28,3 +28,4 @@ mailthon==0.1.1
 bottle-utils==0.8
 newrelic==2.60.0.46
 blinker==1.4
+Pygments==2.0.2

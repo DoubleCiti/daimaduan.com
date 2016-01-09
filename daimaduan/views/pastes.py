@@ -7,9 +7,10 @@ import re
 import time
 
 from bottle import abort
-from bottle import jinja2_view
-from bottle import redirect
 from bottle import request
+from bottle import response
+from bottle import redirect
+from bottle import jinja2_view
 from bottle_utils.csrf import csrf_protect
 from bottle_utils.csrf import csrf_token
 
@@ -238,6 +239,16 @@ def delete(hash_id):
         return redirect('/')
     else:
         abort(403)
+
+
+@app.get('/paste/<hash_id>/embed.js', name='pastes.embed')
+@jinja2_view('pastes/embed.js')
+def embed(hash_id):
+    print hash_id
+    paste = get_paste(hash_id)
+
+    response.content_type = 'text/javascript; charset=utf-8'
+    return {'paste': paste}
 
 
 @app.route('/tags', name='tags.index')

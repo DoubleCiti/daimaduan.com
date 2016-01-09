@@ -6,33 +6,39 @@
 {% from 'macros/pastes.html' import like_paste_button %}
 {% from 'macros/pastes.html' import edit_paste_button %}
 {% from 'macros/pastes.html' import del_paste_button %}
+{% from 'macros/pastes.html' import embed_paste_button with context  %}
 {% from 'macros/common.html' import render_comment_form with context %}
 
 {% block title %}{{ paste.title }}{% endblock %}
 
 {% block content %}
-  <div class="pull-right paste-actions">
-  {% if paste.is_user_owned(request.user) %}
-      {{ edit_paste_button(paste) }}
-      {{ del_paste_button(paste) }}
-  {% endif %}
-  {% if request.user %}
-      {{ like_paste_button(request.user, paste) }}
-  {% endif %}
+  <div class="page-header">
+    <h4>
+      {{ paste.title }}{{ request.method }}
+      {{ render_private(paste) }}
+    </h4>
+
+    <div class="text-muted">
+      <small>最后更新于 {{ paste.updated_at | time_passed }}</small>
+    </div>
   </div>
 
-  <h4 class="page-header">
-    {{ paste.title }}
-    {{ render_private(paste) }}
-  </h4>
-
   <div class="page-sub-header">
-    <div class="actions pull-right">
-    </div>
+    <div class="paste-actions">
+      {% if paste.is_user_owned(request.user) %}
+        {{ edit_paste_button(paste) }}
+        {{ del_paste_button(paste) }}
+      {% endif %}
 
-    <span class="text-muted">
-      最后更新于 {{ paste.updated_at | time_passed }}
-    </span>
+      <div class="pull-right">
+        {{ embed_paste_button(paste) }}
+      {% if request.user %}
+        {{ like_paste_button(request.user, paste) }}
+      {% endif %}
+      </div>
+
+      <div class="clearfix"></div>
+    </div>
   </div>
 
   {% for code in paste.codes %}

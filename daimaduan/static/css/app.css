@@ -70,6 +70,14 @@ pre code {
   margin-top: 0;
 }
 
+.input-xs {  
+  height: 26px;
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 2px;
+}
+
 /* Common Bubble Style */
 .bubble {
   position: relative;
@@ -120,6 +128,9 @@ pre code {
 .paste-actions .action {
   margin-left: 5px;
 }
+.paste-actions .action:first-child {
+  margin-left: 0;
+}
 .paste-actions .action span {
   display: none;
 }
@@ -139,10 +150,27 @@ pre.code_preview {
   margin-top: 10px;
 }
 
-/* Small devices (tablets, 768px and up) */
-@media (min-width: 768px) {
+.input-group-embed {
+  max-width: 120px;
+  float: left;
+}
+
+
+@media (min-width: 480px) {
   .paste-actions .action span {
     display: inline;
+  }
+
+  .input-group-embed {
+    max-width: 200px;
+  }
+}
+
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .input-group-embed {
+    max-width: 250px;
   }
 }
 
