@@ -3,7 +3,7 @@
 {%- from 'macros/users.html' import render_user_panel with context %}
 {%- from 'macros/tags.html' import render_tag %}
 {%- from 'macros/pastes.html' import render_paste_item %}
-{%- from 'macros/common.html' import paginate_for %}
+{%- from 'macros/common.html' import render_pagination %}
 
 {% block title %}{{ user.username }} 喜欢的代码段{% endblock %}
 
@@ -11,13 +11,13 @@
 <h4 class="page-header">{{ user.username }} 喜欢的代码段</h4>
 
 <section class="pastes">
-	{% for like in likes %}
+	{% for like in pagination.items %}
 		{{ render_paste_item(like.likeable) }}
 	{% endfor %}
 
-  <hr />
+	<hr />
 
-  {{ paginate_for('/', page_summary) }}
+	{{ render_pagination(pagination, url_for('user_app.view_likes', username=user.nickname)) }}
 </section><!-- .pastes -->
 {% endblock %}
 

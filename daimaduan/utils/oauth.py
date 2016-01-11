@@ -3,12 +3,14 @@ from daimaduan.models.user_oauth import UserOauth
 
 def oauth_config(config, provider):
     return {
-        'name': config['oauth.%s.name' % provider],
-        'client_id': config['oauth.%s.client_id' % provider],
-        'client_secret': config['oauth.%s.client_secret' % provider],
-        'authorize_url': config['oauth.%s.authorize_url' % provider],
-        'access_token_url': config['oauth.%s.access_token_url' % provider],
-        'base_url': config['oauth.%s.base_url' % provider]
+        'name': config['OAUTH'][provider]['name'],
+        'base_url': config['OAUTH'][provider]['base_url'],
+        'authorize_url': config['OAUTH'][provider]['authorize_url'],
+        'access_token_url': config['OAUTH'][provider]['access_token_url'],
+        'client_id': config['OAUTH'][provider]['client_id'],
+        'client_secret': config['OAUTH'][provider]['client_secret'],
+        # 'callback_url': config['OAUTH'][provider]['callback_url'],
+        # 'scope': config['OAUTH'][provider]['scope']
     }
 
 

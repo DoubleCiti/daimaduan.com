@@ -3,7 +3,7 @@
 {% block title %}用户登录{% endblock %}
 {% block full_content %}
 <form action="/signin" method="POST" id="form-signin">
-  <input type="hidden" name="_csrf_token" value="{{ token }}">
+  {{ form.csrf_token }}
   <div class="panel panel-default">
     <div class="panel-heading">用户登录</div>
     <div class="panel-body">

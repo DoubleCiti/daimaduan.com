@@ -1,15 +1,13 @@
 # coding: utf-8
-from bottle import request
-
-from wtforms import Form
+from flask import session
+from flask_wtf import Form
 from wtforms import StringField
 from wtforms import ValidationError
-from wtforms.validators import InputRequired
 from wtforms.validators import Email
+from wtforms.validators import InputRequired
 from wtforms.validators import Regexp
 
 from daimaduan.models.base import User
-from daimaduan.utils.commons import get_session
 
 
 class UserInfoForm(Form):
@@ -23,7 +21,6 @@ class UserInfoForm(Form):
             raise ValidationError(u'用户名已被使用')
 
     def validate_email(self, field):
-        session = get_session(request)
         if session['email']:
             if session['email'] != field.data:
                 raise ValidationError(u'不能修改第三方登录的email地址')

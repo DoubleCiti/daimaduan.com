@@ -1,12 +1,12 @@
-import mongoengine
 from mongoengine import signals
 
+from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
 
 
 class Like(BaseDocument):
-    user = mongoengine.ReferenceField('User')
-    likeable = mongoengine.GenericReferenceField('Paste')
+    user = db.ReferenceField('User')
+    likeable = db.ReferenceField('Paste')
 
     @classmethod
     def post_save(cls, sender, document, **kwargs):

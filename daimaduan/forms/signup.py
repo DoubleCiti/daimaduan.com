@@ -1,5 +1,5 @@
 # coding: utf-8
-from wtforms import Form
+from flask_wtf import Form
 from wtforms import StringField
 from wtforms import PasswordField
 from wtforms import ValidationError

@@ -82,6 +82,6 @@
       </button>
     </span>
     <input type="text" class="form-control input-xs"
-           value="<script type=&quot;text/javascript&quot; src=&quot;{{ url_for() }}/paste/{{ paste.hash_id }}/embed.js&quot;></script>">
+           value="<script type=&quot;text/javascript&quot; src=&quot;{{ url_for('paste_app.embed_js', hash_id=paste.hash_id) }}&quot;></script>">
   </div><!-- /input-group -->
 {% endmacro %}

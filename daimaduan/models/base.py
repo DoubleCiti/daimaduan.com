@@ -2,34 +2,33 @@
 import hashlib
 import time
 
-import mongoengine
+from flask import request
 from mongoengine import signals
-from bottle import request
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_lexer_by_name
 
-from daimaduan.extensions.jinja import time_passed
+from daimaduan.bootstrap import db
+from daimaduan.utils.filters import time_passed
 from daimaduan.models import BaseDocument
 from daimaduan.models.like import Like
 from daimaduan.models.user_oauth import UserOauth
 
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
-
 
 class User(BaseDocument):
-    username = mongoengine.StringField(required=True)
-    email = mongoengine.StringField(required=True)
-    password = mongoengine.StringField()
-    salt = mongoengine.StringField()
-    is_email_confirmed = mongoengine.BooleanField(default=False)
-    email_confirmed_on = mongoengine.DateTimeField(default=None)
+    username = db.StringField(required=True)
+    email = db.StringField(required=True)
+    password = db.StringField()
+    salt = db.StringField()
+    is_email_confirmed = db.BooleanField(default=False)
+    email_confirmed_on = db.DateTimeField(default=None)
 
-    oauths = mongoengine.ListField(mongoengine.ReferenceField('UserOauth'))
+    oauths = db.ListField(db.ReferenceField('UserOauth'))
 
-    paste_likes_count = mongoengine.IntField(default=0)
-    pastes_count = mongoengine.IntField(default=0)
+    paste_likes_count = db.IntField(default=0)
+    pastes_count = db.IntField(default=0)
 
-    watched_users = mongoengine.ListField(mongoengine.ReferenceField('User'))
+    watched_users = db.ListField(db.ReferenceField('User'))
 
     @property
     def private_pastes_count(self):
@@ -90,12 +89,12 @@ class User(BaseDocument):
 
 
 class Code(BaseDocument):
-    user = mongoengine.ReferenceField(User)
+    user = db.ReferenceField(User)
 
-    hash_id = mongoengine.StringField(unique=True)
-    title = mongoengine.StringField()
-    content = mongoengine.StringField(required=True)
-    tag = mongoengine.StringField()
+    hash_id = db.StringField(unique=True)
+    title = db.StringField()
+    content = db.StringField(required=True)
+    tag = db.StringField()
 
     def save(self, *args, **kwargs):
         self.create_hash_id(self.user.salt, 'code')
@@ -119,17 +118,17 @@ class Code(BaseDocument):
 
 
 class Paste(BaseDocument):
-    user = mongoengine.ReferenceField(User)
+    user = db.ReferenceField(User)
 
-    title = mongoengine.StringField()
-    hash_id = mongoengine.StringField(unique=True)
-    is_private = mongoengine.BooleanField(default=False)
-    codes = mongoengine.ListField(mongoengine.ReferenceField(Code))
-    tags = mongoengine.ListField(mongoengine.StringField())
-    rate = mongoengine.IntField(default=0)
-    views = mongoengine.IntField(default=0)
+    title = db.StringField()
+    hash_id = db.StringField(unique=True)
+    is_private = db.BooleanField(default=False)
+    codes = db.ListField(db.ReferenceField(Code))
+    tags = db.ListField(db.StringField())
+    rate = db.IntField(default=0)
+    views = db.IntField(default=0)
 
-    likes_count = mongoengine.IntField(default=0)
+    likes_count = db.IntField(default=0)
 
     def save(self, *args, **kwargs):
         self.create_hash_id(self.user.salt, 'paste')

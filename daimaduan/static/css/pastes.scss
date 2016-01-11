@@ -1,0 +1,47 @@
+.page-pastes-view {
+	.page-header {
+		margin-bottom: 10px;
+	}
+	.page-sub-header {
+		margin-bottom: 20px;
+	}
+}
+
+#panel-paste-user {
+	.panel-heading {
+		border-bottom: 1px solid #dddddd;
+	}
+	.img-rounded {
+		//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+		border-radius: 50%;
+	}
+}
+.action-unlike {
+	&:link {
+		color: #e5214a;
+	}
+	&:visited {
+		color: #e5214a;
+	}
+	&:hover {
+		color: #e5214a;
+	}
+	&:active {
+		color: #e5214a;
+	}
+}
+.view_pastes.func_show {
+	.page-header {
+		margin-bottom: 10px;
+		padding-bottom: 5px;
+		h4 {
+			margin-bottom: 5px;
+		}
+	}
+	.page-sub-header {
+		margin-bottom: 20px;
+	}
+}
+.action-like:hover {
+	color: #e5214a;
+}

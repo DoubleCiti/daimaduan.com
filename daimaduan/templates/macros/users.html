@@ -1,6 +1,6 @@
 {% macro render_user_avatar(user, size=36) %}
-<a href="/user/{{ user.username }}" title="{{ user.username }}">
-  <img src="{{ user.gravatar_url(width=size) }}"
+<a href="{{ url_for('user_app.view_user', username=user.username) }}" title="{{ user.username }}">
+  <img src="{{ user.email | gravatar(size=size) }}"
        width="{{ size }}" height="{{ size }}"
        alt="{{ user.username }}"
        class="img-rounded"/>
