@@ -110,8 +110,7 @@ class JinajaPlugin(object):
             'autoescape': True,
             'filters': {'datetimeformat': datetimeformat,
                         'time_passed': time_passed,
-                        'ternary': ternary},
-            'bytecode_cache': FileSystemBytecodeCache(app.config['site.jinja2_cache'], '%s.cache')
+                        'ternary': ternary}
         }
 
         Jinja2Template.defaults = {
