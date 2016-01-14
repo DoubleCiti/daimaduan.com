@@ -146,7 +146,7 @@ def view(hash_id):
     user = login.get_user()
     if user:
         # create a JSON packet of our data attributes
-        data = json.dumps({'id': str(user.id), 'username': user.username, 'email': user.email})
+        data = json.dumps({'id': str(user.id), 'username': user.username, 'email': user.email, 'avatar': user.gravatar_url()})
         # encode the data to base64
         message = base64.b64encode(data)
         # generate a timestamp for signing the message
