@@ -1,9 +1,6 @@
 # coding=utf-8
 from functools import wraps
-from json import dumps
 
-from bottle import request, jinja2_template, response
-from bottle_utils.csrf import generate_csrf_token
 from flask import render_template
 from flask_login import current_user
 
@@ -21,12 +18,3 @@ def user_active_required(func):
                                reactive=True,
                                form=form)
     return wrapper
-
-
-def jsontify(func):
-    @wraps(func)
-    def jsontify_function(*args, **kwargs):
-        result = func(*args, **kwargs)
-        response.content_type = 'application/json'
-        return dumps(result)
-    return jsontify_function
