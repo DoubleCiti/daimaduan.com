@@ -10,6 +10,16 @@ MONGODB_SETTINGS = {
 
 SECRET_KEY = 'Youshouldnotknowthis'
 
+BROKER_URL = 'mongodb://192.168.99.100:27017/daimaduan_celery'
+
+EMAIL = {
+    'salt': "won't tell you",
+    'host': 'smtp.gmail.com',
+    'port': 587,
+    'username': 'daimaduan',
+    'password': 'guessme'
+}
+
 DISQUS = {
     'short_name': 'daimaduan-dev',
     'secret_key': 'sdgsadg'

@@ -89,7 +89,7 @@ def signin():
         return redirect(url_for('site_app.index'))
 
 
-@site_app.route('/signout', methods=['DELETE'])
+@site_app.route('/signout', methods=['GET', 'DELETE'])
 def signout_delete():
     logout_user()
     return redirect(url_for('site_app.index'))
@@ -106,7 +106,8 @@ def signup():
             user = User()
             form.populate_obj(user)
             user.save()
-            login_user(user)
+            user_mixin = LoginManagerUser(user)
+            login_user(user_mixin)
             send_confirm_email(current_app.config, user.email)
             return redirect(url_for('site_app.index'))
         return render_template('users/signup.html',

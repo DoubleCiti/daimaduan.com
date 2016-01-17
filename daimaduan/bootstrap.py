@@ -1,4 +1,5 @@
 # coding: utf-8
+from celery import Celery
 from flask import Flask
 from flask_gravatar import Gravatar
 from flask_login import LoginManager
@@ -17,6 +18,8 @@ app = Flask(__name__)
 app.config.from_object('daimaduan.default_settings')
 # app.config.from_envvar('config.cfg')
 db.init_app(app)
+celery = Celery(__name__)
+celery.conf.add_defaults(app.config)
 
 from daimaduan.views.sites import site_app
 from daimaduan.views.users import user_app
