@@ -10,7 +10,7 @@ from flask_login import login_user
 
 from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models import LoginManagerUser
-from daimaduan.models.base import User
+from daimaduan.models.base import User, Paste
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
 
@@ -60,7 +60,7 @@ def view_likes(username):
     user = User.objects.get_or_404(username=username)
 
     page = get_page()
-    likes = user.likes.order_by('-updated_at')
+    likes = Paste.objects(id__in=[str(i.id) for i in user.likes]).order_by('-updated_at')
     pagination = likes.paginate(page, per_page=20)
 
     return render_template('users/likes.html',

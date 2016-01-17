@@ -11,8 +11,8 @@
 <h4 class="page-header">{{ user.username }} 喜欢的代码段</h4>
 
 <section class="pastes">
-	{% for like in pagination.items %}
-		{{ render_paste_item(like.likeable) }}
+	{% for paste in pagination.items %}
+		{{ render_paste_item(paste) }}
 	{% endfor %}
 
 	<hr />

@@ -130,14 +130,30 @@ def edit_paste(hash_id):
 @login_required
 def like(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
-    return jsonify(**paste.toggle_like_by(current_user.user, True))
+    user = current_user.user
+    is_user_liked = paste in user.likes
+    if not is_user_liked:
+        user.likes.append(paste)
+        user.save()
+    return jsonify(dict(paste_id=hash_id,
+                        user_like=len(user.likes),
+                        paste_likes=len(user.likes),
+                        liked=True))
 
 
 @paste_app.route('/<hash_id>/unlike', methods=['POST'])
 @login_required
 def unlike(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
-    return jsonify(**paste.toggle_like_by(current_user.user, False))
+    user = current_user.user
+    is_user_liked = paste in user.likes
+    if is_user_liked:
+        user.likes.remove(paste)
+        user.save()
+    return jsonify(dict(paste_id=hash_id,
+                        user_like=len(user.likes),
+                        paste_likes=len(user.likes),
+                        liked=True))
 
 
 @paste_app.route('/<hash_id>/delete', methods=['POST'])
