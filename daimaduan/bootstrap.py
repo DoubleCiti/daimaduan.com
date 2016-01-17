@@ -1,44 +1,59 @@
 # coding: utf-8
-import logging
-import os
+from flask import Flask
+from flask_gravatar import Gravatar
+from flask_login import LoginManager
+from flask_mongoengine import MongoEngine
 
-import bottle
-from bottle_login import LoginPlugin
-from rauth import OAuth2Service
-
-from daimaduan.extensions.jinja import JinajaPlugin
-from daimaduan.extensions.mongo import MongoenginePlugin
-from daimaduan.utils.oauth import oauth_config
-
-
-def get_current_path():
-    file_name = os.path.dirname(__file__)
-    return os.path.abspath(file_name)
+from daimaduan.extensions import assets
+from daimaduan.utils.filters import datetimeformat
+from daimaduan.utils.filters import ternary
+from daimaduan.utils.filters import time_passed
 
 
-logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO)
-logger = logging.getLogger('daimaduan')
+db = MongoEngine()
+login_manager = LoginManager()
 
+app = Flask(__name__)
+app.config.from_object('daimaduan.default_settings')
+# app.config.from_envvar('config.cfg')
+db.init_app(app)
 
-app = bottle.default_app()
+from daimaduan.views.sites import site_app
+from daimaduan.views.users import user_app
+from daimaduan.views.pastes import paste_app
+from daimaduan.views.tags import tag_app
 
-app.config.load_config('%s/config.cfg' % get_current_path())
-# Check if there's a key in env variables
-# if you want to set config on the fly, use env var
-# a.b.c in config => A_B_C in env var
-for key in app.config.keys():
-    k = key.replace('.', '_').upper()
-    if k in os.environ:
-        app.config[key] = os.environ[k]
-app.config['SECRET_KEY'] = app.config['site.validate_key']
+app.register_blueprint(site_app)
+app.register_blueprint(user_app, url_prefix='/user')
+app.register_blueprint(paste_app, url_prefix='/paste')
+app.register_blueprint(tag_app, url_prefix='/tag')
 
-jinja = JinajaPlugin(template_path='%s/templates' % get_current_path())
-login = LoginPlugin()
+app.jinja_env.filters['time_passed'] = time_passed
+app.jinja_env.filters['ternary'] = ternary
+app.jinja_env.filters['datetimeformat'] = datetimeformat
 
-app.install(login)
-app.install(jinja)
-app.install(MongoenginePlugin())
+login_manager.init_app(app)
+assets.init_app(app)
 
-oauth_services = {}
-oauth_services['google'] = OAuth2Service(**oauth_config(app.config, 'google'))
-oauth_services['github'] = OAuth2Service(**oauth_config(app.config, 'github'))
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False,
+                    use_ssl=True,
+                    base_url=None)
+
+# app.config.load_config('%s/config.cfg' % get_current_path())
+# # Check if there's a key in env variables
+# # if you want to set config on the fly, use env var
+# # a.b.c in config => A_B_C in env var
+# for key in app.config.keys():
+#     k = key.replace('.', '_').upper()
+#     if k in os.environ:
+#         app.config[key] = os.environ[k]
+# app.config['SECRET_KEY'] = app.config['site.validate_key']
+#
+# oauth_services = {}
+# oauth_services['google'] = OAuth2Service(**oauth_config(app.config, 'google'))
+# oauth_services['github'] = OAuth2Service(**oauth_config(app.config, 'github'))

@@ -3,7 +3,7 @@
 {% block title %}修改信息{% endblock %}
 {% block full_content %}
 <form action="/user/manage" method="POST" id="form-signup">
-  <input type="hidden" name="_csrf_token" value="{{ token }}">
+  {{ form.csrf_token }}
   <div class="panel panel-default">
     <div class="panel-heading">修改个人信息</div>
     <div class="panel-body">

@@ -1,10 +1,10 @@
 # coding: utf-8
+from flask import current_app
 from itsdangerous import URLSafeTimedSerializer
 from mailthon import email
 from mailthon.middleware import TLS, Auth
 from mailthon.postman import Postman
 
-from daimaduan.bootstrap import logger
 from daimaduan.models.base import User
 
 
@@ -70,8 +70,8 @@ def send_email(config, user_email, subject, content):
     try:
         response = postman.send(envelope)
         if response.ok:
-            logger.info("Successfully send email to %s" % user_email)
+            current_app.logger.info("Successfully send email to %s" % user_email)
         else:
-            logger.error("Failed to send email to %s" % user_email)
+            current_app.logger.error("Failed to send email to %s" % user_email)
     except Exception, e:
-        logger.error("Exception occured when send email to %s" % e)
+        current_app.logger.error("Exception occured when send email to %s" % e)

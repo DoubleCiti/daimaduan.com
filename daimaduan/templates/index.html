@@ -2,19 +2,19 @@
 
 {%- from 'macros/tags.html' import render_tag %}
 {%- from 'macros/pastes.html' import render_paste_item %}
-{%- from 'macros/common.html' import paginate_for %}
+{%- from 'macros/common.html' import render_pagination %}
 
 {% block content %}
 <h4 class="page-header">最新代码</h4>
 
 <section class="pastes">
-	{% for paste in pastes %}
+	{% for paste in pagination.items %}
 		{{ render_paste_item(paste) }}
 	{% endfor %}
 
   <hr />
 
-  {{ paginate_for('/', page_summary) }}
+  {{ render_pagination(pagination, url_for('site_app.index')) }}
 </section><!-- .pastes -->
 {% endblock %}
 

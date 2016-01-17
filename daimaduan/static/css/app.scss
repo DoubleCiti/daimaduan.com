@@ -1,0 +1,168 @@
+//@extend-elements
+//original selectors
+//.bubble:after, .bubble:before
+%extend_1 {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+a {
+	&:hover {
+		text-decoration: none;
+		outline: none;
+	}
+	&:active {
+		text-decoration: none;
+		outline: none;
+	}
+	&:focus {
+		text-decoration: none;
+		outline: none;
+	}
+}
+body {
+	min-width: 320px;
+}
+.hljs {
+	background: none;
+}
+#form-signin {
+	margin: 30px auto;
+	width: 600px;
+}
+#form-signup {
+	margin: 30px auto;
+	width: 600px;
+}
+pre {
+	overflow: auto;
+	//Instead of the line below you could use @include word-break($value)
+	word-break: normal;
+	word-wrap: normal;
+	&.panel-body {
+		border: 0;
+		background: none;
+		margin: 0;
+	}
+	code {
+		white-space: pre;
+	}
+	&.code_preview {
+		max-height: 200px;
+		overflow: hidden;
+	}
+}
+.name {
+	padding-right: 30px;
+	font-size: 24px;
+}
+.inline {
+	display: inline;
+}
+.hljs-line-numbers {
+	text-align: right;
+	color: #999;
+	//Instead of the line below you could use @include user-select($select)
+	user-select: none;
+	+ .hljs {
+		border-left: 1px solid #e7e7e7;
+	}
+}
+.tag {
+	margin-bottom: 3px;
+}
+.page-header {
+	margin-top: 0;
+}
+.input-xs {
+	height: 26px;
+	padding: 4px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 2px;
+}
+.bubble {
+	position: relative;
+	border: 1px solid #dddddd;
+	padding: 1px 5px;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px;
+	margin-left: 5px;
+	&:after {
+		@extend %extend_1;
+		border-color: rgba(255, 255, 255, 0);
+		border-right-color: white;
+		border-width: 3px 5px 3px 0;
+		margin-top: -3px;
+		margin-right: -1px;
+	}
+	&:before {
+		@extend %extend_1;
+		border-color: rgba(221, 221, 221, 0);
+		border-right-color: #dddddd;
+		border-width: 4px 5px 4px 0;
+		margin-top: -4px;
+	}
+}
+.paste {
+	margin-bottom: 30px;
+}
+.avatar-wrapper {
+	margin-top: 10px;
+}
+.input-group-embed {
+	max-width: 120px;
+	float: left;
+}
+@media(min-width: 480px) {
+	.input-group-embed {
+		max-width: 200px;
+	}
+	.paste-actions .action span {
+		display: inline;
+	}
+}
+@media(min-width: 768px) {
+	.input-group-embed {
+		max-width: 250px;
+	}
+}
+@media(min-width: 992px) {
+}
+@media(min-width: 1200px) {
+}
+.container .jumbotron {
+	padding: 20px;
+}
+.paste-metas a {
+	display: inline-block;
+	margin-left: 15px;
+	text-decoration: none;
+	&:hover {
+		color: #555;
+	}
+	.fa {
+		margin-right: 3px;
+	}
+}
+.paste-actions .action {
+	margin-left: 5px;
+	&:first-child {
+		margin-left: 0;
+	}
+	span {
+		display: none;
+	}
+}
+.code .panel-body pre {
+	margin: -15px;
+	padding: 0;
+	border: 0;
+	background: none;
+}

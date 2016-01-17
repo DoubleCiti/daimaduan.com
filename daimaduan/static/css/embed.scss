@@ -1,0 +1,265 @@
+.daimaduan-code {
+	border: 1px solid #dddddd;
+	// // Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 3px;
+	margin-bottom: 1em;
+}
+.daimaduan-code-meta {
+	background: #f7f7f7;
+	padding: 8px;
+	border-top: 1px solid #eeeeee;
+	font-size: 12px;
+	a {
+		&:link {
+			color: #666;
+			text-decoration: none;
+		}
+		&:visited {
+			color: #666;
+			text-decoration: none;
+		}
+		&:hover {
+			color: #666;
+			text-decoration: none;
+		}
+		&:active {
+			color: #666;
+			text-decoration: none;
+		}
+	}
+}
+.daimaduan-code-block {
+	overflow-x: auto;
+	overflow-y: none;
+	.linenos {
+		background: white;
+		padding: 5px 8px;
+		border-right: 1px solid #eeeeee;
+		width: 1%;
+	}
+	.code {
+		padding: 5px 8px;
+	}
+	pre {
+		margin: 0;
+	}
+}
+.daimaduan-code-name {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-right: 120px;
+}
+.daimaduan-copyright {
+	float: right;
+}
+.codehilite {
+	.hll {
+		background-color: #ffffcc;
+	}
+	.c {
+		color: #999988;
+		font-style: italic;
+	}
+	.err {
+		color: #a61717;
+		background-color: #e3d2d2;
+	}
+	.k {
+		color: black;
+		font-weight: bold;
+	}
+	.o {
+		color: black;
+		font-weight: bold;
+	}
+	.cm {
+		color: #999988;
+		font-style: italic;
+	}
+	.cp {
+		color: #999999;
+		font-weight: bold;
+		font-style: italic;
+	}
+	.c1 {
+		color: #999988;
+		font-style: italic;
+	}
+	.cs {
+		color: #999999;
+		font-weight: bold;
+		font-style: italic;
+	}
+	.gd {
+		color: black;
+		background-color: #ffdddd;
+	}
+	.ge {
+		color: black;
+		font-style: italic;
+	}
+	.gr {
+		color: #aa0000;
+	}
+	.gh {
+		color: #999999;
+	}
+	.gi {
+		color: black;
+		background-color: #ddffdd;
+	}
+	.go {
+		color: #888888;
+	}
+	.gp {
+		color: #555555;
+	}
+	.gs {
+		font-weight: bold;
+	}
+	.gu {
+		color: #aaaaaa;
+	}
+	.gt {
+		color: #aa0000;
+	}
+	.kc {
+		color: black;
+		font-weight: bold;
+	}
+	.kd {
+		color: black;
+		font-weight: bold;
+	}
+	.kn {
+		color: black;
+		font-weight: bold;
+	}
+	.kp {
+		color: black;
+		font-weight: bold;
+	}
+	.kr {
+		color: black;
+		font-weight: bold;
+	}
+	.kt {
+		color: #445588;
+		font-weight: bold;
+	}
+	.m {
+		color: #009999;
+	}
+	.s {
+		color: #d01040;
+	}
+	.na {
+		color: teal;
+	}
+	.nb {
+		color: #0086b3;
+	}
+	.nc {
+		color: #445588;
+		font-weight: bold;
+	}
+	.no {
+		color: teal;
+	}
+	.nd {
+		color: #3c5d5d;
+		font-weight: bold;
+	}
+	.ni {
+		color: #800080;
+	}
+	.ne {
+		color: #990000;
+		font-weight: bold;
+	}
+	.nf {
+		color: #990000;
+		font-weight: bold;
+	}
+	.nl {
+		color: #990000;
+		font-weight: bold;
+	}
+	.nn {
+		color: #555555;
+	}
+	.nt {
+		color: navy_blue;
+	}
+	.nv {
+		color: teal;
+	}
+	.ow {
+		color: black;
+		font-weight: bold;
+	}
+	.w {
+		color: #bbbbbb;
+	}
+	.mf {
+		color: #009999;
+	}
+	.mh {
+		color: #009999;
+	}
+	.mi {
+		color: #009999;
+	}
+	.mo {
+		color: #009999;
+	}
+	.sb {
+		color: #d01040;
+	}
+	.sc {
+		color: #d01040;
+	}
+	.sd {
+		color: #d01040;
+	}
+	.s2 {
+		color: #d01040;
+	}
+	.se {
+		color: #d01040;
+	}
+	.sh {
+		color: #d01040;
+	}
+	.si {
+		color: #d01040;
+	}
+	.sx {
+		color: #d01040;
+	}
+	.sr {
+		color: #009926;
+	}
+	.s1 {
+		color: #d01040;
+	}
+	.ss {
+		color: #990073;
+	}
+	.bp {
+		color: #999999;
+	}
+	.vc {
+		color: teal;
+	}
+	.vg {
+		color: teal;
+	}
+	.vi {
+		color: teal;
+	}
+	.il {
+		color: #009999;
+	}
+}

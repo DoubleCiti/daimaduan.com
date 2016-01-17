@@ -17,7 +17,7 @@
   <div class="list-group">
     <a href="/user/{{ user.username }}" class="list-group-item">
       <span class="badge">
-        {% if request.user and request.user == user %}
+        {% if current_user.is_authenticated and current_user.user == user %}
           {{ user.pastes_count }}
         {% else %}
           {{ user.public_pastes_count }}
@@ -29,7 +29,7 @@
       <span class="badge paste-likes-count">{{ user.paste_likes_count }}</span>
       喜欢的代码段
     </a>
-    {% if request.user and (user != request.user) %}
+    {% if current_user.is_authenticated and (user != current_user.user) %}
       {{ render_user_watch(request.user, user) }}
     {% endif %}
   </div>

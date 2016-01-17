@@ -1,11 +1,10 @@
-import mongoengine
-
+from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
 
 
 class UserOauth(BaseDocument):
-    user = mongoengine.ReferenceField('User')
+    user = db.ReferenceField('User')
 
-    provider = mongoengine.StringField(required=True)
-    openid = mongoengine.StringField(required=True)
-    token = mongoengine.StringField(required=True)
+    provider = db.StringField(required=True)
+    openid = db.StringField(required=True)
+    token = db.StringField(required=True)

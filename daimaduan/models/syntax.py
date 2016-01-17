@@ -1,7 +1,6 @@
-import mongoengine
-
+from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
 
 
 class Syntax(BaseDocument):
-    name = mongoengine.StringField(required=True, unique=True)
+    name = db.StringField(required=True, unique=True)

@@ -12,9 +12,10 @@
 {% block title %}{{ paste.title }}{% endblock %}
 
 {% block content %}
+<div class="page-pastes page-pastes-view">
   <div class="page-header">
     <h4>
-      {{ paste.title }}{{ request.method }}
+      {{ paste.title }}
       {{ render_private(paste) }}
     </h4>
 
@@ -25,7 +26,7 @@
 
   <div class="page-sub-header">
     <div class="paste-actions">
-      {% if paste.is_user_owned(request.user) %}
+      {% if paste.is_user_owned(current_user.user) %}
         {{ edit_paste_button(paste) }}
         {{ del_paste_button(paste) }}
       {% endif %}
@@ -33,7 +34,7 @@
       <div class="pull-right">
         {{ embed_paste_button(paste) }}
       {% if request.user %}
-        {{ like_paste_button(request.user, paste) }}
+        {{ like_paste_button(current_user.user, paste) }}
       {% endif %}
       </div>
 
@@ -46,6 +47,7 @@
   {% endfor %}
 
   {{ render_comment_form(paste.disqus_identifier) }}
+</div>
 {% endblock %}
 
 {% block sidebar %}

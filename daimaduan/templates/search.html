@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}搜索代码段{% endblock %}
+
+{%- from 'macros/pastes.html' import render_paste_item %}
+{%- from 'macros/common.html' import render_pagination %}
+
 {% block content %}
 <h5 class="page-header">查询条件: "{{ query_string }}"</h5>
 
 <section class="pastes">
-	{% include ('pastes/pastes.html') %}
+	{% for paste in pagination.items %}
+		{{ render_paste_item(paste) }}
+	{% endfor %}
 
-	<div id="more_button_li">
-		<button class="btn btn-default btn-block" id="search_more_button" data-page="2" data-keyword="{{ query_string }}">更多</button>
-	</div>
+    <hr />
+
+    {{ render_pagination(pagination, url_for('site_app.search_paste', q=keyword)) }}
 </section><!-- .pastes -->
 {% endblock %}
 
