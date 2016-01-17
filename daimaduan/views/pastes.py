@@ -12,12 +12,12 @@ from flask import redirect
 from flask import render_template, Blueprint
 from flask_login import current_user
 from flask_login import login_required
-from flask_mongoengine.wtf.orm import model_form
 
 from daimaduan.forms.paste import PasteForm
 from daimaduan.models.base import Paste, Code
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
+
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
 
@@ -37,20 +37,18 @@ def create_paste():
             paste = Paste(title=form.title.data, user=user, is_private=form.is_private.data)
             tags = []
             for i, c in enumerate(form.codes):
-                tag_name = c.tag.data.lower()
+                syntax = c.syntax.data.lower()
                 if not c.title.data:
                     c.title.data = '代码片段%s' % (i + 1)
                 code = Code(title=c.title.data,
                             content=c.content.data,
-                            tag=tag_name,
-                            user=user)
-                code.save()
-                tags.append(tag_name)
-                tag = Tag.objects(name=tag_name).first()
+                            syntax=syntax)
+                tags.append(syntax)
+                tag = Tag.objects(name=syntax).first()
                 if tag:
                     tag.popularity += 1
                 else:
-                    tag = Tag(name=tag_name)
+                    tag = Tag(name=syntax)
                 tag.save()
                 paste.codes.append(code)
             paste.tags = list(set(tags))
@@ -83,6 +81,51 @@ def view_paste(hash_id):
                            sig=sig)
 
 
+@paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
+@login_required
+@user_active_required
+def edit_paste(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+    if not paste.is_user_owned(current_user.user):
+        abort(404)
+    if request.method == 'GET':
+        data = {'title': paste.title,
+                'is_private': paste.is_private,
+                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax} for code in paste.codes]}
+        form = PasteForm(data=data)
+        return render_template('pastes/edit.html',
+                               form=form,
+                               paste=paste)
+    else:
+        form = PasteForm(request.form)
+        if form.validate():
+            paste.title = form.title.data
+            paste.is_private = form.is_private.data
+            paste.codes = []
+            tags = []
+            for i, c in enumerate(form.codes):
+                syntax = c.syntax.data.lower()
+                if not c.title.data:
+                    c.title.data = '代码片段%s' % (i + 1)
+                code = Code(title=c.title.data,
+                            content=c.content.data,
+                            syntax=syntax)
+                tags.append(syntax)
+                tag = Tag.objects(name=syntax).first()
+                if tag:
+                    tag.popularity += 1
+                else:
+                    tag = Tag(name=syntax)
+                tag.save()
+                paste.codes.append(code)
+            paste.tags = list(set(tags))
+            paste.save()
+            return redirect('/paste/%s' % paste.hash_id)
+        return render_template('pastes/edit.html',
+                               form=form,
+                               paste=paste)
+
+
 @paste_app.route('/<hash_id>/like', methods=['POST'])
 @login_required
 def like(hash_id):
@@ -95,56 +138,6 @@ def like(hash_id):
 def unlike(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     return jsonify(**paste.toggle_like_by(current_user.user, False))
-
-
-@paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
-@login_required
-@user_active_required
-def edit_paste(hash_id):
-    paste = Paste.objects.get_or_404(hash_id=hash_id)
-    if not paste.is_user_owned(current_user.user):
-        abort(404)
-    if request.method == 'GET':
-        data = {'title': paste.title,
-                'is_private': paste.is_private,
-                'codes': [{'title': code.title, 'content': code.content, 'tag': code.tag} for code in paste.codes]}
-        form = PasteForm(data=data)
-        return render_template('pastes/edit.html',
-                               form=form,
-                               paste=paste)
-    else:
-        form = PasteForm(request.form)
-        if form.validate():
-            paste.title = form.title.data
-            paste.is_private = form.is_private.data
-            tags = []
-            codes = [code for code in paste.codes]
-            paste.codes = []
-            for code in codes:
-                code.delete()
-            for i, c in enumerate(form.codes):
-                tag_name = c.tag.data.lower()
-                if not c.title.data:
-                    c.title.data = '代码片段%s' % (i + 1)
-                code = Code(title=c.title.data,
-                            content=c.content.data,
-                            tag=tag_name,
-                            user=current_user.user)
-                code.save()
-                tags.append(tag_name)
-                tag = Tag.objects(name=tag_name).first()
-                if tag:
-                    tag.popularity += 1
-                else:
-                    tag = Tag(name=tag_name)
-                tag.save()
-                paste.codes.append(code)
-            paste.tags = list(set(tags))
-            paste.save()
-            return redirect('/paste/%s' % paste.hash_id)
-        return render_template('pastes/edit.html',
-                               form=form,
-                               paste=paste)
 
 
 @paste_app.route('/<hash_id>/delete', methods=['POST'])

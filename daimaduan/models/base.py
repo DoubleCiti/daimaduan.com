@@ -2,14 +2,12 @@
 import hashlib
 import time
 
-from flask import request
 from mongoengine import signals
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 
 from daimaduan.bootstrap import db
-from daimaduan.utils.filters import time_passed
 from daimaduan.models import BaseDocument
 from daimaduan.models.like import Like
 from daimaduan.models.user_oauth import UserOauth
@@ -81,23 +79,10 @@ class User(BaseDocument):
         return user in self.watched_users
 
 
-class Code(BaseDocument):
-    user = db.ReferenceField(User)
-
-    hash_id = db.StringField(unique=True)
+class Code(db.EmbeddedDocument):
     title = db.StringField()
     content = db.StringField(required=True)
-    tag = db.StringField()
-
-    def save(self, *args, **kwargs):
-        self.create_hash_id(self.user.salt, 'code')
-        super(Code, self).save(*args, **kwargs)
-
-    def name(self):
-        if self.title:
-            return self.title
-        else:
-            return u'代码段: %s' % self.hash_id
+    syntax = db.StringField()
 
     def content_head(self, n=10):
         lines = self.content.splitlines()[:n]
@@ -116,11 +101,10 @@ class Paste(BaseDocument):
     title = db.StringField()
     hash_id = db.StringField(unique=True)
     is_private = db.BooleanField(default=False)
-    codes = db.ListField(db.ReferenceField(Code))
+    codes = db.ListField(db.EmbeddedDocumentField(Code))
     tags = db.ListField(db.StringField())
-    rate = db.IntField(default=0)
-    views = db.IntField(default=0)
 
+    views = db.IntField(default=0)
     likes_count = db.IntField(default=0)
 
     def save(self, *args, **kwargs):
