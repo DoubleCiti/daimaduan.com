@@ -33,7 +33,7 @@
 
       <div class="pull-right">
         {{ embed_paste_button(paste) }}
-      {% if request.user %}
+      {% if current_user.is_authenticated %}
         {{ like_paste_button(current_user.user, paste) }}
       {% endif %}
       </div>

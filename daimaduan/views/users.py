@@ -1,11 +1,12 @@
 # coding: utf-8
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask import render_template
 from flask import request
 from flask import redirect
 from flask import session
 
-from flask_login import current_user, login_user
+from flask_login import current_user
+from flask_login import login_user
 
 from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models import LoginManagerUser
@@ -73,7 +74,7 @@ def watch_user():
     user = User.objects(username=request.args.get('user')).first_or_404()
     current_user.user.watched_users.append(user)
     current_user.user.save()
-    return {'watchedStatus': current_user.user.is_watched(user)}
+    return jsonify(watchedStatus=current_user.user.is_watched(user))
 
 
 @user_app.route('/unwatch', methods=['POST'])
@@ -81,4 +82,4 @@ def unwatch_user():
     user = User.objects(username=request.params.get('user')).first_or_404()
     current_user.user.watched_users.remove(user)
     current_user.user.save()
-    return {'watchedStatus': request.user.is_watched(user)}
+    return jsonify(watchedStatus=current_user.user.is_watched(user))

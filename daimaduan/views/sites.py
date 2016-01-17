@@ -264,7 +264,7 @@ def sendmail_success():
 
 
 @site_app.route('/sendmail', methods=['POST'])
-def send_mail_post():
+def send_email():
     form = EmailForm()
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()

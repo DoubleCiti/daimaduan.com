@@ -5,7 +5,7 @@ import hmac
 import json
 import time
 
-from flask import abort
+from flask import abort, jsonify
 from flask import current_app, request
 from flask import make_response
 from flask import redirect
@@ -17,13 +17,14 @@ from flask_mongoengine.wtf.orm import model_form
 from daimaduan.forms.paste import PasteForm
 from daimaduan.models.base import Paste, Code
 from daimaduan.models.tag import Tag
-
+from daimaduan.utils.decorators import user_active_required
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
 
 
 @paste_app.route('/create', methods=['GET', 'POST'])
 @login_required
+@user_active_required
 def create_paste():
     if request.method == 'GET':
         # missing csrf
@@ -86,18 +87,19 @@ def view_paste(hash_id):
 @login_required
 def like(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
-    return paste.toggle_like_by(request.user, True)
+    return jsonify(**paste.toggle_like_by(current_user.user, True))
 
 
 @paste_app.route('/<hash_id>/unlike', methods=['POST'])
 @login_required
 def unlike(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
-    return paste.toggle_like_by(request.user, False)
+    return jsonify(**paste.toggle_like_by(current_user.user, False))
 
 
 @paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
 @login_required
+@user_active_required
 def edit_paste(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     if not paste.is_user_owned(current_user.user):

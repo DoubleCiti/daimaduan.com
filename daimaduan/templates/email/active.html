@@ -3,7 +3,7 @@
 {% block content %}
 {% if reactive == True %}
     <span>
-        您的邮箱没有激活，暂时不能分享代码，请激活您的email。
+        您的邮箱没有激活，暂时不能分享代码，请激活您的email: {{ current_user.user.email }}
     </span>
     <br>
 {% else %}
@@ -14,9 +14,9 @@
 {% endif %}
 <span>
     如果您没有收到激活邮件,请点击
-    <form action="/sendmail" method="POST" id="form-sendmail">
-        <input type="hidden" name="_csrf_token" value="{{ token }}">
-        <input type="hidden" name="email" value={{request.user.email}} />
+    <form action="{{ url_for('site_app.send_email') }}" method="POST" id="form-sendmail">
+        {{ form.csrf_token }}
+        <input type="hidden" name="email" value="{{ current_user.user.email }}" />
         <input type="submit" class="btn btn-primary" value="发送激活邮件" />
     </form>
 </span>

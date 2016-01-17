@@ -73,13 +73,6 @@ class User(BaseDocument):
         if oauth and oauth.user:
             return oauth.user
 
-    def is_in_favourites(self, paste):
-        return paste in self.favourites
-
-    def to_json(self):
-        return {'username': self.username,
-                'gravatar_url': self.gravatar_url(width=38)}
-
     def liked(self, paste):
         like = Like.objects(likeable=paste, user=self).first()
         return like is not None
@@ -139,22 +132,6 @@ class Paste(BaseDocument):
     def increase_views(self):
         self.views = self.views + 1
         self.save()
-
-    def to_json(self):
-        return {'hash_id': self.hash_id,
-                'title': self.title,
-                'short_title': self.title[:30],
-                'tags': self.tags,
-                'num_codes': len(self.codes),
-                'time_passed': time_passed(self.updated_at),
-                'disqus_identifier': self.disqus_identifier,
-                'is_private': self.is_private,
-                'user': self.user.to_json()}
-
-    def is_user_favourited(self):
-        if request.user:
-            return request.user.is_in_favourites(self)
-        return False
 
     @property
     def disqus_identifier(self):
