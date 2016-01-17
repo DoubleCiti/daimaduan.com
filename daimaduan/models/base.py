@@ -9,7 +9,6 @@ from pygments.lexers import get_lexer_by_name
 
 from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
-from daimaduan.models.like import Like
 from daimaduan.models.user_oauth import UserOauth
 
 
@@ -24,9 +23,15 @@ class User(BaseDocument):
     oauths = db.ListField(db.ReferenceField('UserOauth'))
 
     likes = db.ListField(db.ReferenceField('Paste'))
-    pastes_count = db.IntField(default=0)
+    followers = db.ListField(db.ReferenceField('User'))
 
-    watched_users = db.ListField(db.ReferenceField('User'))
+    @property
+    def pastes(self):
+        return Paste.objects(user=self)
+
+    @property
+    def pastes_count(self):
+        return len(self.pastes)
 
     @property
     def private_pastes_count(self):
@@ -34,11 +39,7 @@ class User(BaseDocument):
 
     @property
     def public_pastes_count(self):
-        return self.pastes_count - len(self.pastes(is_private=True))
-
-    @property
-    def pastes(self):
-        return Paste.objects(user=self)
+        return len(self.pastes) - len(self.pastes(is_private=True))
 
     def save(self, *args, **kwargs):
         if not self.salt:
@@ -61,18 +62,13 @@ class User(BaseDocument):
     @classmethod
     def find_by_oauth(cls, provider, openid):
         """Find user that has oauth info with given provider and openid"""
-
         oauth = UserOauth.objects(provider=provider, openid=openid).first()
 
         if oauth and oauth.user:
             return oauth.user
 
-    def liked(self, paste):
-        like = Like.objects(likeable=paste, user=self).first()
-        return like is not None
-
-    def is_watched(self, user):
-        return user in self.watched_users
+    def is_followed(self, user):
+        return user in self.followers
 
 
 class Code(db.EmbeddedDocument):
@@ -122,15 +118,3 @@ class Paste(BaseDocument):
     @property
     def likes_count(self):
         return User.objects(likes=self).count()
-
-    @classmethod
-    def post_save(cls, sender, document, **kwargs):
-        if kwargs.get('created'):
-            document.user.increase_counter('pastes')
-
-    @classmethod
-    def post_delete(cls, sender, document, **kwargs):
-        document.user.increase_counter('pastes', -1)
-
-signals.post_save.connect(Paste.post_save, sender=Paste)
-signals.post_delete.connect(Paste.post_delete, sender=Paste)

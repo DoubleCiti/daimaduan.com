@@ -162,8 +162,6 @@ def delete(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
 
     if current_user.user.owns_record(paste):
-        for code in paste.codes:
-            code.delete()
         paste.delete()
         return redirect('/')
     else:
@@ -174,6 +172,6 @@ def delete(hash_id):
 def embed_js(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
 
-    resp = make_response(render_template('paste/embed.js', paste=paste), 200)
+    resp = make_response(render_template('pastes/embed.js', paste=paste), 200)
     resp.headers['Content-Type'] = 'text/javascript; charset=utf-8'
     return resp
