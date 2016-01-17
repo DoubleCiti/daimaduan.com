@@ -25,8 +25,8 @@
       </span>
       发布的代码段
     </a>
-    <a href="/user/{{ user.username }}/likes" class="list-group-item">
-      <span class="badge paste-likes-count">{{ user.paste_likes_count }}</span>
+    <a href="{{ url_for('user_app.view_likes', username=user.username) }}" class="list-group-item">
+      <span class="badge paste-likes-count">{{ user.likes | length }}</span>
       喜欢的代码段
     </a>
     {% if current_user.is_authenticated and (user != current_user.user) %}

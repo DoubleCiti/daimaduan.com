@@ -23,7 +23,7 @@ class User(BaseDocument):
 
     oauths = db.ListField(db.ReferenceField('UserOauth'))
 
-    paste_likes_count = db.IntField(default=0)
+    likes = db.ListField(db.ReferenceField('Paste'))
     pastes_count = db.IntField(default=0)
 
     watched_users = db.ListField(db.ReferenceField('User'))
@@ -35,10 +35,6 @@ class User(BaseDocument):
     @property
     def public_pastes_count(self):
         return self.pastes_count - len(self.pastes(is_private=True))
-
-    @property
-    def likes(self):
-        return Like.objects(user=self)
 
     @property
     def pastes(self):
@@ -105,7 +101,6 @@ class Paste(BaseDocument):
     tags = db.ListField(db.StringField())
 
     views = db.IntField(default=0)
-    likes_count = db.IntField(default=0)
 
     def save(self, *args, **kwargs):
         self.create_hash_id(self.user.salt, 'paste')
@@ -121,23 +116,12 @@ class Paste(BaseDocument):
     def disqus_identifier(self):
         return 'paste-%s' % self.hash_id
 
-    def toggle_like_by(self, user, flag):
-        filters = dict(likeable=self, user=user)
-
-        if flag:
-            Like.find_or_create_by(**filters)
-        else:
-            Like.find_and_delete_by(**filters)
-
-        return {
-            'paste_id': self.hash_id,
-            'user_like': user.reload().paste_likes_count,
-            'paste_likes': self.reload().likes_count,
-            'liked': flag
-        }
-
     def is_user_owned(self, user):
         return self.user == user
+
+    @property
+    def likes_count(self):
+        return User.objects(likes=self).count()
 
     @classmethod
     def post_save(cls, sender, document, **kwargs):

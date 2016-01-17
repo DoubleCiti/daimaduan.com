@@ -17,7 +17,7 @@
 {% macro render_code(code) %}
 <div class="code panel panel-default" id="code-{{ code.hash_id }}">
   <div class="panel-heading">
-    <span class="pull-right">{{ render_tag(code.tag) }}</span>
+    <span class="pull-right">{{ render_tag(code.syntax) }}</span>
     {{ code.title }}
   </div>
   <div class="panel-body">
@@ -61,7 +61,7 @@
 
 
 {% macro like_paste_button(user, paste) %}
-  {% set liked = user and user.liked(paste) -%}
+  {% set liked = paste in user.likes -%}
   {% set text  = liked | ternary('取消喜欢', '喜欢') -%}
   <a href="javascript:;"
      title="{{ text }}"
