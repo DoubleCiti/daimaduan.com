@@ -4,13 +4,13 @@ DEBUG = True
 ASSETS_DEBUG = True
 
 MONGODB_SETTINGS = {
-    'host': '192.168.99.100',
+    'host': '127.0.0.1',
     'db': 'daimaduan'
 }
 
 SECRET_KEY = 'Youshouldnotknowthis'
 
-BROKER_URL = 'mongodb://192.168.99.100:27017/daimaduan_celery'
+BROKER_URL = 'mongodb://127.0.0.1:27017/daimaduan_celery'
 
 EMAIL = {
     'salt': "won't tell you",
