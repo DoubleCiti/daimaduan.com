@@ -230,20 +230,15 @@ def reset_password_success():
 def confirm_email(token):
     email = validate_token(current_app.config, token)
     if email:
-        user = User.objects(email=email).first()
-        if user:
-            if (request.user is not None and user == request.user) or request.user is None:
-                if user.is_email_confirmed:
-                    return render_template('email/confirm.html',
-                                           title=u"Email已经激活过了",
-                                           message=u"对不起，您的email已经激活过了。")
-                else:
-                    user.is_email_confirmed = True
-                    user.email_confirmed_on = datetime.datetime.now()
-                    user.save()
-                    return render_template('email/confirm.html',
-                                           title=u'Email已经激活',
-                                           message=u'您的email已经激活，请点击登录查看最新代码段。')
+        user = User.objects(email=email).first_or_404()
+        if (current_user.is_authenticated and user == current_user.user) or not current_user.is_authenticated:
+            if user.is_email_confirmed:
+                return render_template('email/confirm.html', title=u"Email已经激活过了", message=u"对不起，您的email已经激活过了。")
+            else:
+                user.is_email_confirmed = True
+                user.email_confirmed_on = datetime.datetime.now()
+                user.save()
+                return render_template('email/confirm.html', title=u'Email已经激活', message=u'您的email已经激活，请点击登录查看最新代码段。')
     return render_template('email/confirm.html',
                            title=u'Email验证链接错误',
                            message=u'对不起，您的验证链接无效或者已经过期。')
