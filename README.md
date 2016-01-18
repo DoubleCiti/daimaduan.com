@@ -12,9 +12,9 @@ source code of daimaduan.com
 ## 本地运行开发服务器
 
 1. 启动MongoDB
-2. `cp daimaduan/config.cfg.example daimaduan/config.cfg`
+2. `cp daimaduan/default_settings.py daimaduan/config.cfg`
 3. `python setup.py develop`
-4. `fab run`
+4. `CONFIG=config.cfg fab run`
 
 ## Assets
 
