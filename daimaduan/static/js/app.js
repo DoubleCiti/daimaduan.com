@@ -2,8 +2,10 @@ function signoutHandler() {
   $.ajax({
     url: '/signout',
     method: 'DELETE',
-    success: function() {
-      document.location = '/';
+    success: function(data) {
+        if (data.status == 302) {
+            document.location = data.location;
+        }
     }
   });
 }
