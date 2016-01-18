@@ -8,6 +8,9 @@ from daimaduan.models.base import User
 
 
 class EmailForm(Form):
+    """
+    Email form, only one field
+    """
     email = StringField(u'email', validators=[InputRequired(), Email(message=u"邮件地址不正确")])
 
     def validate(self):

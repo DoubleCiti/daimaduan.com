@@ -13,6 +13,10 @@ from daimaduan.models.user_oauth import UserOauth
 
 
 class User(BaseDocument):
+    """
+    User model
+    followers are all users following this user
+    """
     username = db.StringField(required=True)
     email = db.StringField(required=True)
     password = db.StringField()

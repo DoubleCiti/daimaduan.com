@@ -34,6 +34,10 @@ from daimaduan.utils.oauth import oauth_config
 
 
 def get_oauth_services():
+    """
+    Generate a dict for oauth services
+    :return:
+    """
     oauth_services = {}
     oauth_services['google'] = OAuth2Service(**oauth_config(current_app.config, 'google'))
     oauth_services['github'] = OAuth2Service(**oauth_config(current_app.config, 'github'))
@@ -51,6 +55,10 @@ site_app = Blueprint("site_app", __name__, template_folder="templates")
 
 @site_app.route('/', methods=['GET'])
 def index():
+    """
+    Index page for daimaduan.com
+    :return:
+    """
     page = get_page()
     pagination = Paste.objects(is_private=False).order_by('-updated_at').paginate(page=page, per_page=20)
 

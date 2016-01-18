@@ -26,6 +26,10 @@ paste_app = Blueprint("paste_app", __name__, template_folder="templates")
 @login_required
 @user_active_required
 def create_paste():
+    """
+    Create paste
+    :return:
+    """
     if request.method == 'GET':
         # missing csrf
         return render_template('pastes/create.html',
@@ -60,6 +64,11 @@ def create_paste():
 
 @paste_app.route('/<hash_id>', methods=['GET'])
 def view_paste(hash_id):
+    """
+    View paste
+    :param hash_id:
+    :return:
+    """
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     paste.increase_views()
 
@@ -85,6 +94,11 @@ def view_paste(hash_id):
 @login_required
 @user_active_required
 def edit_paste(hash_id):
+    """
+    Edit paste
+    :param hash_id:
+    :return:
+    """
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     if not paste.is_user_owned(current_user.user):
         abort(404)
