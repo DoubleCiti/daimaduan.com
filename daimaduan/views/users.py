@@ -1,11 +1,10 @@
 # coding: utf-8
 from flask import Blueprint, jsonify
+from flask import redirect
 from flask import render_template
 from flask import request
-from flask import redirect
 from flask import session
-
-from flask_login import current_user
+from flask_login import current_user, login_required
 from flask_login import login_user
 
 from daimaduan.forms.userinfo import UserInfoForm
@@ -13,7 +12,6 @@ from daimaduan.models import LoginManagerUser
 from daimaduan.models.base import User, Paste
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
-
 
 user_app = Blueprint("user_app", __name__, template_folder="templates")
 

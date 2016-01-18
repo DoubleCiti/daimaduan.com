@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
 
 from daimaduan.extensions import assets
-from daimaduan.utils.filters import datetimeformat
+from daimaduan.utils.filters import datetimeformat, md
 from daimaduan.utils.filters import ternary
 from daimaduan.utils.filters import time_passed
 
@@ -34,6 +34,7 @@ app.register_blueprint(tag_app, url_prefix='/tag')
 app.jinja_env.filters['time_passed'] = time_passed
 app.jinja_env.filters['ternary'] = ternary
 app.jinja_env.filters['datetimeformat'] = datetimeformat
+app.jinja_env.filters['markdown'] = md
 
 login_manager.init_app(app)
 assets.init_app(app)

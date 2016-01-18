@@ -5,7 +5,7 @@ import hmac
 import json
 import time
 
-from flask import abort, jsonify
+from flask import abort, jsonify, url_for
 from flask import current_app, request
 from flask import make_response
 from flask import redirect
@@ -14,12 +14,24 @@ from flask_login import current_user
 from flask_login import login_required
 
 from daimaduan.forms.paste import PasteForm
-from daimaduan.models.base import Paste, Code
+from daimaduan.models.base import Paste, Code, User
+from daimaduan.models.message import Message
+from daimaduan.models.message_category import NEW_PASTE
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
 
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
+
+
+def create_message(user, paste):
+    user.messages.append(Message(category=NEW_PASTE,
+                                 content=u"您关注的用户 [%s](%s) 发表了新的代码集合 [%s](%s)" % (
+                                     paste.user.username,
+                                     url_for('user_app.view_user', username=paste.user.username),
+                                     paste.title,
+                                     url_for('paste_app.view_paste', hash_id=paste.hash_id))))
+    user.save()
 
 
 @paste_app.route('/create', methods=['GET', 'POST'])
@@ -53,6 +65,9 @@ def create_paste():
                 paste.codes.append(code)
             paste.tags = list(set(tags))
             paste.save()
+            followers = User.objects(followers=user)
+            for follower in followers:
+                create_message(follower, paste)
             return redirect('/paste/%s' % paste.hash_id)
         return render_template('pastes/create.html',
                                form=form)

@@ -1,14 +1,15 @@
 # coding: utf-8
+import datetime
 import json
 import re
 
-import datetime
 from flask import abort
 from flask import Blueprint, flash, current_app, session, jsonify
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask.ext.login import login_required
 from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
@@ -26,11 +27,11 @@ from daimaduan.models.base import Paste
 from daimaduan.models.base import User
 from daimaduan.models.tag import Tag
 from daimaduan.models.user_oauth import UserOauth
-from daimaduan.utils.email_confirmation import validate_token
 from daimaduan.utils.email_confirmation import send_confirm_email
 from daimaduan.utils.email_confirmation import send_reset_password_email
-from daimaduan.utils.pagination import get_page
+from daimaduan.utils.email_confirmation import validate_token
 from daimaduan.utils.oauth import oauth_config
+from daimaduan.utils.pagination import get_page
 
 
 def get_oauth_services():
@@ -302,3 +303,9 @@ def search_paste():
                            query_string=q,
                            keyword=keyword,
                            pagination=pagination)
+
+
+@site_app.route('/messages', methods=['GET'])
+@login_required
+def view_messages():
+    return render_template('users/messages.html')
