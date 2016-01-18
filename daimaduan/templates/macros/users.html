@@ -11,8 +11,8 @@
   {% include 'shared/user_panel.html' %}
 {% endmacro %}
 
-{% macro render_user_watch(request_user, user) %}
-  {% set is_watched = request_user.is_watched(user) -%}
+{% macro render_user_watch(user, current_user) %}
+  {% set is_watched = user.is_followed_by(current_user) -%}
   {% set display = is_watched | ternary('取消关注', '关注') -%}
   <div class="list-group-item">
     <button class="btn btn-info btn-xs action action-{{ is_watched | ternary('unwatch', 'watch') }}">{{ display }}</button>

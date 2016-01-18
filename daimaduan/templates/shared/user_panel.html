@@ -30,7 +30,7 @@
       喜欢的代码段
     </a>
     {% if current_user.is_authenticated and (user != current_user.user) %}
-      {{ render_user_watch(current_user.user, user) }}
+      {{ render_user_watch(user, current_user.user) }}
     {% endif %}
   </div>
 </div>

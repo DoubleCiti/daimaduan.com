@@ -71,15 +71,21 @@ def view_likes(username):
 
 @user_app.route('/watch', methods=['POST'])
 def watch_user():
-    user = User.objects(username=request.args.get('user')).first_or_404()
-    current_user.user.followers.append(user)
-    current_user.user.save()
-    return jsonify(watchedStatus=current_user.user.is_followed(user))
+    be_followed_user = User.objects(username=request.form.get('user')).first_or_404()
+
+    if not be_followed_user.is_followed_by(current_user.user):
+        be_followed_user.followers.append(current_user.user)
+        be_followed_user.save()
+
+    return jsonify(watchedStatus=be_followed_user.is_followed_by(current_user.user))
 
 
 @user_app.route('/unwatch', methods=['POST'])
 def unwatch_user():
-    user = User.objects(username=request.params.get('user')).first_or_404()
-    current_user.user.followers.remove(user)
-    current_user.user.save()
-    return jsonify(watchedStatus=current_user.user.is_followed(user))
+    be_followed_user = User.objects(username=request.form.get('user')).first_or_404()
+
+    if be_followed_user.is_followed_by(current_user.user):
+        be_followed_user.followers.remove(current_user.user)
+        be_followed_user.save()
+
+    return jsonify(watchedStatus=be_followed_user.is_followed_by(current_user.user))

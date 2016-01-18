@@ -67,7 +67,7 @@ class User(BaseDocument):
         if oauth and oauth.user:
             return oauth.user
 
-    def is_followed(self, user):
+    def is_followed_by(self, user):
         return user in self.followers
 
 
