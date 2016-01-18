@@ -4,7 +4,7 @@ import re
 
 import datetime
 from flask import abort
-from flask import Blueprint, flash, current_app, session
+from flask import Blueprint, flash, current_app, session, jsonify
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -89,10 +89,10 @@ def signin():
         return redirect(url_for('site_app.index'))
 
 
-@site_app.route('/signout', methods=['GET', 'DELETE'])
+@site_app.route('/signout', methods=['DELETE'])
 def signout_delete():
     logout_user()
-    return redirect(url_for('site_app.index'))
+    return jsonify(status=302, location="/")
 
 
 @site_app.route('/signup', methods=['GET', 'POST'])
