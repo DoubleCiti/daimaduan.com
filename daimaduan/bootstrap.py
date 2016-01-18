@@ -16,7 +16,7 @@ login_manager = LoginManager()
 
 app = Flask(__name__)
 app.config.from_object('daimaduan.default_settings')
-# app.config.from_envvar('config.cfg')
+app.config.from_envvar('CONFIG')
 db.init_app(app)
 celery = Celery(__name__)
 celery.conf.add_defaults(app.config)
