@@ -12,12 +12,12 @@ from flask import redirect
 from flask import render_template, Blueprint
 from flask_login import current_user
 from flask_login import login_required
-from flask_mongoengine.wtf.orm import model_form
 
 from daimaduan.forms.paste import PasteForm
 from daimaduan.models.base import Paste, Code
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
+
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
 
@@ -37,20 +37,18 @@ def create_paste():
             paste = Paste(title=form.title.data, user=user, is_private=form.is_private.data)
             tags = []
             for i, c in enumerate(form.codes):
-                tag_name = c.tag.data.lower()
+                syntax = c.syntax.data.lower()
                 if not c.title.data:
                     c.title.data = '代码片段%s' % (i + 1)
                 code = Code(title=c.title.data,
                             content=c.content.data,
-                            tag=tag_name,
-                            user=user)
-                code.save()
-                tags.append(tag_name)
-                tag = Tag.objects(name=tag_name).first()
+                            syntax=syntax)
+                tags.append(syntax)
+                tag = Tag.objects(name=syntax).first()
                 if tag:
                     tag.popularity += 1
                 else:
-                    tag = Tag(name=tag_name)
+                    tag = Tag(name=syntax)
                 tag.save()
                 paste.codes.append(code)
             paste.tags = list(set(tags))
@@ -83,20 +81,6 @@ def view_paste(hash_id):
                            sig=sig)
 
 
-@paste_app.route('/<hash_id>/like', methods=['POST'])
-@login_required
-def like(hash_id):
-    paste = Paste.objects.get_or_404(hash_id=hash_id)
-    return jsonify(**paste.toggle_like_by(current_user.user, True))
-
-
-@paste_app.route('/<hash_id>/unlike', methods=['POST'])
-@login_required
-def unlike(hash_id):
-    paste = Paste.objects.get_or_404(hash_id=hash_id)
-    return jsonify(**paste.toggle_like_by(current_user.user, False))
-
-
 @paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
 @login_required
 @user_active_required
@@ -107,7 +91,7 @@ def edit_paste(hash_id):
     if request.method == 'GET':
         data = {'title': paste.title,
                 'is_private': paste.is_private,
-                'codes': [{'title': code.title, 'content': code.content, 'tag': code.tag} for code in paste.codes]}
+                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax} for code in paste.codes]}
         form = PasteForm(data=data)
         return render_template('pastes/edit.html',
                                form=form,
@@ -117,26 +101,21 @@ def edit_paste(hash_id):
         if form.validate():
             paste.title = form.title.data
             paste.is_private = form.is_private.data
-            tags = []
-            codes = [code for code in paste.codes]
             paste.codes = []
-            for code in codes:
-                code.delete()
+            tags = []
             for i, c in enumerate(form.codes):
-                tag_name = c.tag.data.lower()
+                syntax = c.syntax.data.lower()
                 if not c.title.data:
                     c.title.data = '代码片段%s' % (i + 1)
                 code = Code(title=c.title.data,
                             content=c.content.data,
-                            tag=tag_name,
-                            user=current_user.user)
-                code.save()
-                tags.append(tag_name)
-                tag = Tag.objects(name=tag_name).first()
+                            syntax=syntax)
+                tags.append(syntax)
+                tag = Tag.objects(name=syntax).first()
                 if tag:
                     tag.popularity += 1
                 else:
-                    tag = Tag(name=tag_name)
+                    tag = Tag(name=syntax)
                 tag.save()
                 paste.codes.append(code)
             paste.tags = list(set(tags))
@@ -147,14 +126,42 @@ def edit_paste(hash_id):
                                paste=paste)
 
 
+@paste_app.route('/<hash_id>/like', methods=['POST'])
+@login_required
+def like(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+    user = current_user.user
+    is_user_liked = paste in user.likes
+    if not is_user_liked:
+        user.likes.append(paste)
+        user.save()
+    return jsonify(dict(paste_id=hash_id,
+                        user_like=len(user.likes),
+                        paste_likes=len(user.likes),
+                        liked=True))
+
+
+@paste_app.route('/<hash_id>/unlike', methods=['POST'])
+@login_required
+def unlike(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+    user = current_user.user
+    is_user_liked = paste in user.likes
+    if is_user_liked:
+        user.likes.remove(paste)
+        user.save()
+    return jsonify(dict(paste_id=hash_id,
+                        user_like=len(user.likes),
+                        paste_likes=len(user.likes),
+                        liked=True))
+
+
 @paste_app.route('/<hash_id>/delete', methods=['POST'])
 @login_required
 def delete(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
 
     if current_user.user.owns_record(paste):
-        for code in paste.codes:
-            code.delete()
         paste.delete()
         return redirect('/')
     else:
@@ -165,6 +172,6 @@ def delete(hash_id):
 def embed_js(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
 
-    resp = make_response(render_template('paste/embed.js', paste=paste), 200)
+    resp = make_response(render_template('pastes/embed.js', paste=paste), 200)
     resp.headers['Content-Type'] = 'text/javascript; charset=utf-8'
     return resp

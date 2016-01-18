@@ -13,7 +13,7 @@ from daimaduan.models.syntax import Syntax
 
 class CodeForm(Form):
     title = StringField(u'片段描述')
-    tag = SelectField(u'语法', choices=[(s.name.lower(), s.name) for s in Syntax.objects().order_by('name')])
+    syntax = SelectField(u'语法', choices=[(s.name.lower(), s.name) for s in Syntax.objects().order_by('name')])
     content = TextAreaField(u'代码片段', validators=[InputRequired(message=u'不能为空！')])
 
 
