@@ -65,6 +65,7 @@ config.cfg
 .DS_Store
 
 # Assets
+/daimaduan/static/lib
 /daimaduan/static/.webassets-cache
 /daimaduan/static/css/compiled.css
 /daimaduan/static/js/compiled.js

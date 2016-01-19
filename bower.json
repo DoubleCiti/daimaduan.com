@@ -6,5 +6,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "vue": "~1.0.14"
+  }
 }
