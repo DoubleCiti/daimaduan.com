@@ -80,9 +80,45 @@
     $('.input-group-embed :text').select();
   }
 
+  function initPasteEditor() {
+    var newCode = { title: "", syntax: "text", content: "" };
+    var codes = new Vue({
+      el: "#form-paste",
+      data: {
+        lexers: lexers,
+        paste: {
+          title: "",
+          is_private: false,
+          codes: [_.clone(newCode)]  
+        }
+        
+      },
+      computed: {
+        codeRemovable: function() {
+          return this.paste.codes.length > 1;
+        }
+      },
+      methods: {
+        addCode: function() {
+          this.paste.codes.push(_.clone(newCode));
+        },
+        removeCode: function(code) {
+          this.paste.codes.$remove(code);
+        },
+        submitPaste: function() {
+          console.log(JSON.stringify(this.paste, null, "  "));
+          alert("Not implemented.");
+        }
+      }
+    });
+  }
+
   $(document).ready(function() {
     initPaste();
     initCodes();
+    initGetMore();
+    initSearchGetMore();
+    initPasteEditor();
 
     $('.input-group-embed').on('click', selectEmbedCode);
     $('.input-group-embed :text').on('focus', selectEmbedCode);

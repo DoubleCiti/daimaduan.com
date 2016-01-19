@@ -7,6 +7,23 @@
 	}
 }
 
+
+.panel-code {
+	.title-wrapper {
+		margin-right: 160px;
+	}
+
+	.syntax-wrapper {
+		width: 100px;
+		float: right;
+		margin-right: 10px;
+	}
+	.trash-wrapper {
+		width: 40px;
+		float: right;
+	}
+}
+
 #panel-paste-user {
 	.panel-heading {
 		border-bottom: 1px solid #dddddd;
