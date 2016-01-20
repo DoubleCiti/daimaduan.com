@@ -81,7 +81,10 @@ def view_paste(hash_id):
     sig = message = timestamp = None
     if current_user.is_authenticated:
         # create a JSON packet of our data attributes
-        data = json.dumps({'id': str(current_user.id), 'username': current_user.username, 'email': current_user.email})
+        data = json.dumps({'id': str(current_user.id),
+                           'username': current_user.username,
+                           'email': current_user.email,
+                           'avatar': current_user.user.gravatar_url()})
         # encode the data to base64
         message = base64.b64encode(data)
         # generate a timestamp for signing the message

@@ -39,7 +39,8 @@ syntax_list = [
     "VBScript",
     "Swift",
     "Access-Log",
-    "Text"
+    "Text",
+    "Kotlin"
 ]
 
 
