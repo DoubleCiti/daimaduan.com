@@ -1,5 +1,6 @@
 # coding: utf-8
 import time
+from markdown import markdown
 
 
 def datetimeformat(value):
@@ -55,3 +56,12 @@ def ternary(value, x, y):
         return x
     else:
         return y
+
+
+def md(value):
+    """
+    Translate markdown syntax to html
+    :param value:
+    :return:
+    """
+    return markdown(value)

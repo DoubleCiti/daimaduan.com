@@ -59,11 +59,9 @@ function switchWatchAction(data) {
 function toggleUserWatch() {
     var $action = $(this);
     var action = $action.is(".action-watch") ? "watch" : "unwatch";
-    var user_name = $(".panel-heading h4").text();
-    var url = "/user/" + action;
+    var username = $(".panel-heading h4").text();
     $.ajax({
-        url: url,
-        data: "user=" + user_name,
+        url: "/user/" + username + "/" + action,
         type: 'POST',
         success: function(data) {
             $action.replaceWith(switchWatchAction(data));

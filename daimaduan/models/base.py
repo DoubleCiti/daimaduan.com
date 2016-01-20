@@ -2,7 +2,6 @@
 import hashlib
 import time
 
-from mongoengine import signals
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -10,6 +9,7 @@ from pygments.lexers import get_lexer_by_name
 from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
 from daimaduan.models.user_oauth import UserOauth
+from daimaduan.models.message import Message
 
 
 class User(BaseDocument):
@@ -19,8 +19,9 @@ class User(BaseDocument):
     salt = db.StringField()
     is_email_confirmed = db.BooleanField(default=False)
     email_confirmed_on = db.DateTimeField(default=None)
+    messages = db.ListField(db.EmbeddedDocumentField(Message))
 
-    oauths = db.ListField(db.ReferenceField('UserOauth'))
+    oauths = db.ListField(db.ReferenceField(UserOauth))
 
     likes = db.ListField(db.ReferenceField('Paste'))
     followers = db.ListField(db.ReferenceField('User'))
