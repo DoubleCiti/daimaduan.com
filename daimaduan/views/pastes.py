@@ -17,6 +17,7 @@ from daimaduan.forms.paste import PasteForm
 from daimaduan.models.base import Paste, Code, User
 from daimaduan.models.message import Message
 from daimaduan.models.message_category import NEW_PASTE
+from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
 
@@ -47,23 +48,23 @@ def create_paste():
         if form.validate():
             user = current_user.user
             paste = Paste(title=form.title.data, user=user, is_private=form.is_private.data)
-            tags = []
+            # tags = []
             for i, c in enumerate(form.codes):
-                syntax = c.syntax.data.lower()
+                syntax = Syntax.objects(key=c.syntax.data).get_or_404()
                 if not c.title.data:
                     c.title.data = '代码片段%s' % (i + 1)
                 code = Code(title=c.title.data,
                             content=c.content.data,
                             syntax=syntax)
-                tags.append(syntax)
-                tag = Tag.objects(name=syntax).first()
-                if tag:
-                    tag.popularity += 1
-                else:
-                    tag = Tag(name=syntax)
-                tag.save()
+                # tags.append(syntax)
+                # tag = Tag.objects(name=syntax).first()
+                # if tag:
+                #     tag.popularity += 1
+                # else:
+                #     tag = Tag(name=syntax)
+                # tag.save()
                 paste.codes.append(code)
-            paste.tags = list(set(tags))
+            # paste.tags = list(set(tags))
             paste.save()
             followers = User.objects(followers=user)
             for follower in followers:
@@ -120,23 +121,23 @@ def edit_paste(hash_id):
             paste.title = form.title.data
             paste.is_private = form.is_private.data
             paste.codes = []
-            tags = []
+            # tags = []
             for i, c in enumerate(form.codes):
-                syntax = c.syntax.data.lower()
+                syntax = Syntax.objects(key=c.syntax.data).get_or_404()
                 if not c.title.data:
                     c.title.data = '代码片段%s' % (i + 1)
                 code = Code(title=c.title.data,
                             content=c.content.data,
                             syntax=syntax)
-                tags.append(syntax)
-                tag = Tag.objects(name=syntax).first()
-                if tag:
-                    tag.popularity += 1
-                else:
-                    tag = Tag(name=syntax)
-                tag.save()
+                # tags.append(syntax)
+                # tag = Tag.objects(name=syntax).first()
+                # if tag:
+                #     tag.popularity += 1
+                # else:
+                #     tag = Tag(name=syntax)
+                # tag.save()
                 paste.codes.append(code)
-            paste.tags = list(set(tags))
+            # paste.tags = list(set(tags))
             paste.save()
             return redirect('/paste/%s' % paste.hash_id)
         return render_template('pastes/edit.html',

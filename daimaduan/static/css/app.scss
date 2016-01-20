@@ -28,9 +28,6 @@ a {
 body {
 	min-width: 320px;
 }
-.hljs {
-	background: none;
-}
 #form-signin {
 	margin: 30px auto;
 	width: 600px;
@@ -46,15 +43,10 @@ pre {
 	word-wrap: normal;
 	&.panel-body {
 		border: 0;
-		background: none;
 		margin: 0;
 	}
 	code {
 		white-space: pre;
-	}
-	&.code_preview {
-		max-height: 200px;
-		overflow: hidden;
 	}
 }
 .name {
@@ -63,15 +55,6 @@ pre {
 }
 .inline {
 	display: inline;
-}
-.hljs-line-numbers {
-	text-align: right;
-	color: #999;
-	//Instead of the line below you could use @include user-select($select)
-	user-select: none;
-	+ .hljs {
-		border-left: 1px solid #e7e7e7;
-	}
 }
 .tag {
 	margin-bottom: 3px;
@@ -156,13 +139,26 @@ pre {
 	&:first-child {
 		margin-left: 0;
 	}
-	span {
-		display: none;
-	}
 }
 .code .panel-body pre {
-	margin: -15px;
-	padding: 0;
 	border: 0;
-	background: none;
+	background-color: #FFF;
+}
+
+.code .panel-body {
+	padding: 0;
+}
+
+.highlighttable {
+	width: 100%;
+}
+
+.highlighttable pre {
+	border: 0;
+	border-radius: 0;
+}
+
+.code_preview {
+	max-height: 192px;
+	overflow: hidden;
 }

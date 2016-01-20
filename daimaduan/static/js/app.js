@@ -70,8 +70,6 @@ function toggleUserWatch() {
 }
 
 $(document).ready(function() {
-    hljs.initHighlightingOnLoad();
-    hljs.initLineNumbersOnLoad();
     initToggleFullCode();
     $(document).on('click', '.action-signout', signoutHandler);
     $(document).on('click', '.action-watch, .action-unwatch', toggleUserWatch);
