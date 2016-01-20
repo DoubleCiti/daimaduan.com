@@ -1,4 +1,6 @@
 # coding: utf-8
+import os
+
 from celery import Celery
 from flask import Flask
 from flask_gravatar import Gravatar
@@ -6,9 +8,15 @@ from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
 
 from daimaduan.extensions import assets
-from daimaduan.utils.filters import datetimeformat, md
+from daimaduan.utils.filters import datetimeformat
+from daimaduan.utils.filters import md
 from daimaduan.utils.filters import ternary
 from daimaduan.utils.filters import time_passed
+
+
+# set default CONFIG to config.cfg
+if not os.environ.get('CONFIG', None):
+    os.environ['CONFIG'] = 'config.cfg'
 
 
 db = MongoEngine()
