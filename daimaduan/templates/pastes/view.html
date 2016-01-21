@@ -30,12 +30,12 @@
         {{ edit_paste_button(paste) }}
         {{ del_paste_button(paste) }}
       {% endif %}
-
-      <div class="pull-right">
-        {{ embed_paste_button(paste) }}
       {% if current_user.is_authenticated %}
         {{ like_paste_button(current_user.user, paste) }}
       {% endif %}
+
+      <div class="pull-right">
+        {{ embed_paste_button(paste) }}
       </div>
 
       <div class="clearfix"></div>

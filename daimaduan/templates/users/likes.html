@@ -23,12 +23,12 @@
 
 {% block sidebar %}
 	{{ render_user_panel(user) }}
-<div class="panel panel-default">
-	<div class="panel-heading">热门标签</div>
-	<div class="panel-body">
-	{% for tag in tags %}
-		{{ render_tag(tag.name) }}
-	{% endfor %}
-	</div>
-</div>
+{#<div class="panel panel-default">#}
+{#	<div class="panel-heading">热门标签</div>#}
+{#	<div class="panel-body">#}
+{#	{% for tag in tags %}#}
+{#		{{ render_tag(tag.name) }}#}
+{#	{% endfor %}#}
+{#	</div>#}
+{#</div>#}
 {% endblock %}

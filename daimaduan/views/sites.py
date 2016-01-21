@@ -85,9 +85,11 @@ def signin():
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
 
-        flash('Logged in successfully.')
+            flash('Logged in successfully.')
 
-        return redirect(url_for('site_app.index'))
+            return redirect(url_for('site_app.index'))
+        return render_template('users/signin.html',
+                               form=form)
 
 
 @site_app.route('/signout', methods=['DELETE'])
