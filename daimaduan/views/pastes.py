@@ -110,7 +110,7 @@ def edit_paste(hash_id):
     if request.method == 'GET':
         data = {'title': paste.title,
                 'is_private': paste.is_private,
-                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax} for code in paste.codes]}
+                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax.key} for code in paste.codes]}
         form = PasteForm(data=data)
         return render_template('pastes/edit.html',
                                form=form,

@@ -41,13 +41,6 @@
 
     </div>
 
-    <p class="pull-right">
-      <a href="/paste/{{ paste.hash_id }}#code-{{ paste.codes[0].id }}">
-        查看完整代码集合
-        <span class="fa fa-caret-right"></span>
-      </a>
-    </p>
-
     <p class="paste-tags">
       {% for tag in paste.tags %}
         {{ render_tag(tag) }}

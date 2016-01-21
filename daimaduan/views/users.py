@@ -63,8 +63,7 @@ def view_likes(username):
 
     return render_template('users/likes.html',
                            user=user,
-                           pagination=pagination,
-                           tags=Tag.objects().order_by('-popularity')[:10])
+                           pagination=pagination)
 
 
 @user_app.route('/watch', methods=['POST'])
