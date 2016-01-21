@@ -8,11 +8,11 @@
 		<title>{% block title %}最新代码{% endblock %} - 代码段</title>
 		<link rel="shortcut icon" href="/static/images/favicon.ico" />
 		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/colorful.min.css" rel="stylesheet">
 		<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="//cdn.bootcss.com/bootstrap-social/4.11.0/bootstrap-social.min.css" rel="stylesheet">
-		<link href="//cdn.bootcss.com/highlight.js/9.0.0/styles/github.min.css" rel="stylesheet">
 		{% assets "css_all" %}
-		<link href="{{ ASSET_URL }}" rel="stylesheet"></script>
+		<link href="{{ ASSET_URL }}" rel="stylesheet">
 		{% endassets %}
 
 		<script type="text/javascript">
@@ -38,11 +38,9 @@
 
 		{% include 'shared/footer.html' %}
 
-		<script src="//cdn.bootcss.com/highlight.js/9.0.0/highlight.min.js"></script>
 		<script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
 		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 		<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<script src="/static/js/highlightjs.line.numbers.min.js"></script>
 		{% assets "js_all" %}
 		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
 		{% endassets %}

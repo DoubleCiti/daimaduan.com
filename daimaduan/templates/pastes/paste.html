@@ -57,9 +57,9 @@
     <div class="clearfix"></div>
 
     {% if paste.codes[0].content.count('\n') > 10 %}
-    {{ render_source_code_preview(paste.codes[0].content) }}
+    {{ render_source_code_preview(paste.codes[0].highlight_content) }}
     {% else %}
-    {{ render_source_code(paste.codes[0].content) }}
+    {{ render_source_code(paste.codes[0].highlight_content) }}
     {% endif %}
   </div>
 </div>

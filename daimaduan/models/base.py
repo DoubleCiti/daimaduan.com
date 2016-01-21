@@ -75,7 +75,7 @@ class User(BaseDocument):
 class Code(db.EmbeddedDocument):
     title = db.StringField()
     content = db.StringField(required=True)
-    syntax = db.StringField()
+    syntax = db.ReferenceField('Syntax')
 
     def content_head(self, n=10):
         lines = self.content.splitlines()[:n]
@@ -83,8 +83,8 @@ class Code(db.EmbeddedDocument):
 
     @property
     def highlight_content(self):
-        lexer = get_lexer_by_name(self.tag, stripall=True)
-        formatter = HtmlFormatter(linenos=True, cssclass='codehilite')
+        lexer = get_lexer_by_name(self.syntax.key, stripall=True)
+        formatter = HtmlFormatter(linenos=True, cssclass='highlight')
         return highlight(self.content, lexer, formatter)
 
 
