@@ -10,7 +10,7 @@ tag_app = Blueprint('tag_app', __name__, template_folder="templates")
 
 @tag_app.route('/<tag_name>', methods=['GET'])
 def view(tag_name):
-    tag = Tag.objects.get_or_404(name=tag_name)
+    tag = Tag.objects.get_or_404(key=tag_name)
     page = get_page()
 
     pastes = tag.pastes(is_private=False).order_by('-updated_at')
