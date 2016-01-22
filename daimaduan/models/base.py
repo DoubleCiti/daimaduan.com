@@ -95,7 +95,7 @@ class Paste(BaseDocument):
     hash_id = db.StringField(unique=True)
     is_private = db.BooleanField(default=False)
     codes = db.ListField(db.EmbeddedDocumentField(Code))
-    tags = db.ListField(db.StringField())
+    tags = db.ListField(db.ReferenceField('Tag'))
 
     views = db.IntField(default=0)
 

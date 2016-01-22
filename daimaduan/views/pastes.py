@@ -35,6 +35,42 @@ def create_message(user, paste):
     user.save()
 
 
+def save_paste_and_codes(form, paste=None):
+    if not paste:
+        paste = Paste(user=current_user.user)
+
+    paste.title = form.title.data
+    paste.is_private = form.is_private.data
+    paste.codes = []
+    tags = {}
+    for tag in form.tags.data.split():
+        tags[tag.lower()] = tag.lower()
+    for i, c in enumerate(form.codes):
+        syntax = Syntax.objects(key=c.syntax.data).get_or_404()
+        if not c.title.data:
+            c.title.data = '代码片段%s' % (i + 1)
+        code = Code(title=c.title.data,
+                    content=c.content.data,
+                    syntax=syntax)
+        tags[syntax.key] = syntax.name
+        paste.codes.append(code)
+    for key in tags:
+        syntax = Syntax.objects(name__iexact=tags[key]).first()
+        tag = Tag.objects(key__iexact=key).first()
+        if not tag and syntax:
+            tag = Tag(key=syntax.key, name=syntax.name)
+            tag.save()
+        elif not tag and not syntax:
+            tag = Tag(key=key, name=tags[key])
+        else:
+            tag.popularity += 1
+        tag.save()
+        if tag not in paste.tags:
+            paste.tags.append(tag)
+    paste.save()
+    return paste
+
+
 @paste_app.route('/create', methods=['GET', 'POST'])
 @login_required
 @user_active_required
@@ -47,31 +83,44 @@ def create_paste():
         form = PasteForm(request.form)
         if form.validate():
             user = current_user.user
-            paste = Paste(title=form.title.data, user=user, is_private=form.is_private.data)
-            # tags = []
-            for i, c in enumerate(form.codes):
-                syntax = Syntax.objects(key=c.syntax.data).get_or_404()
-                if not c.title.data:
-                    c.title.data = '代码片段%s' % (i + 1)
-                code = Code(title=c.title.data,
-                            content=c.content.data,
-                            syntax=syntax)
-                # tags.append(syntax)
-                # tag = Tag.objects(name=syntax).first()
-                # if tag:
-                #     tag.popularity += 1
-                # else:
-                #     tag = Tag(name=syntax)
-                # tag.save()
-                paste.codes.append(code)
-            # paste.tags = list(set(tags))
-            paste.save()
+            paste = save_paste_and_codes(form)
             followers = User.objects(followers=user)
             for follower in followers:
                 create_message(follower, paste)
             return redirect('/paste/%s' % paste.hash_id)
         return render_template('pastes/create.html',
                                form=form)
+
+
+@paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
+@login_required
+@user_active_required
+def edit_paste(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+    if not paste.is_user_owned(current_user.user):
+        abort(404)
+    if request.method == 'GET':
+        tags = []
+        syntaxes = [code.syntax.name for code in paste.codes]
+        for tag in paste.tags:
+            if tag.name not in syntaxes:
+                tags.append(tag.name)
+        data = {'title': paste.title,
+                'is_private': paste.is_private,
+                'tags': ' '.join(tags),
+                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax.key} for code in paste.codes]}
+        form = PasteForm(data=data)
+        return render_template('pastes/edit.html',
+                               form=form,
+                               paste=paste)
+    else:
+        form = PasteForm(request.form)
+        if form.validate():
+            paste = save_paste_and_codes(form, paste=paste)
+            return redirect('/paste/%s' % paste.hash_id)
+        return render_template('pastes/edit.html',
+                               form=form,
+                               paste=paste)
 
 
 @paste_app.route('/<hash_id>', methods=['GET'])
@@ -98,51 +147,6 @@ def view_paste(hash_id):
                            message=message,
                            timestamp=timestamp,
                            sig=sig)
-
-
-@paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
-@login_required
-@user_active_required
-def edit_paste(hash_id):
-    paste = Paste.objects.get_or_404(hash_id=hash_id)
-    if not paste.is_user_owned(current_user.user):
-        abort(404)
-    if request.method == 'GET':
-        data = {'title': paste.title,
-                'is_private': paste.is_private,
-                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax.key} for code in paste.codes]}
-        form = PasteForm(data=data)
-        return render_template('pastes/edit.html',
-                               form=form,
-                               paste=paste)
-    else:
-        form = PasteForm(request.form)
-        if form.validate():
-            paste.title = form.title.data
-            paste.is_private = form.is_private.data
-            paste.codes = []
-            # tags = []
-            for i, c in enumerate(form.codes):
-                syntax = Syntax.objects(key=c.syntax.data).get_or_404()
-                if not c.title.data:
-                    c.title.data = '代码片段%s' % (i + 1)
-                code = Code(title=c.title.data,
-                            content=c.content.data,
-                            syntax=syntax)
-                # tags.append(syntax)
-                # tag = Tag.objects(name=syntax).first()
-                # if tag:
-                #     tag.popularity += 1
-                # else:
-                #     tag = Tag(name=syntax)
-                # tag.save()
-                paste.codes.append(code)
-            # paste.tags = list(set(tags))
-            paste.save()
-            return redirect('/paste/%s' % paste.hash_id)
-        return render_template('pastes/edit.html',
-                               form=form,
-                               paste=paste)
 
 
 @paste_app.route('/<hash_id>/like', methods=['POST'])

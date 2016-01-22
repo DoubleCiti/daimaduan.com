@@ -17,6 +17,10 @@
           <label>{{ form.is_private() }} 我想要将这段代码私有</label>
         </div>
       </div>
+      <div class="form-group">
+        {{ form.tags.label(class="control-label col-sm-2") }}
+        <div class="col-md-10">{{ form.tags(class="form-control", placeholder="你还可以给这个代码集合添加3个标签, 用空格来分割") }}</div>
+      </div>
       <div id="codes">
         {% for code in form.codes %}
         <div class="well code">
