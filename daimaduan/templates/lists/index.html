@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% from 'macros/common.html' import render_pagination %}
+{% from 'macros/users.html' import render_user_avatar %}
+{% from 'macros/pastes.html' import render_private %}
+{% from 'macros/common.html' import fa_icon %}
+
+{% block title %}码单{% endblock %}
+{% block content %}
+<h4 class="page-header">最新码单
+  <span class="pull-right">
+    <a class="btn btn-xs btn-success" href="{{ url_for('list_app.create_list') }}">{{ fa_icon('plus-square') }} 创建一个码单</a>
+  </span>
+</h4>
+<section>
+
+  {% for li in pagination.items %}
+    <div class="paste" id="paste-{{ li.id }}">
+      <div class="media">
+        <div class="media-left">
+          {{ render_user_avatar(li.user, size=38) }}
+        </div>
+        <div class="media-body">
+          <div class="paste-metas pull-right">
+            <a href="{{ url_for('list_app.view_list', hash_id=li.hash_id) }}" class="text-muted">
+              <span class="fa fa-file-code-o"></span>
+              {{ li.pastes | length }}个代码集合
+            </a>
+          </div>
+
+          <h5 class="media-heading">
+            <a href="{{ url_for('list_app.view_list', hash_id=li.hash_id) }}">
+              {{ li.title  }}
+              {{ render_private(li) }}
+            </a>
+          </h5>
+
+          <p class="text-muted">
+            <small>最后更新于{{ li.updated_at | time_passed }}</small>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  <hr />
+
+  {{ render_pagination(pagination, url_for('list_app.index')) }}
+</section>
+{% endblock %}

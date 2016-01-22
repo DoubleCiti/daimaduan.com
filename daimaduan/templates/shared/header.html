@@ -12,8 +12,9 @@
 
     <div class="navbar-collapse collapse" id="navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="/">首页</a></li>
-        <li><a href="/tags">标签</a></li>
+        <li><a href="{{ url_for('site_app.index') }}">首页</a></li>
+        <li><a href="{{ url_for('site_app.tags') }}">标签</a></li>
+        <li><a href="{{ url_for('list_app.index') }}">码单</a></li>
       </ul>
 
       <form action="/search" class="navbar-form navbar-left">

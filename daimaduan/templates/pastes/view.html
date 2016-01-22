@@ -6,6 +6,7 @@
 {% from 'macros/pastes.html' import like_paste_button %}
 {% from 'macros/pastes.html' import edit_paste_button %}
 {% from 'macros/pastes.html' import del_paste_button %}
+{% from 'macros/pastes.html' import add_to_list_form %}
 {% from 'macros/pastes.html' import embed_paste_button with context  %}
 {% from 'macros/common.html' import render_comment_form with context %}
 
@@ -32,6 +33,7 @@
       {% endif %}
       {% if current_user.is_authenticated %}
         {{ like_paste_button(current_user.user, paste) }}
+        {{ add_to_list_form(paste, paste_lists) }}
       {% endif %}
 
       <div class="pull-right">

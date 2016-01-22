@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% from 'macros/users.html' import render_user_panel with context %}
+{% from 'macros/pastes.html' import render_paste_item %}
+{% from 'macros/common.html' import render_pagination %}
+{% from 'macros/common.html' import fa_icon %}
+
+{% block title %}{{ paste_list.title }}{% endblock %}
+{% block content %}
+<h4 class="page-header">{{ paste_list.title }} 里的代码
+  {% if current_user.is_authenticated and current_user.user == paste_list.user %}
+  <form class="inline action"
+        action="{{ url_for('list_app.delete_list', hash_id=paste_list.hash_id) }}"
+        method="post">
+    <span class="pull-right">
+      <button type="submit"
+              class="btn btn-danger btn-xs action action-del">
+        {{ fa_icon('trash') }} <span>删除这个码单</span>
+      </button>
+    </span>
+  </form>
+  {% endif %}
+</h4>
+
+<section class="pastes">
+	{% for paste in paste_list.pastes %}
+		{{ render_paste_item(paste) }}
+	{% endfor %}
+</section>
+{% endblock %}
+
+{% block sidebar %}
+  {{ render_user_panel(paste_list.user) }}
+{% endblock %}
