@@ -88,14 +88,16 @@
 
 {% macro add_to_list_form(paste, paste_lists) %}
   {% if paste_lists %}
-  <form action="{{ url_for('list_app.add_paste') }}" method="POST">
-  <input type="hidden" name="paste_hash_id" value="{{ paste.hash_id }}" />
-  <select name="paste_list_id">
-    {% for paste_list in paste_lists %}
-      <option value="{{ paste_list.hash_id }}">{{ paste_list.title }}</option>
-    {% endfor %}
-  </select>
-  <input type="submit" value="添加" />
-  </form>
+    <form class="form-inline" action="{{ url_for('list_app.add_paste') }}" method="POST">
+      <input type="hidden" name="paste_hash_id" value="{{ paste.hash_id }}" />
+      <div class="form-group">
+        <select class="form-control input-sm" name="paste_list_id">
+          {% for paste_list in paste_lists %}
+            <option value="{{ paste_list.hash_id }}">{{ paste_list.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <input class="btn btn-default btn-xs" type="submit" value="添加" />
+    </form>
   {% endif %}
 {% endmacro %}

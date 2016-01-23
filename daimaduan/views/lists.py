@@ -1,3 +1,4 @@
+# coding: utf-8
 from flask import abort
 from flask import Blueprint
 from flask import render_template
@@ -19,7 +20,18 @@ list_app = Blueprint("list_app", __name__, template_folder="templates")
 def index():
     page = get_page()
 
-    pagination = PasteList.objects(is_private=False).paginate(page, per_page=20)
+    pagination = PasteList.objects(is_private=False).order_by('-updated_at').paginate(page, per_page=20)
+
+    return render_template('lists/index.html',
+                           pagination=pagination)
+
+
+@list_app.route('/mine', methods=['GET'])
+@login_required
+def my_list():
+    page = get_page()
+
+    pagination = PasteList.objects(user=current_user.user).order_by('-updated_at').paginate(page, per_page=20)
 
     return render_template('lists/index.html',
                            pagination=pagination)
@@ -52,6 +64,14 @@ def add_paste():
         abort(404)
     paste_list = PasteList.objects(hash_id=request.form['paste_list_id']).get_or_404()
     paste = Paste.objects(hash_id=request.form['paste_hash_id']).get_or_404()
+    if paste in paste_list.pastes:
+        return render_template('error.html',
+                               title=u'该代码集合已经在码单中',
+                               message=u'该代码集合已经在码单中')
+    if len(paste_list.pastes) >= 10:
+        return render_template('error.html',
+                               title=u'一个码单最多只能有10个代码集合',
+                               message=u'一个码单最多只能有10个代码集合')
     if paste not in paste_list.pastes:
         paste_list.pastes.append(paste)
         paste_list.save()

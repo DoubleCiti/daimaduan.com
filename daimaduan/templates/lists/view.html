@@ -7,7 +7,7 @@
 
 {% block title %}{{ paste_list.title }}{% endblock %}
 {% block content %}
-<h4 class="page-header">{{ paste_list.title }} 里的代码
+<h4 class="page-header">{{ paste_list.title }}
   {% if current_user.is_authenticated and current_user.user == paste_list.user %}
   <form class="inline action"
         action="{{ url_for('list_app.delete_list', hash_id=paste_list.hash_id) }}"

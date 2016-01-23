@@ -33,7 +33,9 @@
       {% endif %}
       {% if current_user.is_authenticated %}
         {{ like_paste_button(current_user.user, paste) }}
-        {{ add_to_list_form(paste, paste_lists) }}
+        <div class="pull-right">
+          {{ add_to_list_form(paste, paste_lists) }}
+        </div>
       {% endif %}
 
       <div class="pull-right">

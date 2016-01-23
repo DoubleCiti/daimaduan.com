@@ -33,7 +33,7 @@
           </a>
           <ul class="dropdown-menu">
             <li><a href="/user/{{ current_user.username }}">我的主页</a></li>
-            <!--<li><a href="/user/favourites">我的收藏</a></li>-->
+            <li><a href="{{ url_for('list_app.my_list') }}">我的码单</a></li>
             <li class="divider"></li>
             <li><a href="/messages"><i class="icon-envelope"></i> 系统消息</a></li>
             <!-- <li><a href="/manage"><i class="icon-cog"></i> 设置</a></li>
