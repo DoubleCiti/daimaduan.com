@@ -10,7 +10,7 @@
             this.page.identifier = '{{ identifier }}';
             {% if sig %}
             this.page.remote_auth_s3 = "{{ message }} {{ sig }} {{ timestamp }}";
-            this.page.api_key = "{{ config['site.disqus_public_key'] }}";
+            this.page.api_key = "{{ config['DISQUS']['public_key'] }}";
             {% endif %}
 
             this.sso = {
