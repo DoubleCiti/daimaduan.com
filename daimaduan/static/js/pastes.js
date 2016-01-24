@@ -8,43 +8,6 @@
     })
   }
 
-  function initCodes() {
-    $(document).on('click', '#one_more', function(event) {
-      event.preventDefault();
-
-      var i = $("#codes > .code").length;
-      var $code = $('.code').last().clone();
-
-      $code.find('input').first().attr('name', 'codes-' + i + '-title');
-      $code.find('input').first().val('');
-      $code.find('select').first().attr('name', 'codes-' + i + '-syntax');
-      $code.find('select').first().val('');
-      $code.find('textarea').first().attr('name', 'codes-' + i + '-content');
-      $code.find('textarea').first().val('');
-
-      $code.find('div.form-group').last().css('display', 'block');
-
-      $code.appendTo('#codes');
-    });
-
-    $(document).on('click', '.remove-code', function(event) {
-      event.preventDefault();
-      var i = $("#codes > .code").length;
-      if (i == 1) {
-        $(this).attr('disabled', 'disabled');
-      } else {
-        $(this).parent().parent().parent().remove();
-        $.each($("#codes > .code"), function(i, code) {
-          $(code).find('input').first().attr('name', 'codes-' + i + '-title');
-          $(code).find('select').first().attr('name', 'codes-' + i + '-tag');
-          $(code).find('textarea').first().attr('name', 'codes-' + i + '-content');
-        });
-      }
-
-    });
-
-  }
-
   function renderLikePasteAction(data) {
     data.text = data.liked ? '取消喜欢' : '喜欢';
     data.class_name = data.liked ? 'unlike' : 'like';
@@ -115,7 +78,6 @@
 
   $(document).ready(function() {
     initPaste();
-    initCodes();
     initGetMore();
     initSearchGetMore();
     initPasteEditor();

@@ -64,6 +64,9 @@ config.cfg
 
 .DS_Store
 
+# Configurations
+/daimaduan/custom_settings.py
+
 # Assets
 /daimaduan/static/lib
 /daimaduan/static/.webassets-cache
