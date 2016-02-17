@@ -17,7 +17,6 @@ pluggy==0.3.1
 py==1.4.30
 pycrypto==2.6.1
 pyflakes==0.8.1
-pymongo==2.8
 six==1.9.0
 tox==2.1.1
 virtualenv==13.1.2
@@ -31,3 +30,4 @@ blinker==1.4
 Pygments==2.0.2
 celery==3.1.19
 markdown==2.6.5
+-e git+https://github.com/DoubleCiti/mongodb-migrations.git#egg=mongodb-migrations

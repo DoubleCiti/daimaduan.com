@@ -9,7 +9,6 @@ dependency_links = []
 with open('requirements.txt') as f:
     for line in f.read().splitlines():
         if 'egg=' in line:
-            install_requires.append(re.sub(r'.*egg=', '', line))
             dependency_links.append(line)
         else:
             install_requires.append(line)
