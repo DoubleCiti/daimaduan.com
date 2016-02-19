@@ -20,7 +20,7 @@ class CodeForm(Form):
 class PasteForm(Form):
     title = StringField(u'标题')
     is_private = BooleanField(u'我想要这段代码私有')
-    codes = FieldList(FormField(CodeForm))
+    codes = FieldList(FormField(CodeForm), min_entries=1)
     tags = StringField(u'标签')
 
     def validate_tags(self, field):

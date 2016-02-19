@@ -6,6 +6,7 @@ from flask import Flask
 from flask_gravatar import Gravatar
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
+from flask.ext.log import Logging
 
 from daimaduan.extensions import assets
 from daimaduan.utils.filters import datetimeformat
@@ -16,16 +17,19 @@ from daimaduan.utils.filters import time_passed
 
 # set default CONFIG to config.cfg
 if not os.environ.get('CONFIG', None):
-    os.environ['CONFIG'] = 'config.cfg'
+    os.environ['CONFIG'] = 'custom_settings.py'
 
 
 db = MongoEngine()
 login_manager = LoginManager()
+flask_log = Logging()
 
 app = Flask(__name__)
 app.config.from_object('daimaduan.default_settings')
 app.config.from_envvar('CONFIG')
+
 db.init_app(app)
+flask_log.init_app(app)
 celery = Celery(__name__)
 celery.conf.add_defaults(app.config)
 

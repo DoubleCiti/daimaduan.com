@@ -21,7 +21,7 @@ from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
-
+from daimaduan.utils import logger
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
 
@@ -44,6 +44,7 @@ def save_paste_and_codes(form, paste=None):
     paste.is_private = form.is_private.data
     paste.codes = []
     tags = {}
+
     for tag in form.tags.data.split():
         tags[tag.lower()] = tag.lower()
     for i, c in enumerate(form.codes):
@@ -88,9 +89,10 @@ def create_paste():
             followers = User.objects(followers=user)
             for follower in followers:
                 create_message(follower, paste)
-            return redirect('/paste/%s' % paste.hash_id)
-        return render_template('pastes/create.html',
-                               form=form)
+            return jsonify(success=True, hash_id=paste.hash_id)
+        else:
+            logger.info('Failed saving paste for reason: %s', form.errors)
+            return jsonify(success=False, errors=form.errors)
 
 
 @paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])

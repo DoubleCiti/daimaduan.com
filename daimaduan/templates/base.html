@@ -17,6 +17,7 @@
 
 		<script type="text/javascript">
 			var app = {};
+			app.rootUrl = '{{ request.url_root[0:-1] }}';
 
 			{% if current_user.is_authenticated -%}
 			app.current_user = {
@@ -47,6 +48,7 @@
 		{% include 'shared/script_disqus.html' %}
 
 		{% if config['site.analytics'] %}{% include 'shared/analytics.html' %}{% endif %}
+		<!--
 		<script type="text/javascript">
 		(function() {
 			var po = document.createElement('script');
@@ -56,5 +58,6 @@
 			s.parentNode.insertBefore(po, s);
 		})();
 		</script>
+		-->
 	</body>
 </html>

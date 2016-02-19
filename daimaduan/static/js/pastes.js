@@ -53,8 +53,8 @@
           title: "",
           is_private: false,
           codes: [_.clone(newCode)]  
-        }
-        
+        },
+        errors: {}
       },
       computed: {
         codeRemovable: function() {
@@ -62,6 +62,14 @@
         }
       },
       methods: {
+        codeHasError: function(index, field) {
+          try {
+            var error = this.errors.codes[index][field];
+            return error ? 'has-error' : '';
+          } catch(e) {
+            return '';
+          }
+        },
         addCode: function() {
           this.paste.codes.push(_.clone(newCode));
         },
@@ -69,8 +77,22 @@
           this.paste.codes.$remove(code);
         },
         submitPaste: function() {
-          console.log(JSON.stringify(this.paste, null, "  "));
-          alert("Not implemented.");
+          var self = this;
+          var url = app.rootUrl + '/paste/create';
+
+          $.ajax({
+            url: url,
+            method: 'POST',
+            dataType: 'json',
+            data: $('#form-paste').serialize(),
+            success: function(data) {
+              if (data.success) {
+
+              } else {
+                self.errors = data.errors;
+              }
+            }
+          });
         }
       }
     });
@@ -78,8 +100,6 @@
 
   $(document).ready(function() {
     initPaste();
-    initGetMore();
-    initSearchGetMore();
     initPasteEditor();
 
     $('.input-group-embed').on('click', selectEmbedCode);

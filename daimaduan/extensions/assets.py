@@ -8,8 +8,6 @@ js = Bundle('lib/vue/dist/vue.js',
             'js/lexers.js',
             'js/app.js',
             'js/pastes.js',
-            'js/tags.js',
-            'js/users.js',
             filters='uglifyjs', output='js/compiled.js')
 assets.register('js_all', js)
 
