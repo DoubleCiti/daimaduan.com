@@ -87,7 +87,7 @@
             data: $('#form-paste').serialize(),
             success: function(data) {
               if (data.success) {
-
+                document.location = '/paste/' + data.hash_id;
               } else {
                 self.errors = data.errors;
               }

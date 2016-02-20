@@ -15,7 +15,7 @@
                 v-model="code.syntax"
                 name="codes-{{ index }}-syntax">
           <option v-for="lexer in lexers"
-                  value="{{ lexer.value }}">{{ lexer.name }}</option>
+                  v-bind:value="lexer.value">{{ lexer.name }}</option>
         </select>  
       </div>
     </div>

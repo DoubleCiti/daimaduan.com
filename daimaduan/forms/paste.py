@@ -11,9 +11,14 @@ from wtforms.validators import InputRequired, ValidationError
 from daimaduan.models.syntax import Syntax
 
 
+class NonValidatingSelectField(SelectField):
+    def pre_validate(self, form):
+        pass
+
+
 class CodeForm(Form):
     title = StringField(u'片段描述')
-    syntax = SelectField(u'语法', choices=[(s.key, s.name) for s in Syntax.objects().order_by('name')])
+    syntax = NonValidatingSelectField(u'语法', choices=[(s.key, s.name) for s in Syntax.objects().order_by('name')])
     content = TextAreaField(u'代码片段', validators=[InputRequired(message=u'不能为空！')])
 
 
