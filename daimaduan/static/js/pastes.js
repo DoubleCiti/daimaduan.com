@@ -44,16 +44,14 @@
   }
 
   function initPasteEditor() {
+    if ($('#form-paste').size() == 0) return;
+
     var newCode = { title: "", syntax: "text", content: "" };
     var codes = new Vue({
       el: "#form-paste",
       data: {
         lexers: lexers,
-        paste: {
-          title: "",
-          is_private: false,
-          codes: [_.clone(newCode)]  
-        },
+        paste: app.paste,
         errors: {}
       },
       computed: {
@@ -78,10 +76,10 @@
         },
         submitPaste: function() {
           var self = this;
-          var url = app.rootUrl + '/paste/create';
+          var url = app.rootUrl;
 
           $.ajax({
-            url: url,
+            url: document.location.href,
             method: 'POST',
             dataType: 'json',
             data: $('#form-paste').serialize(),

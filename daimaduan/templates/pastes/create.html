@@ -4,11 +4,17 @@
 {% block title %}粘贴新代码{% endblock %}
 
 {% block content %}
-{% include 'shared/form_errors.html' %}
+<script type="text/javascript">
+app.paste = {
+  title: "",
+  is_private: false,
+  codes: [{ title: "", syntax: "text", content: "" }]
+};
+</script>
+
 <h4 class="page-header">分享代码</h4>
 
-<form action="{{ url_for('paste_app.create_paste') }}" method="POST" enctype="multipart/form-data" id="form-paste">
-
+<form id="form-paste">
   <div class="form-group">
     <input type="text" class="form-control" placeholder="描述一下这段代码集合（选填）" v-model="paste.title" name="title" autofocus />
   </div>
