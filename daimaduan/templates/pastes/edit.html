@@ -23,7 +23,10 @@ app.paste = {{ data | tojson | safe }};
 
   <div class="codes">
     {% include "pastes/form_code.html" %}
-    <button type="button" class="btn btn-default" @click="addCode()">
+    <button type="button"
+            class="btn btn-default"
+            @click="addCode()"
+            v-if="codeIncreasable">
       {{ fa_icon("plus", text="增加一个片断") }}
     </button>
   </div>

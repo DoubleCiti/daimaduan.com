@@ -18,14 +18,17 @@ class NonValidatingSelectField(SelectField):
 
 class CodeForm(Form):
     title = StringField(u'片段描述')
-    syntax = NonValidatingSelectField(u'语法', choices=[(s.key, s.name) for s in Syntax.objects().order_by('name')])
-    content = TextAreaField(u'代码片段', validators=[InputRequired(message=u'不能为空！')])
+    syntax = NonValidatingSelectField(u'语法')
+    content = TextAreaField(u'代码片段',
+                            validators=[
+                                InputRequired(message=u'不能为空！')
+                            ])
 
 
 class PasteForm(Form):
     title = StringField(u'标题')
     is_private = BooleanField(u'我想要这段代码私有')
-    codes = FieldList(FormField(CodeForm), min_entries=1)
+    codes = FieldList(FormField(CodeForm), min_entries=1, max_entries=7)
     tags = StringField(u'标签')
 
     def validate_tags(self, field):

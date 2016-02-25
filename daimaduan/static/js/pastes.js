@@ -57,6 +57,9 @@
       computed: {
         codeRemovable: function() {
           return this.paste.codes.length > 1;
+        },
+        codeIncreasable: function() {
+          return this.paste.codes.length < 7;
         }
       },
       methods: {
