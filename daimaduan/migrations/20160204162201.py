@@ -24,8 +24,7 @@ ALL_SUPPORTTED_SYNTAX = (
     ('swift', 'Swift'),
     ('js', 'JavaScript'),
     ('puppet', 'Puppet'),
-    ('groovy', 'Groovy'),
-    ('groovy', 'Gradle'),
+    ('groovy', 'Groovy/Gradle'),
     ('python', 'Python'),
     ('scss', 'SCSS'),
     ('lua', 'Lua'),
@@ -49,7 +48,7 @@ OLD_SYNTAX_NEW_SYNTAX = {
     'less': 'CSS',
     'access-log': 'Text only',
     'vim-script': 'VimL',
-    'gradle': 'Gradle',
+    'gradle': 'Groovy',
     'nginx': 'Nginx configuration file',
     'text': 'Text only',
     'javascript': 'JavaScript'
