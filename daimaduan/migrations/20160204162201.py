@@ -50,8 +50,7 @@ OLD_SYNTAX_NEW_SYNTAX = {
     'vim-script': 'VimL',
     'gradle': 'Groovy',
     'nginx': 'Nginx configuration file',
-    'text': 'Text only',
-    'javascript': 'JavaScript'
+    'text': 'Text only'
 }
 
 
@@ -127,8 +126,12 @@ class Migration(BaseMigration):
                 if code['tag'] in new_syntax_keys:
                     syntax = self.db.syntax.find_one({'name': re.compile(code['tag'], re.IGNORECASE)})
                 else:
-                    syntax = self.db.syntax.find_one(
-                        {'name': re.compile(OLD_SYNTAX_NEW_SYNTAX[code['tag']], re.IGNORECASE)})
+                    if code['tag'] in OLD_SYNTAX_NEW_SYNTAX.keys():
+                        syntax = self.db.syntax.find_one(
+                            {'name': re.compile(OLD_SYNTAX_NEW_SYNTAX[code['tag']], re.IGNORECASE)})
+                    else:
+                        re_string = code['tag'].replace('+', '\+')
+                        syntax = self.db.syntax.find_one({'name': re.compile(re_string, re.IGNORECASE)})
                 tag = self.db.tag.find_one({'key': syntax['key']})
                 if tag:
                     tags.append(tag['_id'])
