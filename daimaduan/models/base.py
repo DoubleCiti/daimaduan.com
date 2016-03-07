@@ -83,7 +83,7 @@ class Code(db.EmbeddedDocument):
 
     @property
     def highlight_content(self):
-        lexer = get_lexer_by_name(self.syntax.key, stripall=True)
+        lexer = get_lexer_by_name(self.syntax.syntax, stripall=True)
         formatter = HtmlFormatter(linenos=True, cssclass='highlight')
         return highlight(self.content, lexer, formatter)
 
