@@ -78,6 +78,9 @@ def deploy(app_env):
     run('ln -s %s/%s/daimaduan %s/current' % (app_path, dist, app_path))
     run('cp %s/shared/config.cfg %s/current' % (app_path, app_path))
     run('cp %s/shared/deploy.py %s/current' % (app_path, app_path))
+    run('mkdir -p %s/current/static/.webassets-cache' % app_path)
+    run('chmod 777 %s/current/static/.webassets-cache' % app_path)
+    run('chmod 777 %s/current/static/js/compiled.js' % app_path)
 
     # touching uwsgi ini file will reload this app
     sudo('touch /etc/uwsgi.d/daimaduan_%s.ini' % app_env)
