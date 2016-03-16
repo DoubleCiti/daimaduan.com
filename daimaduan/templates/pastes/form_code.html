@@ -1,0 +1,40 @@
+{% raw %}
+<div class="panel panel-default panel-code"
+     v-for="(index, code) in paste.codes">
+  <div class="panel-heading">
+    <div class="trash-wrapper">
+      <button type="button" class="btn btn-default btn-block"
+              @click="removeCode(code)"
+              :disabled="!codeRemovable">
+        <span class="fa fa-trash"></span>
+      </button>
+    </div>
+    <div class="syntax-wrapper">
+      <div class="form-group {{ codeHasError(index, 'syntax') }}">
+        <select class="form-control"
+                v-model="code.syntax"
+                name="codes-{{ index }}-syntax">
+          <option v-for="lexer in lexers"
+                  v-bind:value="lexer.value">{{ lexer.name }}</option>
+        </select>  
+      </div>
+    </div>
+
+    <div class="title-wrapper">
+      <input type="text"
+             class="form-control"
+             v-model="code.title"
+             name="codes-{{ index }}-title"
+             placeholder="描述一下这个代码片断（选填）" />
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="form-group {{ codeHasError(index, 'content') }}">
+      <textarea class="form-control" rows="8"
+                v-model="code.content"
+                name="codes-{{ index }}-content"
+                placeholder=""></textarea>
+    </div>
+  </div>
+</div>
+{% endraw %}

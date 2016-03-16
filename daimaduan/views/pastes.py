@@ -21,7 +21,7 @@ from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
-
+from daimaduan.utils import logger
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
 
@@ -44,6 +44,7 @@ def save_paste_and_codes(form, paste=None):
     paste.is_private = form.is_private.data
     paste.codes = []
     tags = {}
+
     for tag in form.tags.data.split():
         tags[tag.lower()] = tag.lower()
     for i, c in enumerate(form.codes):
@@ -78,8 +79,8 @@ def save_paste_and_codes(form, paste=None):
 def create_paste():
     if request.method == 'GET':
         # missing csrf
-        return render_template('pastes/create.html',
-                               form=PasteForm(data={'codes': [{'title': '', 'content': ''}]}))
+        form = PasteForm(data={'codes': [{'title': '', 'content': ''}]})
+        return render_template('pastes/create.html', form=form)
     else:
         form = PasteForm(request.form)
         if form.validate():
@@ -88,9 +89,12 @@ def create_paste():
             followers = User.objects(followers=user)
             for follower in followers:
                 create_message(follower, paste)
-            return redirect('/paste/%s' % paste.hash_id)
-        return render_template('pastes/create.html',
-                               form=form)
+            return jsonify(success=True, hash_id=paste.hash_id)
+        else:
+            errors = form.errors
+            errors['codes'] = [code.errors for code in form.codes]
+            logger.info('Failed saving paste for reason: %s', errors)
+            return jsonify(success=False, errors=errors)
 
 
 @paste_app.route('/<hash_id>/edit', methods=['GET', 'POST'])
@@ -98,30 +102,34 @@ def create_paste():
 @user_active_required
 def edit_paste(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
+
     if not paste.is_user_owned(current_user.user):
         abort(404)
+
     if request.method == 'GET':
         tags = []
         syntaxes = [code.syntax.name for code in paste.codes]
         for tag in paste.tags:
             if tag.name not in syntaxes:
                 tags.append(tag.name)
-        data = {'title': paste.title,
+        data = {'hash_id': paste.hash_id,
+                'title': paste.title,
                 'is_private': paste.is_private,
                 'tags': ' '.join(tags),
                 'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax.key} for code in paste.codes]}
-        form = PasteForm(data=data)
         return render_template('pastes/edit.html',
-                               form=form,
-                               paste=paste)
+                               paste=paste,
+                               data=data)
     else:
         form = PasteForm(request.form)
         if form.validate():
             paste = save_paste_and_codes(form, paste=paste)
-            return redirect('/paste/%s' % paste.hash_id)
-        return render_template('pastes/edit.html',
-                               form=form,
-                               paste=paste)
+            return jsonify(success=True, hash_id=paste.hash_id)
+        else:
+            errors = form.errors
+            errors['codes'] = [code.errors for code in form.codes]
+            logger.info('Failed saving paste for reason: %s', errors)
+            return jsonify(success=False, errors=errors)
 
 
 @paste_app.route('/<hash_id>', methods=['GET'])

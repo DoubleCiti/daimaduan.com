@@ -3,7 +3,10 @@ from flask_assets import Environment
 
 assets = Environment()
 
-js = Bundle('js/app.js',
+js = Bundle('lib/vue/dist/vue.js',
+            'lib/underscore/underscore.js',
+            'js/lexers.js',
+            'js/app.js',
             'js/pastes.js',
             filters='uglifyjs', output='js/compiled.js')
 assets.register('js_all', js)

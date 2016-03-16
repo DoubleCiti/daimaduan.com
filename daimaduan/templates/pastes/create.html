@@ -1,68 +1,58 @@
-{% extends 'base.html' %}
+{% extends 'base.html' -%}
+{% from 'macros/common.html' import fa_icon -%}
+
 {% block title %}粘贴新代码{% endblock %}
 
 {% block content %}
-{% include 'shared/form_errors.html' %}
-<form class="form-horizontal" action="{{ url_for('paste_app.create_paste') }}" method="POST" enctype="multipart/form-data">
-  <div class="panel panel-default">
-    <div class="panel-heading">分享代码</div>
-    <div class="panel-body">
-      <div class="form-group">
-        <div class="col-md-12">
-          {{ form.title(class_="form-control", placeholder="描述一下这段代码集合(选填)", autofocus=true) }}
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-md-12">
-          <label>{{ form.is_private() }} 我想要将这段代码私有</label>
-        </div>
-      </div>
-      <div class="form-group">
-        {{ form.tags.label(class="control-label col-sm-2") }}
-        <div class="col-md-10">{{ form.tags(class="form-control", placeholder="你还可以给这个代码集合添加3个标签, 用空格来分割") }}</div>
-      </div>
-      <div id="codes">
-        {% for code in form.codes %}
-        <div class="well code">
-          <div class="form-group">
-            {{ code.title.label(class="control-label col-sm-2") }}
-            <div class="col-md-9">{{ code.title(class="form-control", placeholder="描述一下这个代码片段(选填)") }}</div>
-          </div>
-          <div class="form-group">
-            {{ code.syntax.label(class="control-label col-sm-2") }}
-            <div class="col-md-9">{{ code.syntax(class="form-control") }}</div>
-          </div>
-          <div class="form-group">
-            {{ code.content.label(class="control-label col-sm-2") }}
-            <div class="col-md-9">{{ code.content(class="form-control", rows="10", required=true) }}</div>
-          </div>
-          <div class="form-group" style="display:none;">
-            <div class="col-sm-10 pull-right">
-              <input type="button" class="btn btn-danger remove-code" value="去掉这段代码" />
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="form-group">
-        <div class="col-sm-10">
-          <input type="submit" class="btn btn-primary" value="分享这段代码集合" />
-          <button id="one_more" class="btn btn-default">增加一个片段</button>
-        </div>
-      </div>
-    </div>
+<script type="text/javascript">
+app.paste = {
+  title: "",
+  is_private: false,
+  codes: [{ title: "", syntax: "text", content: "" }]
+};
+</script>
+
+<h4 class="page-header">分享代码</h4>
+
+<form id="form-paste">
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="描述一下这段代码集合（选填）" v-model="paste.title" name="title" autofocus />
   </div>
+  
+  <div class="form-group">
+    <label><input type="checkbox" v-model="paste.is_private" name="is_private" /> 我想要将这段代码私有</label>
+  </div>
+
+  <div class="codes">
+    {% include "pastes/form_code.html" %}
+    <button type="button"
+            class="btn btn-default"
+            @click="addCode()"
+            v-if="codeIncreasable">
+      {{ fa_icon("plus", text="增加一个片断") }}
+    </button>
+  </div>
+
+  <hr/>
+
+  <div class="form-group text-center">
+    <button type="button"
+            class="btn btn-primary btn-lg"
+            @click="submitPaste()">分享这段代码集合</button>
+  </div>
+
 </form>
 {% endblock %}
+
 {% block sidebar %}
-<h2 class="new-paste-title">
-  <span></span>
-  小贴士
-</h2>
-<p class="lh24 pt15">
-  <li>每一个代码集合可以有多个代码片段</li>
-  <li>添加一个代码片段只需要点击"添加一个片段"即可</li>
-  <li>每个代码片段可以有自己的描述和语法</li>
-  <li>勾选"私有"后可以将代码集合隐藏, 只有知道链接的人才可以访问到</li>
-</p>
+  <h2 class="new-paste-title">
+    <span></span>
+    小贴士
+  </h2>
+  <p class="lh24 pt15">
+    <li>每一个代码集合可以有多个代码片段</li>
+    <li>添加一个代码片段只需要点击"添加一个片段"即可</li>
+    <li>每个代码片段可以有自己的描述和语法</li>
+    <li>勾选"私有"后可以将代码集合隐藏, 只有知道链接的人才可以访问到</li>
+  </p>
 {% endblock %}

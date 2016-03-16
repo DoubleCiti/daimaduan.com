@@ -17,6 +17,7 @@
 
 		<script type="text/javascript">
 			var app = {};
+			app.rootUrl = '{{ request.url_root[0:-1] }}';
 
 			{% if current_user.is_authenticated -%}
 			app.current_user = {
@@ -38,7 +39,6 @@
 
 		{% include 'shared/footer.html' %}
 
-		<script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
 		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 		<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		{% assets "js_all" %}
@@ -47,6 +47,7 @@
 		{% include 'shared/script_disqus.html' %}
 
 		{% if config['site.analytics'] %}{% include 'shared/analytics.html' %}{% endif %}
+		<!--
 		<script type="text/javascript">
 		(function() {
 			var po = document.createElement('script');
@@ -56,5 +57,6 @@
 			s.parentNode.insertBefore(po, s);
 		})();
 		</script>
+		-->
 	</body>
 </html>
