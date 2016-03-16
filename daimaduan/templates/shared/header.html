@@ -12,8 +12,9 @@
 
     <div class="navbar-collapse collapse" id="navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="/">首页</a></li>
-        <li><a href="/tags">标签</a></li>
+        <li><a href="{{ url_for('site_app.index') }}">首页</a></li>
+        <li><a href="{{ url_for('site_app.tags') }}">标签</a></li>
+        <li><a href="{{ url_for('bookmark_app.index') }}">收藏夹</a></li>
       </ul>
 
       <form action="/search" class="navbar-form navbar-left">
@@ -32,7 +33,7 @@
           </a>
           <ul class="dropdown-menu">
             <li><a href="/user/{{ current_user.username }}">我的主页</a></li>
-            <!--<li><a href="/user/favourites">我的收藏</a></li>-->
+            <li><a href="{{ url_for('bookmark_app.my_list') }}">我的收藏夹</a></li>
             <li class="divider"></li>
             <li><a href="/messages"><i class="icon-envelope"></i> 系统消息</a></li>
             <!-- <li><a href="/manage"><i class="icon-cog"></i> 设置</a></li>

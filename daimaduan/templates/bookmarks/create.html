@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}创建新的码单{% endblock %}
+
+{% block content %}
+{% include 'shared/form_errors.html' %}
+<form class="form-horizontal" action="{{ url_for('bookmark_app.create_list') }}" method="POST" enctype="multipart/form-data">
+  {{ form.csrf_token }}
+  <div class="panel panel-default">
+    <div class="panel-heading">创建新的码单</div>
+    <div class="panel-body">
+      <div class="form-group">
+        <div class="col-md-12">
+          {{ form.title(class_="form-control", placeholder="描述一下这段代码集合(选填)", autofocus=true) }}
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-12">
+          <label>{{ form.is_private() }} 我想要将这段代码私有</label>
+        </div>
+      </div>
+      <div class="form-group">
+        {{ form.description.label(class="control-label col-sm-2") }}
+        <div class="col-md-9">{{ form.description(class="form-control", rows="10") }}</div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-10">
+          <input type="submit" class="btn btn-primary" value="创建" />
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+{% block sidebar %}
+<h2 class="new-paste-title">
+  <span></span>
+  小贴士
+</h2>
+<p class="lh24 pt15">
+  <li>每一个代码集合可以有多个代码片段</li>
+  <li>添加一个代码片段只需要点击"添加一个片段"即可</li>
+  <li>每个代码片段可以有自己的描述和语法</li>
+  <li>勾选"私有"后可以将代码集合隐藏, 只有知道链接的人才可以访问到</li>
+</p>
+{% endblock %}
