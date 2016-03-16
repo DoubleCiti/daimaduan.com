@@ -10,12 +10,12 @@
 <h4 class="page-header">{{ paste_list.title }}
   {% if current_user.is_authenticated and current_user.user == paste_list.user %}
   <form class="inline action"
-        action="{{ url_for('list_app.delete_list', hash_id=paste_list.hash_id) }}"
+        action="{{ url_for('bookmark_app.delete_list', hash_id=paste_list.hash_id) }}"
         method="post">
     <span class="pull-right">
       <button type="submit"
               class="btn btn-danger btn-xs action action-del">
-        {{ fa_icon('trash') }} <span>删除这个码单</span>
+        {{ fa_icon('trash') }} <span>删除这个收藏夹</span>
       </button>
     </span>
   </form>

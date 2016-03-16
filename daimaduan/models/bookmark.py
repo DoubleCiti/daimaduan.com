@@ -4,7 +4,7 @@ from daimaduan.models import BaseDocument
 from daimaduan.models.base import User
 
 
-class PasteList(BaseDocument):
+class Bookmark(BaseDocument):
     user = db.ReferenceField(User)
 
     hash_id = db.StringField(unique=True)
@@ -15,7 +15,7 @@ class PasteList(BaseDocument):
     pastes = db.ListField(db.ReferenceField('Paste'))
 
     def save(self, *args, **kwargs):
-        self.create_hash_id(self.user.salt, 'paste_list')
+        self.create_hash_id(self.user.salt, 'bookmark')
         if not self.title:
-            self.title = u"码单: %s" % self.hash_id
-        super(PasteList, self).save(*args, **kwargs)
+            self.title = u"收藏夹: %s" % self.hash_id
+        super(Bookmark, self).save(*args, **kwargs)

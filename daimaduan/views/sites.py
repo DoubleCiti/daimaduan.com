@@ -25,6 +25,7 @@ from daimaduan.models import LoginManagerUser
 from daimaduan.models.base import Code
 from daimaduan.models.base import Paste
 from daimaduan.models.base import User
+from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.tag import Tag
 from daimaduan.models.user_oauth import UserOauth
 from daimaduan.utils.email_confirmation import send_confirm_email
@@ -109,6 +110,10 @@ def signup():
             user = User()
             form.populate_obj(user)
             user.save()
+            bookmark = Bookmark()
+            bookmark.user = user
+            bookmark.title = u"%s 的收藏夹" % user.username
+            bookmark.save()
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
             send_confirm_email(current_app.config, user.email)

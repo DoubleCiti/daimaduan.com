@@ -17,7 +17,7 @@ from daimaduan.forms.paste import PasteForm
 from daimaduan.models.base import Paste, Code, User
 from daimaduan.models.message import Message
 from daimaduan.models.message_category import NEW_PASTE
-from daimaduan.models.paste_list import PasteList
+from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
@@ -144,7 +144,7 @@ def view_paste(hash_id):
         # generate our hmac signature
         sig = hmac.HMAC(current_app.config['DISQUS']['secret_key'], '%s %s' % (message, timestamp), hashlib.sha1).hexdigest()
 
-        paste_lists = PasteList.objects(user=current_user.user)
+        paste_lists = Bookmark.objects(user=current_user.user)
 
     return render_template('pastes/view.html',
                            paste=paste,
