@@ -1,9 +1,14 @@
+import json
+from operator import itemgetter
+
 from fabric.decorators import task
 
 from daimaduan.models.syntax import Syntax
 
 
-ALL_SUPPORTTED_SYNTAX = (
+DIST_FILE = 'daimaduan/static/js/lexers.js'
+
+ALL_SUPPORTED_SYNTAX = (
     # ('brainfuck', 'brainfuck', 'Brainfuck'),
     # ('cirru', 'cirru', 'Cirru'),
     # ('nimrod', 'nimrod', 'Nimrod'),
@@ -362,6 +367,19 @@ ALL_SUPPORTTED_SYNTAX = (
 )
 
 
+def lexer_parser(lexer):
+    return {"name": lexer[2], "value": lexer[0]}
+
+
+def get_lexers():
+    lexers = map(lexer_parser, ALL_SUPPORTED_SYNTAX)
+    return sorted(lexers, key=itemgetter("name"))
+
+
+def lexer_dumps(lexer):
+    return json.dumps(lexer)
+
+
 @task
 def seed():
     """Seed syntax data in MongoDB"""
@@ -371,5 +389,12 @@ def seed():
             print "Seeding syntax: %s, %s, %s" % (key, syntax, name)
             Syntax(key=key, syntax=syntax, name=name).save()
 
-    for key, syntax, name in ALL_SUPPORTTED_SYNTAX:
+    for key, syntax, name in ALL_SUPPORTED_SYNTAX:
         find_or_create_syntax(key, syntax, name)
+
+    print "Generating %s" % DIST_FILE
+    with open(DIST_FILE, "w") as f:
+        lexers = get_lexers()
+        lexers_code = ", ".join(map(lexer_dumps, lexers))
+        f.write("var lexers = [%s];" % lexers_code)
+        print "  %d lexers created." % len(lexers)
