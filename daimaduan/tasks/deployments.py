@@ -30,6 +30,7 @@ NEWRELIC_APPLICATION_ID = {
 @task
 def pack():
     """Create a new source distribution as tarball"""
+    local('tower install')
     local('python setup.py sdist --formats=gztar', capture=False)
 
 
