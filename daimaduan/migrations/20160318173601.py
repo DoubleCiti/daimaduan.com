@@ -30,7 +30,7 @@ class Migration(BaseMigration):
         def generate_hash_id():
             return hashlib.sha1('%s%s%s' % (salt, string, str(time.time()))).hexdigest()[:11]
         hash_id = generate_hash_id()
-        while(self.db.bookmark(hash_id=hash_id).first() is not None):
+        while(self.db.bookmark.find_one({'hash_id': hash_id}) is not None):
             hash_id = generate_hash_id()
 
         return hash_id
