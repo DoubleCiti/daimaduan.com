@@ -126,14 +126,15 @@ class Migration(BaseMigration):
             tags = []
             for code_id in code_ids:
                 code = codes[code_id]
-                if code['tag'] in new_syntax_keys:
-                    syntax = self.db.syntax.find_one({'name': re.compile(code['tag'], re.IGNORECASE)})
+                old_syntax = code['tag']
+                if old_syntax in new_syntax_keys:
+                    syntax = self.db.syntax.find_one({'key': re.compile(old_syntax, re.IGNORECASE)})
                 else:
-                    if code['tag'] in OLD_SYNTAX_NEW_SYNTAX.keys():
+                    if old_syntax in OLD_SYNTAX_NEW_SYNTAX.keys():
                         syntax = self.db.syntax.find_one(
-                            {'name': re.compile(OLD_SYNTAX_NEW_SYNTAX[code['tag']], re.IGNORECASE)})
+                            {'name': re.compile(OLD_SYNTAX_NEW_SYNTAX[old_syntax], re.IGNORECASE)})
                     else:
-                        re_string = code['tag'].replace('+', '\+')
+                        re_string = old_syntax.replace('+', '\+')
                         syntax = self.db.syntax.find_one({'name': re.compile(re_string, re.IGNORECASE)})
                 tag = self.db.tag.find_one({'key': syntax['key']})
                 if tag:

@@ -11,6 +11,7 @@ class Bookmark(BaseDocument):
     title = db.StringField(required=True)
     description = db.StringField()
     is_private = db.BooleanField(default=False)
+    is_default = db.BooleanField(default=False)
 
     pastes = db.ListField(db.ReferenceField('Paste'))
 

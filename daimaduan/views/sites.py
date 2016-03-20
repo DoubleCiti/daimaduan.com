@@ -110,9 +110,9 @@ def signup():
             user = User()
             form.populate_obj(user)
             user.save()
-            bookmark = Bookmark()
-            bookmark.user = user
-            bookmark.title = u"%s 的收藏夹" % user.username
+            bookmark = Bookmark(user=user,
+                                title=u"%s 的收藏夹" % user.username,
+                                is_default=True)
             bookmark.save()
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
