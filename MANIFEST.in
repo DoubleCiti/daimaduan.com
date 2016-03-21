@@ -3,3 +3,4 @@ include fabfile.py
 recursive-include daimaduan/templates *
 recursive-include daimaduan/static *
 recursive-exclude daimaduan/static/.webassets-cache *
+recursive-exclude daimaduan/static/lib *
