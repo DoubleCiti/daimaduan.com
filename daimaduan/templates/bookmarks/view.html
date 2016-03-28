@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% from 'macros/users.html' import render_user_panel with context %}
-{% from 'macros/pastes.html' import render_paste_item %}
+{% from 'macros/pastes.html' import render_paste_item with context %}
 {% from 'macros/common.html' import render_pagination %}
 {% from 'macros/common.html' import fa_icon %}
 
-{% block title %}{{ paste_list.title }}{% endblock %}
+{% block title %}{{ bookmark.title }}{% endblock %}
 {% block content %}
-<h4 class="page-header">{{ paste_list.title }}
-  {% if current_user.is_authenticated and current_user.user == paste_list.user %}
+<h4 class="page-header">{{ bookmark.title }}
+  {% if current_user.is_authenticated and current_user.user == bookmark.user %}
   <form class="inline action"
-        action="{{ url_for('bookmark_app.delete_list', hash_id=paste_list.hash_id) }}"
+        action="{{ url_for('bookmark_app.delete', hash_id=bookmark.hash_id) }}"
         method="post">
     <span class="pull-right">
       <button type="submit"
@@ -23,12 +23,12 @@
 </h4>
 
 <section class="pastes">
-	{% for paste in paste_list.pastes %}
+	{% for paste in bookmark.pastes %}
 		{{ render_paste_item(paste) }}
 	{% endfor %}
 </section>
 {% endblock %}
 
 {% block sidebar %}
-  {{ render_user_panel(paste_list.user) }}
+  {{ render_user_panel(bookmark.user) }}
 {% endblock %}

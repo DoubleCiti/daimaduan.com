@@ -26,6 +26,18 @@
             0条评论
           </span>
         </a>
+        {% if bookmark_hash_id %}
+        <form class="inline action"
+              action="{{ url_for('bookmark_app.remove_paste') }}"
+              method="post">
+          <input type="hidden" name="paste_hash_id" value="{{ paste.hash_id }}" />
+          <input type="hidden" name="bookmark_id" value="{{ bookmark_hash_id }}" />
+            <button type="submit"
+                    class="btn btn-link btn-xs action action-del">
+              {{ fa_icon('trash') }} <span>将此代码移出收藏夹</span>
+            </button>
+        </form>
+        {% endif %}
       </div>
 
       <h5 class="media-heading">

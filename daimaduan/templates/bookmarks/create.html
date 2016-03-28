@@ -3,7 +3,7 @@
 
 {% block content %}
 {% include 'shared/form_errors.html' %}
-<form class="form-horizontal" action="{{ url_for('bookmark_app.create_list') }}" method="POST" enctype="multipart/form-data">
+<form class="form-horizontal" action="{{ url_for('bookmark_app.create') }}" method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
   <div class="panel panel-default">
     <div class="panel-heading">创建新的码单</div>

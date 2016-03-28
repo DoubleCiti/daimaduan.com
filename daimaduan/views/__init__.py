@@ -20,6 +20,10 @@ def error_404(error):
 
 @app.errorhandler(500)
 def error_500(error):
+    if error.description:
+        message = error.description
+    else:
+        message = u"服务器开小差了, 晚点再来吧!"
     return render_template('error.html',
                            title=u"服务器错误",
-                           message=u"服务器开小差了, 晚点再来吧!")
+                           message=message)
