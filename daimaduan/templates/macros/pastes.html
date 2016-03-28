@@ -86,12 +86,12 @@
   </div><!-- /input-group -->
 {% endmacro %}
 
-{% macro add_to_list_form(paste, paste_lists) %}
+{% macro add_to_bookmark_form(paste, paste_lists) %}
   {% if paste_lists %}
     <form class="form-inline" action="{{ url_for('bookmark_app.add_paste') }}" method="POST">
       <input type="hidden" name="paste_hash_id" value="{{ paste.hash_id }}" />
       <div class="form-group">
-        <select class="form-control input-sm" name="paste_list_id">
+        <select class="form-control input-sm" name="bookmark_id">
           {% for paste_list in paste_lists %}
             <option value="{{ paste_list.hash_id }}">{{ paste_list.title }}</option>
           {% endfor %}

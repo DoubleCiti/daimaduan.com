@@ -9,7 +9,7 @@
 {% block content %}
 <h4 class="page-header">最新收藏夹
   <span class="pull-right">
-    <a class="btn btn-xs btn-success" href="{{ url_for('bookmark_app.create_list') }}">{{ fa_icon('plus-square') }} 创建一个收藏夹</a>
+    <a class="btn btn-xs btn-success" href="{{ url_for('bookmark_app.create') }}">{{ fa_icon('plus-square') }} 创建一个收藏夹</a>
   </span>
 </h4>
 <section>
@@ -22,14 +22,14 @@
         </div>
         <div class="media-body">
           <div class="paste-metas pull-right">
-            <a href="{{ url_for('bookmark_app.view_list', hash_id=li.hash_id) }}" class="text-muted">
+            <a href="{{ url_for('bookmark_app.view', hash_id=li.hash_id) }}" class="text-muted">
               <span class="fa fa-file-code-o"></span>
               {{ li.pastes | length }}个代码集合
             </a>
           </div>
 
           <h5 class="media-heading">
-            <a href="{{ url_for('bookmark_app.view_list', hash_id=li.hash_id) }}">
+            <a href="{{ url_for('bookmark_app.view', hash_id=li.hash_id) }}">
               {{ li.title  }}
               {{ render_private(li) }}
             </a>
