@@ -112,11 +112,10 @@ def deploy(app_env):
     if len(versions) > 4:
         versions = ["%s/%s" % (app_path, i) for i in versions]
         versions_to_delete = " ".join(versions[3:])
-        print versions_to_delete
-        # run('rm -rf %s' % versions_to_delete)
+        run('rm -rf %s' % versions_to_delete)
 
     # send deployments notification to newrelic
-    # version = local('python setup.py --version', capture=True).strip()
-    # local('curl -H "x-api-key:%s" -d "deployment[application_id]=%s" '
-    #       '-d "deployment[revision]=%s" -d "deployment[user]=David Xie" '
-    #       'https://api.newrelic.com/deployments.xml' % (newrelic_key, NEWRELIC_APPLICATION_ID[app_env], version))
+    version = local('python setup.py --version', capture=True).strip()
+    local('curl -H "x-api-key:%s" -d "deployment[application_id]=%s" '
+          '-d "deployment[revision]=%s" -d "deployment[user]=David Xie" '
+          'https://api.newrelic.com/deployments.xml' % (newrelic_key, NEWRELIC_APPLICATION_ID[app_env], version))

@@ -1,6 +1,6 @@
-import sys
-import re
 import subprocess
+import sys
+
 from setuptools import setup, find_packages
 
 # get requirements
@@ -23,7 +23,7 @@ if err:
 
 setup(
     name='daimaduan.com',
-    version='2.2+%s' % out.strip(),
+    version='2.3+%s' % out.strip(),
     long_description=__doc__,
     url='https://github.com/DoubleCiti/daimaduan.com',
     author='David Xie',
