@@ -2,5 +2,5 @@ include requirements.txt
 include fabfile.py
 recursive-include daimaduan/templates *
 recursive-include daimaduan/static *
+recursive-include daimaduan/migrations *
 recursive-exclude daimaduan/static/.webassets-cache *
-recursive-exclude daimaduan/static/lib *
