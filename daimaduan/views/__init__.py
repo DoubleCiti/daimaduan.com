@@ -20,7 +20,7 @@ def error_404(error):
 
 @app.errorhandler(500)
 def error_500(error):
-    if error.description:
+    if hasattr(error, 'description'):
         message = error.description
     else:
         message = u"服务器开小差了, 晚点再来吧!"
