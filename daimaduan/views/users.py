@@ -4,12 +4,14 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import session
-from flask_login import current_user, login_required
+from flask_login import current_user
+from flask_login import login_required
 from flask_login import login_user
 
 from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models import LoginManagerUser
 from daimaduan.models.base import User, Paste
+from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
 
@@ -27,6 +29,10 @@ def manage():
             user = User(email=form.email.data, username=form.username.data,
                         is_email_confirmed=True)
             user.save()
+            bookmark = Bookmark(user=user,
+                                title=u"%s 的收藏夹" % user.username,
+                                is_default=True)
+            bookmark.save()
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
             if 'email' in session:
@@ -67,6 +73,7 @@ def view_likes(username):
 
 
 @user_app.route('/<username>/watch', methods=['POST'])
+@login_required
 def watch_user(username):
     be_followed_user = User.objects(username=username).first_or_404()
 
@@ -78,6 +85,7 @@ def watch_user(username):
 
 
 @user_app.route('/<username>/unwatch', methods=['POST'])
+@login_required
 def unwatch_user(username):
     be_followed_user = User.objects(username=username).first_or_404()
 
