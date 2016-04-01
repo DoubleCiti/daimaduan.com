@@ -1,5 +1,8 @@
 DEBUG = True
 
+# Set it to 'INFO' in production
+FLASK_LOG_LEVEL = 'DEBUG'
+
 # Enable Flask-Assets debug mode.
 ASSETS_DEBUG = False
 
