@@ -13,7 +13,13 @@ assets.register('js_all', js)
 
 css = Bundle('css/app.scss',
              'css/pastes.scss',
-             # 'css/embed.scss',
-             filters='scss', output='css/compiled.css')
+             'css/embed.scss',
+             # 'css/bootstrap.min.css',
+             # 'css/colorful.min.css',
+             filters='scss,cssmin', output='css/compiled.css')
 
 assets.register('css_all', css)
+
+embed = Bundle('css/embed.scss', filters='scss,cssmin', output='css/embed.css')
+
+assets.register('embed', embed)

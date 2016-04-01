@@ -1,5 +1,6 @@
-{% set root_url = url_for() -%}
-document.write('<link rel="stylesheet" href="{{ root_url }}/static/css/embed.css" />');
+{% assets "embed" -%}
+document.write('<link href="//{{ domain }}{{ ASSET_URL }}" rel="stylesheet">');
+{% endassets -%}
 {% for code in paste.codes -%}
 document.write('<div class="daimaduan-code" id="paste-{{ paste.hash_id }}">');
 document.write('<div class="daimaduan-code-block">');
