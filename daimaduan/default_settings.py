@@ -1,7 +1,7 @@
 DEBUG = True
 
 # Enable Flask-Assets debug mode.
-ASSETS_DEBUG = True
+ASSETS_DEBUG = False
 
 MONGODB_SETTINGS = {
     'host': '127.0.0.1',

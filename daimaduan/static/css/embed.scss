@@ -30,7 +30,7 @@
 }
 .daimaduan-code-block {
 	overflow-x: auto;
-	overflow-y: none;
+	overflow-y: hidden;
 	.linenos {
 		background: white;
 		padding: 5px 8px;
@@ -190,7 +190,7 @@
 		color: #555555;
 	}
 	.nt {
-		color: navy_blue;
+		color: blue;
 	}
 	.nv {
 		color: teal;

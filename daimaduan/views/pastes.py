@@ -208,6 +208,6 @@ def delete(hash_id):
 def embed_js(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
 
-    resp = make_response(render_template('pastes/embed.js', paste=paste), 200)
+    resp = make_response(render_template('pastes/embed.html', paste=paste, domain=current_app.config['DOMAIN']), 200)
     resp.headers['Content-Type'] = 'text/javascript; charset=utf-8'
     return resp
