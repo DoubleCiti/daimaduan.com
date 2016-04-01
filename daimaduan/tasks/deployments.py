@@ -77,7 +77,7 @@ def deploy(app_env):
         run('%s/venv/bin/python setup.py develop > /dev/null 2>&1' % app_path)
     run('rm -f %s/current' % app_path)
     run('ln -s %s/%s/daimaduan %s/current' % (app_path, dist, app_path))
-    run('cp %s/shared/config.cfg %s/current' % (app_path, app_path))
+    run('cp %s/shared/custom_settings.py %s/current' % (app_path, app_path))
     run('cp %s/shared/deploy.py %s/current' % (app_path, app_path))
     run('mkdir -p %s/current/static/.webassets-cache' % app_path)
     run('chmod 777 %s/current/static/.webassets-cache' % app_path)
