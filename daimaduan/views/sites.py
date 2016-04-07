@@ -314,5 +314,5 @@ def search_paste():
 
 @site_app.route('/messages', methods=['GET'])
 @login_required
-def view_messages():
+def messages():
     return render_template('users/messages.html')

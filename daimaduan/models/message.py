@@ -12,7 +12,8 @@ TITLES = {
 }
 
 
-class Message(db.EmbeddedDocument):
+class Message(db.Document):
+    user = db.ReferenceField('User')
     category = db.StringField(choices=CHOICES)
     content = db.StringField()
     is_read = db.BooleanField(default=False)

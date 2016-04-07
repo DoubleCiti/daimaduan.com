@@ -43,7 +43,7 @@ def manage():
 
 
 @user_app.route('/<username>', methods=['GET'])
-def view_user(username):
+def view(username):
     page = get_page()
     user = User.objects.get_or_404(username=username)
 

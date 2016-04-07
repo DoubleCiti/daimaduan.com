@@ -20,7 +20,6 @@ class User(BaseDocument):
     salt = db.StringField()
     is_email_confirmed = db.BooleanField(default=False)
     email_confirmed_on = db.DateTimeField(default=None)
-    messages = db.ListField(db.EmbeddedDocumentField(Message))
 
     oauths = db.ListField(db.ReferenceField(UserOauth))
 
