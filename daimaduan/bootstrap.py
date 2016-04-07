@@ -60,7 +60,7 @@ gravatar = Gravatar(app,
                     force_default=False,
                     force_lower=False,
                     use_ssl=True,
-                    base_url=None)
+                    base_url='https://cn.gravatar.com/')
 
 # app.config.load_config('%s/config.cfg' % get_current_path())
 # # Check if there's a key in env variables
