@@ -11,12 +11,15 @@ js = Bundle('lib/vue/dist/vue.js',
             filters='uglifyjs', output='js/compiled.js')
 assets.register('js_all', js)
 
-css = Bundle('css/app.scss',
-             'css/pastes.scss',
-             'css/embed.scss',
-             # 'css/bootstrap.min.css',
-             # 'css/colorful.min.css',
-             filters='scss,cssmin', output='css/compiled.css')
+scss = Bundle('css/app.scss',
+              'css/pastes.scss',
+              'css/embed.scss',
+              filters='scss')
+
+css = Bundle('css/bootstrap.min.css',
+             'css/colorful.min.css',
+             scss,
+             filters='cssmin', output='css/compiled.css')
 
 assets.register('css_all', css)
 
