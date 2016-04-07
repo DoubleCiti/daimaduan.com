@@ -5,3 +5,8 @@ recursive-include daimaduan/static *
 recursive-include daimaduan/migrations *
 exclude daimaduan/custom_settings.py
 recursive-exclude daimaduan/static/.webassets-cache *
+recursive-exclude daimaduan/static/css *
+recursive-exclude daimaduan/static/js *
+recursive-exclude daimaduan/static/lib *
+include daimaduan/static/css/compiled.css
+include daimaduan/static/js/compiled.js
