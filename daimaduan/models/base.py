@@ -58,9 +58,6 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
-    def gravatar_url(self, width=80):
-        return "https://cn.gravatar.com/avatar/%s?s=%d" % (hashlib.md5(self.email).hexdigest(), width)
-
     @classmethod
     def find_by_oauth(cls, provider, openid):
         """Find user that has oauth info with given provider and openid"""
@@ -118,10 +115,6 @@ class Paste(BaseDocument):
     def increase_views(self):
         self.views = self.views + 1
         self.save()
-
-    @property
-    def disqus_identifier(self):
-        return 'paste-%s' % self.hash_id
 
     def is_user_owned(self, user):
         return self.user == user

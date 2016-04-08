@@ -42,7 +42,6 @@
     {% assets "js_all" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
-    {% include 'shared/script_disqus.html' %}
 
     {% if config['GOOGLE_ANALYTICS'] %}{% include 'shared/google_analytics.html' %}{% endif %}
     {% if config['BAIDU_ANALYTICS'] %}{% include 'shared/baidu_analytics.html' %}{% endif %}
