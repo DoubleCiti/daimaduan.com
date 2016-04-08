@@ -79,17 +79,18 @@ def add_paste():
         bookmark.pastes.append(paste)
         bookmark.save()
 
-        content = BOOKMARK.format(user_username=current_user.user.username,
-                                  user_url=url_for('user_app.view', username=current_user.user.username),
-                                  paste_title=paste.title,
-                                  paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id),
-                                  bookmark_title=bookmark.title,
-                                  bookmark_url=url_for('bookmark_app.view', hash_id=bookmark.hash_id))
+        if bookmark.user != paste.user:
+            content = BOOKMARK.format(user_username=current_user.user.username,
+                                      user_url=url_for('user_app.view', username=current_user.user.username),
+                                      paste_title=paste.title,
+                                      paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id),
+                                      bookmark_title=bookmark.title,
+                                      bookmark_url=url_for('bookmark_app.view', hash_id=bookmark.hash_id))
 
-        message = Message(user=paste.user,
-                          who=bookmark.user,
-                          content=content)
-        message.save()
+            message = Message(user=paste.user,
+                              who=bookmark.user,
+                              content=content)
+            message.save()
 
     return redirect(url_for('bookmark_app.view', hash_id=bookmark.hash_id))
 

@@ -154,15 +154,16 @@ def comments(hash_id):
                           paste=paste,
                           content=form.content.data)
         comment.save()
-        content = NEW_COMMENT.format(user_username=current_user.user.username,
-                                     user_url=url_for('user_app.view', username=current_user.user.username),
-                                     paste_title=paste.title,
-                                     paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
+        if comment.user != paste.user:
+            content = NEW_COMMENT.format(user_username=current_user.user.username,
+                                         user_url=url_for('user_app.view', username=current_user.user.username),
+                                         paste_title=paste.title,
+                                         paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
 
-        message = Message(user=paste.user,
-                          who=current_user.user,
-                          content=content)
-        message.save()
+            message = Message(user=paste.user,
+                              who=current_user.user,
+                              content=content)
+            message.save()
 
     return redirect(url_for('paste_app.view_paste', hash_id=hash_id))
 
@@ -198,14 +199,15 @@ def like(hash_id):
     if not is_user_liked:
         user.likes.append(paste)
         user.save()
-        content = LIKE.format(user_username=user.username,
-                              user_url=url_for('user_app.view', username=user.username),
-                              paste_title=paste.title,
-                              paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
-        message = Message(user=paste.user,
-                          who=user,
-                          content=content)
-        message.save()
+        if user != paste.user:
+            content = LIKE.format(user_username=user.username,
+                                  user_url=url_for('user_app.view', username=user.username),
+                                  paste_title=paste.title,
+                                  paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
+            message = Message(user=paste.user,
+                              who=user,
+                              content=content)
+            message.save()
     return jsonify(dict(paste_id=hash_id,
                         user_like=len(user.likes),
                         paste_likes=len(user.likes),
