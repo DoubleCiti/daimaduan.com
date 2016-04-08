@@ -1,39 +1,52 @@
-{% macro render_comment_form(identifier) -%}
-    <div id="disqus_thread"></div>
-    <script>
-        /**
-         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-         */
-
-        var disqus_config = function () {
-            this.page.identifier = '{{ identifier }}';
-            {% if sig %}
-            this.page.remote_auth_s3 = "{{ message }} {{ sig }} {{ timestamp }}";
-            this.page.api_key = "{{ config['DISQUS']['public_key'] }}";
-            {% endif %}
-
-            this.sso = {
-              name:    "代码段",
-              button:  "https://{{ config['DOMAIN'] }}/static/images/favicon.ico",
-              icon:    "https://{{ config['DOMAIN'] }}/static/images/favicon.ico",
-              url:     "https://{{ config['DOMAIN'] }}/signin",
-              logout:  "https://{{ config['DOMAIN'] }}/signout",
-              width:   "800",
-              height:  "400"
-            };
-        };
-
-        (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
-            var d = document, s = d.createElement('script');
-
-            s.src = '//{{ config['DISQUS']['short_name'] }}.disqus.com/embed.js';  // IMPORTANT: Replace EXAMPLE with your forum shortname!
-
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+{% macro render_comments(paste) -%}
+  <div href="#comments">
+    <h4>{{ paste.comments_count }} 条评论</h4>
+    <hr />
+        {% for comment in paste.comments.items %}
+          <div class="media">
+            <div class="media-left">
+              <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">
+                <img class="img-rounded" alt="{{ comment.user.username }}" src="{{ comment.user.email | gravatar(size=38) }}"/>
+              </a>
+            </div>
+            <div class="media-body">
+              <div class="pull-right">
+                <a href="{{ url_for('paste_app.edit_comment', paste_id=paste.hash_id, hash_id=comment.hash_id) }}" class="btn btn-xs text-muted">
+                  <i class="fa fa-pencil"></i>
+                  <span>编辑</span>
+                </a>
+                <a href="{{ url_for('paste_app.delete_comment', paste_id=paste.hash_id, hash_id=comment.hash_id) }}" class="btn btn-xs text-muted action-del">
+                  <i class="fa fa-eraser"></i>
+                  <span>删除</span>
+                </a>
+              </div>
+              <h5 class="media-heading">
+                <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">{{ comment.user.username }}</a>
+                <small class="text-muted">发表于 {{ comment.created_at | time_passed }}</small>
+              </h5>
+              <p>{{ comment.content }}</p>
+            </div>
+          </div>
+        {% endfor %}
+        {{ render_pagination(paste.comments, url_for('paste_app.view_paste', hash_id=paste.hash_id)) }}
+        {% if current_user.is_authenticated %}
+          <div class="media">
+            <div class="media-left">
+              <a href=""><img class="img-rounded" src="{{ current_user.user.email | gravatar(size=38) }}" /></a>
+            </div>
+            <div class="media-body">
+              <form class="form media-heading" action="{{ url_for('paste_app.comments', hash_id=paste.hash_id) }}" method="POST">
+                <div class="form-group">
+                  <textarea name="content" class="form-control" placeholder="开始讨论"></textarea>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">发布</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        {% endif %}
+  </div>
 {%- endmacro %}
 
 {# 快速添加 fa 图标的标签 #}

@@ -21,9 +21,8 @@
         </a>
         <a href="/paste/{{ paste.hash_id }}#comments" class="text-muted">
           <span class="fa fa-file-code-o"></span>
-          <span class="disqus-comment-count"
-                data-disqus-identifier="{{ paste.disqus_identifier }}">
-            0条评论
+          <span class="disqus-comment-count">
+            {{ paste.comments_count }}条评论
           </span>
         </a>
         {% if bookmark_hash_id %}

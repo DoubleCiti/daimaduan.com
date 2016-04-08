@@ -34,3 +34,7 @@ class PasteForm(Form):
     def validate_tags(self, field):
         if len(field.data.split()) > 3:
             raise ValidationError(u'只能添加3个标签')
+
+
+class CommentForm(Form):
+    content = StringField(u'评论')

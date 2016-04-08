@@ -2,6 +2,7 @@
 import hashlib
 import time
 
+from daimaduan.utils.pagination import get_page
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -57,9 +58,6 @@ class User(BaseDocument):
     def check_login(self, password):
         return self.generate_password(password) == self.password
 
-    def gravatar_url(self, width=80):
-        return "https://cn.gravatar.com/avatar/%s?s=%d" % (hashlib.md5(self.email).hexdigest(), width)
-
     @classmethod
     def find_by_oauth(cls, provider, openid):
         """Find user that has oauth info with given provider and openid"""
@@ -99,6 +97,15 @@ class Paste(BaseDocument):
 
     views = db.IntField(default=0)
 
+    @property
+    def comments(self):
+        page = get_page()
+        return Comment.objects(paste=self).order_by('-created_at').paginate(page=page, per_page=20)
+
+    @property
+    def comments_count(self):
+        return Comment.objects(paste=self).count()
+
     def save(self, *args, **kwargs):
         self.create_hash_id(self.user.salt, 'paste')
         if not self.title:
@@ -109,13 +116,20 @@ class Paste(BaseDocument):
         self.views = self.views + 1
         self.save()
 
-    @property
-    def disqus_identifier(self):
-        return 'paste-%s' % self.hash_id
-
     def is_user_owned(self, user):
         return self.user == user
 
     @property
     def likes_count(self):
         return User.objects(likes=self).count()
+
+
+class Comment(BaseDocument):
+    hash_id = db.StringField(unique=True)
+    user = db.ReferenceField(User)
+    paste = db.ReferenceField(Paste)
+    content = db.StringField()
+
+    def save(self, *args, **kwargs):
+        self.create_hash_id(self.user.salt, 'comment')
+        super(Comment, self).save(*args, **kwargs)

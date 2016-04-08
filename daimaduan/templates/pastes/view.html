@@ -8,7 +8,7 @@
 {% from 'macros/pastes.html' import del_paste_button %}
 {% from 'macros/pastes.html' import add_to_bookmark_form %}
 {% from 'macros/pastes.html' import embed_paste_button with context  %}
-{% from 'macros/common.html' import render_comment_form with context %}
+{% from 'macros/common.html' import render_comments with context %}
 
 {% block title %}{{ paste.title }}{% endblock %}
 
@@ -50,7 +50,7 @@
     {{ render_code(code) }}
   {% endfor %}
 
-  {{ render_comment_form(paste.disqus_identifier) }}
+  {{ render_comments(paste) }}
 </div>
 {% include 'shared/jiathis.html' %}
 {% endblock %}
