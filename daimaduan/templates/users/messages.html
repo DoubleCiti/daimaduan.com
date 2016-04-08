@@ -1,9 +1,23 @@
 {% extends 'base.html' %}
+{%- from 'macros/common.html' import render_pagination %}
 {% block title %}查看消息{% endblock %}
 {% block content %}
 <h4 class="page-header">全部消息</h4>
 <section class="messages">
   {% for message in pagination.items %}
+    <div class="media">
+      <div class="media-left">
+        <a href="{{ url_for('user_app.view', username=message.who.username) }}">
+          <img class="img-rounded" alt="{{ message.who.username }}" src="{{ message.who.email | gravatar(size=38) }}"/>
+        </a>
+      </div>
+      <div class="media-body">
+        <h5 class="media-heading">{{ message.content | markdown | safe }}</h5>
+        <small class="text-muted">{{ message.created_at | time_passed }}</small>
+      </div>
+    </div>
   {% endfor %}
+
+  {{ render_pagination(pagination, url_for('site_app.messages')) }}
 </section>
 {% endblock %}

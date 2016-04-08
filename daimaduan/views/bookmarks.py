@@ -10,6 +10,8 @@ from flask.ext.login import current_user, login_required
 from daimaduan.forms.bookmark import BookmarkForm
 from daimaduan.models.base import Paste
 from daimaduan.models.bookmark import Bookmark
+from daimaduan.models.message import BOOKMARK
+from daimaduan.models.message import Message
 from daimaduan.utils.pagination import get_page
 
 
@@ -76,6 +78,18 @@ def add_paste():
     if paste not in bookmark.pastes:
         bookmark.pastes.append(paste)
         bookmark.save()
+
+        content = BOOKMARK.format(user_username=current_user.user.username,
+                                  user_url=url_for('user_app.view', username=current_user.user.username),
+                                  paste_title=paste.title,
+                                  paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id),
+                                  bookmark_title=bookmark.title,
+                                  bookmark_url=url_for('bookmark_app.view', hash_id=bookmark.hash_id))
+
+        message = Message(user=paste.user,
+                          who=bookmark.user,
+                          content=content)
+        message.save()
 
     return redirect(url_for('bookmark_app.view', hash_id=bookmark.hash_id))
 

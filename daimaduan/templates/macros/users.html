@@ -12,9 +12,9 @@
 {% endmacro %}
 
 {% macro render_user_watch(user, current_user) %}
-  {% set is_followed = user.is_followed_by(current_user) -%}
-  {% set display = is_followed | ternary('取消关注', '关注') -%}
+  {% set is_following = current_user.is_following(user) -%}
+  {% set display = is_following | ternary('取消关注TA', '关注TA') -%}
   <div class="list-group-item">
-    <button class="btn btn-info btn-xs action action-{{ is_followed | ternary('unwatch', 'watch') }}">{{ display }}</button>
+    <button class="btn btn-info btn-xs action action-{{ is_following | ternary('unwatch', 'watch') }}">{{ display }}</button>
   </div>
 {% endmacro %}

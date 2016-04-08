@@ -1,1 +1,0 @@
-NEW_PASTE = 'NEW_PASTE'

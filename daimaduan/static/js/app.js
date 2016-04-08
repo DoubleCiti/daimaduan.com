@@ -27,7 +27,7 @@ function signoutHandler() {
   }
 
 function switchWatchAction(data) {
-    data.text = data.watchedStatus ? "取消关注" : "关注";
+    data.text = data.watchedStatus ? "取消关注TA" : "关注TA";
     data.class_name = data.watchedStatus ? "unwatch" : "watch";
 
     var new_html = '<button class="btn btn-info btn-xs action action-<%= class_name %>"><%= text %></button>';
