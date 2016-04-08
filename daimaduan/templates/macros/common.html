@@ -5,7 +5,7 @@
         {% for comment in paste.comments.items %}
           <div class="media">
             <div class="media-left">
-              <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">
+              <a href="{{ url_for('user_app.view', username=comment.user.username) }}">
                 <img class="img-rounded" alt="{{ comment.user.username }}" src="{{ comment.user.email | gravatar(size=38) }}"/>
               </a>
             </div>
@@ -23,7 +23,7 @@
               </div>
               {% endif %}
               <h5 class="media-heading">
-                <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">{{ comment.user.username }}</a>
+                <a href="{{ url_for('user_app.view', username=comment.user.username) }}">{{ comment.user.username }}</a>
                 <small class="text-muted">发表于 {{ comment.created_at | time_passed }}</small>
               </h5>
               <p>{{ comment.content }}</p>

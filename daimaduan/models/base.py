@@ -10,7 +10,6 @@ from pygments.lexers import get_lexer_by_name
 from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
 from daimaduan.models.user_oauth import UserOauth
-from daimaduan.models.message import Message
 
 
 class User(BaseDocument):
@@ -20,12 +19,11 @@ class User(BaseDocument):
     salt = db.StringField()
     is_email_confirmed = db.BooleanField(default=False)
     email_confirmed_on = db.DateTimeField(default=None)
-    messages = db.ListField(db.EmbeddedDocumentField(Message))
 
     oauths = db.ListField(db.ReferenceField(UserOauth))
 
     likes = db.ListField(db.ReferenceField('Paste'))
-    followers = db.ListField(db.ReferenceField('User'))
+    followings = db.ListField(db.ReferenceField('User'))
 
     @property
     def pastes(self):
@@ -66,8 +64,8 @@ class User(BaseDocument):
         if oauth and oauth.user:
             return oauth.user
 
-    def is_followed_by(self, user):
-        return user in self.followers
+    def is_following(self, user):
+        return user in self.followings
 
 
 class Code(db.EmbeddedDocument):

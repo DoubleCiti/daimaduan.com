@@ -27,6 +27,7 @@ from daimaduan.models.base import Paste
 from daimaduan.models.base import User
 from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.tag import Tag
+from daimaduan.models.message import Message
 from daimaduan.models.user_oauth import UserOauth
 from daimaduan.utils.email_confirmation import send_confirm_email
 from daimaduan.utils.email_confirmation import send_reset_password_email
@@ -314,5 +315,8 @@ def search_paste():
 
 @site_app.route('/messages', methods=['GET'])
 @login_required
-def view_messages():
-    return render_template('users/messages.html')
+def messages():
+    page = get_page()
+    pagination = Message.objects(user=current_user.user).order_by('-created_at').paginate(page, per_page=20)
+    return render_template('users/messages.html',
+                           pagination=pagination)

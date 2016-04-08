@@ -17,7 +17,7 @@
 
   <hr />
 
-  {{ render_pagination(pagination, url_for('user_app.view_user', username=user.username)) }}
+  {{ render_pagination(pagination, url_for('user_app.view', username=user.username)) }}
 </section><!-- .pastes -->
 {% endblock %}
 

@@ -13,25 +13,18 @@ from daimaduan.models.base import Paste
 from daimaduan.models.base import Code
 from daimaduan.models.base import User
 from daimaduan.models.base import Comment
+from daimaduan.models.message import NEW_PASTE
+from daimaduan.models.message import NEW_COMMENT
+from daimaduan.models.message import LIKE
 from daimaduan.models.message import Message
-from daimaduan.models.message_category import NEW_PASTE
 from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
 from daimaduan.utils import logger
 
+
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
-
-
-def create_message(user, paste):
-    user.messages.append(Message(category=NEW_PASTE,
-                                 content=u"您关注的用户 [%s](%s) 发表了新的代码集合 [%s](%s)" % (
-                                     paste.user.username,
-                                     url_for('user_app.view_user', username=paste.user.username),
-                                     paste.title,
-                                     url_for('paste_app.view_paste', hash_id=paste.hash_id))))
-    user.save()
 
 
 def save_paste_and_codes(form, paste=None):
@@ -84,9 +77,16 @@ def create_paste():
         if form.validate():
             user = current_user.user
             paste = save_paste_and_codes(form)
-            followers = User.objects(followers=user)
+            followers = User.objects(followings=user)
+            content = NEW_PASTE.format(user_username=user.username,
+                                       user_url=url_for('user_app.view', username=user.username),
+                                       paste_title=paste.title,
+                                       paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
             for follower in followers:
-                create_message(follower, paste)
+                message = Message(user=follower,
+                                  who=user,
+                                  content=content)
+                message.save()
             return jsonify(success=True, hash_id=paste.hash_id)
         else:
             errors = form.errors
@@ -154,6 +154,17 @@ def comments(hash_id):
                           paste=paste,
                           content=form.content.data)
         comment.save()
+        if comment.user != paste.user:
+            content = NEW_COMMENT.format(user_username=current_user.user.username,
+                                         user_url=url_for('user_app.view', username=current_user.user.username),
+                                         paste_title=paste.title,
+                                         paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
+
+            message = Message(user=paste.user,
+                              who=current_user.user,
+                              content=content)
+            message.save()
+
     return redirect(url_for('paste_app.view_paste', hash_id=hash_id))
 
 
@@ -188,6 +199,15 @@ def like(hash_id):
     if not is_user_liked:
         user.likes.append(paste)
         user.save()
+        if user != paste.user:
+            content = LIKE.format(user_username=user.username,
+                                  user_url=url_for('user_app.view', username=user.username),
+                                  paste_title=paste.title,
+                                  paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
+            message = Message(user=paste.user,
+                              who=user,
+                              content=content)
+            message.save()
     return jsonify(dict(paste_id=hash_id,
                         user_like=len(user.likes),
                         paste_likes=len(user.likes),

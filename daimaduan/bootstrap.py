@@ -61,17 +61,3 @@ gravatar = Gravatar(app,
                     force_lower=False,
                     use_ssl=True,
                     base_url='https://cn.gravatar.com/')
-
-# app.config.load_config('%s/config.cfg' % get_current_path())
-# # Check if there's a key in env variables
-# # if you want to set config on the fly, use env var
-# # a.b.c in config => A_B_C in env var
-# for key in app.config.keys():
-#     k = key.replace('.', '_').upper()
-#     if k in os.environ:
-#         app.config[key] = os.environ[k]
-# app.config['SECRET_KEY'] = app.config['site.validate_key']
-#
-# oauth_services = {}
-# oauth_services['google'] = OAuth2Service(**oauth_config(app.config, 'google'))
-# oauth_services['github'] = OAuth2Service(**oauth_config(app.config, 'github'))

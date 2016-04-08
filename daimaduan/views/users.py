@@ -4,6 +4,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import session
+from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
@@ -12,6 +13,8 @@ from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models import LoginManagerUser
 from daimaduan.models.base import User, Paste
 from daimaduan.models.bookmark import Bookmark
+from daimaduan.models.message import WATCH
+from daimaduan.models.message import Message
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
 
@@ -43,7 +46,7 @@ def manage():
 
 
 @user_app.route('/<username>', methods=['GET'])
-def view_user(username):
+def view(username):
     page = get_page()
     user = User.objects.get_or_404(username=username)
 
@@ -75,22 +78,29 @@ def view_likes(username):
 @user_app.route('/<username>/watch', methods=['POST'])
 @login_required
 def watch_user(username):
-    be_followed_user = User.objects(username=username).first_or_404()
+    following_user = User.objects(username=username).first_or_404()
 
-    if not be_followed_user.is_followed_by(current_user.user):
-        be_followed_user.followers.append(current_user.user)
-        be_followed_user.save()
+    if not current_user.user.is_following(following_user):
+        current_user.user.followings.append(following_user)
+        current_user.user.save()
 
-    return jsonify(watchedStatus=be_followed_user.is_followed_by(current_user.user))
+        content = WATCH.format(user_username=current_user.user.username,
+                               user_url=url_for('user_app.view', username=current_user.user.username))
+        message = Message(user=following_user,
+                          who=current_user.user,
+                          content=content)
+        message.save()
+
+    return jsonify(watchedStatus=current_user.user.is_following(following_user))
 
 
 @user_app.route('/<username>/unwatch', methods=['POST'])
 @login_required
 def unwatch_user(username):
-    be_followed_user = User.objects(username=username).first_or_404()
+    following_user = User.objects(username=username).first_or_404()
 
-    if be_followed_user.is_followed_by(current_user.user):
-        be_followed_user.followers.remove(current_user.user)
-        be_followed_user.save()
+    if current_user.user.is_following(following_user):
+        current_user.user.followings.remove(following_user)
+        current_user.user.save()
 
-    return jsonify(watchedStatus=be_followed_user.is_followed_by(current_user.user))
+    return jsonify(watchedStatus=current_user.user.is_following(following_user))
