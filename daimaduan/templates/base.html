@@ -1,60 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="代码段是一个优秀的代码分享平台, 用户可以在代码段上分享自己的代码, 查看别人优秀的代码, 甚至收藏别人的代码, 打造一个属于自己的代码库">
-		<meta name="keywords" content="代码, 开发, 平台, 分享">
-		<title>{% block title %}最新代码{% endblock %} - 代码段</title>
-		<link rel="shortcut icon" href="/static/images/favicon.ico" />
-		{% assets "css_all" %}
-		<link href="{{ ASSET_URL }}" rel="stylesheet">
-		{% endassets %}
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="代码段是一个优秀的代码分享平台, 用户可以在代码段上分享自己的代码, 查看别人优秀的代码, 甚至收藏别人的代码, 打造一个属于自己的代码库">
+    <meta name="keywords" content="代码, 开发, 平台, 分享">
+    <title>{% block title %}最新代码{% endblock %} - 代码段</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    {% assets "css_all" %}
+    <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/bootstrap-social/4.11.0/bootstrap-social.min.css" rel="stylesheet">
 
-		<script type="text/javascript">
-			var app = {};
-			app.rootUrl = '{{ request.url_root[0:-1] }}';
+    <script type="text/javascript">
+      var app = {};
+      app.rootUrl = '{{ request.url_root[0:-1] }}';
 
-			{% if current_user.is_authenticated -%}
-			app.current_user = {
-				id: '{{ current_user.id }}',
-				username: '{{ current_user.username }}'
-			};
-			{% endif -%}
-		</script>
+      {% if current_user.is_authenticated -%}
+      app.current_user = {
+        id: '{{ current_user.id }}',
+        username: '{{ current_user.username }}'
+      };
+      {% endif -%}
+    </script>
 
-	</head>
-	<body>
-		{% include 'shared/header.html' %}
+  </head>
+  <body>
+    {% include 'shared/header.html' %}
 
-		<div class="container">
-			<div class="col-md-12">{% block full_content %}{% endblock %}</div>
-			<div class="col-md-9">{% block content %}{% endblock %}</div>
-			<div class="col-md-3">{% block sidebar %}{% endblock %}</div>
-		</div>
+    <div class="container">
+      <div class="col-md-12">{% block full_content %}{% endblock %}</div>
+      <div class="col-md-9">{% block content %}{% endblock %}</div>
+      <div class="col-md-3">{% block sidebar %}{% endblock %}</div>
+    </div>
 
-		{% include 'shared/footer.html' %}
+    {% include 'shared/footer.html' %}
 
-		<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-		<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		{% assets "js_all" %}
-		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
-		{% endassets %}
-		{% include 'shared/script_disqus.html' %}
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {% assets "js_all" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {% include 'shared/script_disqus.html' %}
 
-		{% if config['site.analytics'] %}{% include 'shared/analytics.html' %}{% endif %}
-		<!--
-		<script type="text/javascript">
-		(function() {
-			var po = document.createElement('script');
-			po.type = 'text/javascript'; po.async = true;
-			po.src = 'https://plus.google.com/js/client:plusone.js';
-			var s = document.getElementsByTagName('script')[0];
-			s.parentNode.insertBefore(po, s);
-		})();
-		</script>
-		-->
-	</body>
+    {% if config['GOOGLE_ANALYTICS'] %}{% include 'shared/google_analytics.html' %}{% endif %}
+    {% if config['BAIDU_ANALYTICS'] %}{% include 'shared/baidu_analytics.html' %}{% endif %}
+    <!--
+    <script type="text/javascript">
+    (function() {
+      var po = document.createElement('script');
+      po.type = 'text/javascript'; po.async = true;
+      po.src = 'https://plus.google.com/js/client:plusone.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(po, s);
+    })();
+    </script>
+    -->
+  </body>
 </html>
