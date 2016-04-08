@@ -10,6 +10,7 @@
               </a>
             </div>
             <div class="media-body">
+              {% if current_user.is_authenticated and comment.is_user_owned(current_user.user) %}
               <div class="pull-right">
                 <a href="{{ url_for('paste_app.edit_comment', paste_id=paste.hash_id, hash_id=comment.hash_id) }}" class="btn btn-xs text-muted">
                   <i class="fa fa-pencil"></i>
@@ -20,6 +21,7 @@
                   <span>删除</span>
                 </a>
               </div>
+              {% endif %}
               <h5 class="media-heading">
                 <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">{{ comment.user.username }}</a>
                 <small class="text-muted">发表于 {{ comment.created_at | time_passed }}</small>

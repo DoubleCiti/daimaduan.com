@@ -133,3 +133,6 @@ class Comment(BaseDocument):
     def save(self, *args, **kwargs):
         self.create_hash_id(self.user.salt, 'comment')
         super(Comment, self).save(*args, **kwargs)
+
+    def is_user_owned(self, user):
+        return self.user == user
