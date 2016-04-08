@@ -23,12 +23,6 @@ EMAIL = {
     'password': 'guessme'
 }
 
-DISQUS = {
-    'short_name': 'daimaduan-dev',
-    'secret_key': 'sdgsadg',
-    'public_key': 'sdgasdg'
-}
-
 DOMAIN = 'daimaduan.dev:8080'
 
 OAUTH = {

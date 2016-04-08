@@ -99,6 +99,13 @@ class Paste(BaseDocument):
 
     views = db.IntField(default=0)
 
+    def get_comments(self, page=1):
+        return Comment.objects(paste=self)
+
+    @property
+    def comments_count(self):
+        return Comment.objects(paste=self).count()
+
     def save(self, *args, **kwargs):
         self.create_hash_id(self.user.salt, 'paste')
         if not self.title:
@@ -119,3 +126,9 @@ class Paste(BaseDocument):
     @property
     def likes_count(self):
         return User.objects(likes=self).count()
+
+
+class Comment(BaseDocument):
+    user = db.ReferenceField(User)
+    paste = db.ReferenceField(Paste)
+    content = db.StringField()

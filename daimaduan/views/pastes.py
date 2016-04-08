@@ -1,10 +1,4 @@
 # coding: utf-8
-import base64
-import hashlib
-import hmac
-import json
-import time
-
 from flask import abort, jsonify, url_for
 from flask import current_app, request
 from flask import make_response
@@ -14,7 +8,10 @@ from flask_login import current_user
 from flask_login import login_required
 
 from daimaduan.forms.paste import PasteForm
-from daimaduan.models.base import Paste, Code, User
+from daimaduan.forms.paste import CommentForm
+from daimaduan.models.base import Paste
+from daimaduan.models.base import User
+from daimaduan.models.base import Comment
 from daimaduan.models.message import Message
 from daimaduan.models.message_category import NEW_PASTE
 from daimaduan.models.bookmark import Bookmark
@@ -137,29 +134,26 @@ def view_paste(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     paste.increase_views()
 
-    sig = message = timestamp = None
     paste_lists = []
     if current_user.is_authenticated:
-        # create a JSON packet of our data attributes
-        data = json.dumps({'id': str(current_user.id),
-                           'username': current_user.username,
-                           'email': current_user.email,
-                           'avatar': current_user.user.gravatar_url()})
-        # encode the data to base64
-        message = base64.b64encode(data)
-        # generate a timestamp for signing the message
-        timestamp = int(time.time())
-        # generate our hmac signature
-        sig = hmac.HMAC(current_app.config['DISQUS']['secret_key'], '%s %s' % (message, timestamp), hashlib.sha1).hexdigest()
-
         paste_lists = Bookmark.objects(user=current_user.user)
 
     return render_template('pastes/view.html',
                            paste=paste,
-                           paste_lists=paste_lists,
-                           message=message,
-                           timestamp=timestamp,
-                           sig=sig)
+                           paste_lists=paste_lists)
+
+
+@paste_app.route('/<hash_id>/comments', methods=['POST'])
+def comments(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+
+    form = CommentForm(request.form)
+    if form.validate():
+        comment = Comment(user=current_user.user,
+                          paste=paste,
+                          content=form.content.data)
+        comment.save()
+    return redirect(url_for('paste_app.view_paste', hash_id=hash_id))
 
 
 @paste_app.route('/<hash_id>/like', methods=['POST'])
