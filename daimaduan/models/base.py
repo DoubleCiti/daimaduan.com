@@ -2,6 +2,7 @@
 import hashlib
 import time
 
+from daimaduan.utils.pagination import get_page
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
@@ -99,8 +100,10 @@ class Paste(BaseDocument):
 
     views = db.IntField(default=0)
 
-    def get_comments(self, page=1):
-        return Comment.objects(paste=self)
+    @property
+    def comments(self):
+        page = get_page()
+        return Comment.objects(paste=self).order_by('-created_at').paginate(page=page, per_page=20)
 
     @property
     def comments_count(self):

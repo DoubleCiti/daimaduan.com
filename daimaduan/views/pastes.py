@@ -10,6 +10,7 @@ from flask_login import login_required
 from daimaduan.forms.paste import PasteForm
 from daimaduan.forms.paste import CommentForm
 from daimaduan.models.base import Paste
+from daimaduan.models.base import Code
 from daimaduan.models.base import User
 from daimaduan.models.base import Comment
 from daimaduan.models.message import Message

@@ -2,7 +2,7 @@
   <div>
     <h4>{{ paste.comments_count }} 条评论</h4>
     <hr />
-        {% for comment in paste.get_comments() %}
+        {% for comment in paste.comments.items %}
           <div class="media">
             <div class="media-left">
               <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">
@@ -20,6 +20,7 @@
             </div>
           </div>
         {% endfor %}
+        {{ render_pagination(paste.comments, url_for('paste_app.view_paste', hash_id=paste.hash_id)) }}
         {% if current_user.is_authenticated %}
           <div class="media">
             <div class="media-left">
@@ -28,7 +29,7 @@
             <div class="media-body">
               <form class="form media-heading" action="{{ url_for('paste_app.comments', hash_id=paste.hash_id) }}" method="POST">
                 <div class="form-group">
-                  <textarea name="content" class="form-control"></textarea>
+                  <textarea name="content" class="form-control" placeholder="我来评论一下"></textarea>
                 </div>
                 <div class="form-group">
                   <button type="submit" class="btn btn-primary">发布</button>
