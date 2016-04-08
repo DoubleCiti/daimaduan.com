@@ -1,5 +1,5 @@
 {% macro render_comments(paste) -%}
-  <div>
+  <div href="#comments">
     <h4>{{ paste.comments_count }} 条评论</h4>
     <hr />
         {% for comment in paste.comments.items %}
@@ -11,10 +11,18 @@
             </div>
             <div class="media-body">
               <div class="pull-right">
-                <small class="text-muted">发表于 {{ comment.created_at | time_passed }}</small>
+                <a href="#" class="btn btn-xs text-muted">
+                  <i class="fa fa-pencil"></i>
+                  <span>编辑</span>
+                </a>
+                <a href="#" class="btn btn-xs text-muted">
+                  <i class="fa fa-eraser"></i>
+                  <span>删除</span>
+                </a>
               </div>
               <h5 class="media-heading">
                 <a href="{{ url_for('user_app.view_user', username=comment.user.username) }}">{{ comment.user.username }}</a>
+                <small class="text-muted">发表于 {{ comment.created_at | time_passed }}</small>
               </h5>
               <p>{{ comment.content }}</p>
             </div>

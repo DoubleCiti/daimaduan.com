@@ -132,6 +132,11 @@ class Paste(BaseDocument):
 
 
 class Comment(BaseDocument):
+    hash_id = db.StringField(unique=True)
     user = db.ReferenceField(User)
     paste = db.ReferenceField(Paste)
     content = db.StringField()
+
+    def save(self, *args, **kwargs):
+        self.create_hash_id(self.user.salt, 'comment')
+        super(Comment, self).save(*args, **kwargs)
