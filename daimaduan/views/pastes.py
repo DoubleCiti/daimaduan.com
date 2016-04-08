@@ -157,6 +157,28 @@ def comments(hash_id):
     return redirect(url_for('paste_app.view_paste', hash_id=hash_id))
 
 
+@paste_app.route('/<paste_id>/comments/<hash_id>', methods=['GET', 'POST'])
+def edit_comment(paste_id, hash_id):
+    comment = Comment.objects.get_or_404(hash_id=hash_id)
+    form = CommentForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            comment.content = form.content.data
+            comment.save()
+            return redirect(url_for('paste_app.view_paste', hash_id=paste_id))
+
+    return render_template('pastes/edit_comment.html',
+                           paste_id=paste_id,
+                           comment=comment)
+
+
+@paste_app.route('/<paste_id>/comments/<hash_id>/delete', methods=['GET'])
+def delete_comment(paste_id, hash_id):
+    comment = Comment.objects.get_or_404(hash_id=hash_id)
+    comment.delete()
+    return redirect(url_for('paste_app.view_paste', hash_id=paste_id))
+
+
 @paste_app.route('/<hash_id>/like', methods=['POST'])
 @login_required
 def like(hash_id):

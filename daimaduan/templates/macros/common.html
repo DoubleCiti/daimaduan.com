@@ -11,11 +11,11 @@
             </div>
             <div class="media-body">
               <div class="pull-right">
-                <a href="#" class="btn btn-xs text-muted">
+                <a href="{{ url_for('paste_app.edit_comment', paste_id=paste.hash_id, hash_id=comment.hash_id) }}" class="btn btn-xs text-muted">
                   <i class="fa fa-pencil"></i>
                   <span>编辑</span>
                 </a>
-                <a href="#" class="btn btn-xs text-muted">
+                <a href="{{ url_for('paste_app.delete_comment', paste_id=paste.hash_id, hash_id=comment.hash_id) }}" class="btn btn-xs text-muted action-del">
                   <i class="fa fa-eraser"></i>
                   <span>删除</span>
                 </a>
@@ -37,7 +37,7 @@
             <div class="media-body">
               <form class="form media-heading" action="{{ url_for('paste_app.comments', hash_id=paste.hash_id) }}" method="POST">
                 <div class="form-group">
-                  <textarea name="content" class="form-control" placeholder="我来评论一下"></textarea>
+                  <textarea name="content" class="form-control" placeholder="开始讨论"></textarea>
                 </div>
                 <div class="form-group">
                   <button type="submit" class="btn btn-primary">发布</button>
