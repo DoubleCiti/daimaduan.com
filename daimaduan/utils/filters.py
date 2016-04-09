@@ -65,3 +65,8 @@ def md(value):
     :return:
     """
     return markdown(value)
+
+
+def time_used(value):
+    t = int((time.time() - value) * 1000)
+    return "%sms" % t

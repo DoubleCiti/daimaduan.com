@@ -13,6 +13,7 @@ from daimaduan.utils.filters import datetimeformat
 from daimaduan.utils.filters import md
 from daimaduan.utils.filters import ternary
 from daimaduan.utils.filters import time_passed
+from daimaduan.utils.filters import time_used
 
 
 # set default CONFIG to config.cfg
@@ -46,6 +47,7 @@ app.register_blueprint(tag_app, url_prefix='/tag')
 app.register_blueprint(bookmark_app, url_prefix='/bookmark')
 
 app.jinja_env.filters['time_passed'] = time_passed
+app.jinja_env.filters['time_used'] = time_used
 app.jinja_env.filters['ternary'] = ternary
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['markdown'] = md

@@ -1,7 +1,8 @@
 <div class="container footer">
   <div class="col-md-12">
     <hr />
-    <span>© 2011 - 2015 <a href="https://github.com/DoubleCiti/daimaduan.com">daimaduan.com</a> All right reserved</span>
+    <span>© 2011 - 2016 <a href="https://github.com/DoubleCiti/daimaduan.com">daimaduan.com</a> All right reserved</span>
+    <small class="text-muted">当前版本: {{ config['VERSION'] }} | 发布时间: {{ config['DEPLOYED_AT'] }} | 页面加载时间: {{ g.started_at | time_used }}</small>
     <span class="pull-right">
       <a href="http://blog.daimaduan.com/pages/about/">关于代码段</a> |
       <a href="https://github.com/DoubleCiti/daimaduan.com">项目主页</a> |

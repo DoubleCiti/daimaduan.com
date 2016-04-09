@@ -1,7 +1,15 @@
 # coding: utf-8
+import time
+
+from flask import g
 from flask import render_template
 
 from daimaduan.bootstrap import app
+
+
+@app.before_request
+def before_request():
+    g.started_at = time.time()
 
 
 @app.errorhandler(401)

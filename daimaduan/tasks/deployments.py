@@ -1,5 +1,6 @@
 import sys
 import urllib2
+from datetime import datetime
 
 from fabric.context_managers import cd
 from fabric.decorators import task
@@ -69,6 +70,7 @@ def deploy(app_env):
     versions = [i.strip() for i in out.split("\n")]
     # figure out the release name and version
     dist = local('python setup.py --fullname', capture=True).strip()
+    version = local('python setup.py --version', capture=True).strip()
     # upload the source tarball to the temporary folder on the server
     put('dist/%s.tar.gz' % dist, '%s/%s.tar.gz' % (app_path, dist))
     with cd(app_path):
@@ -78,6 +80,9 @@ def deploy(app_env):
     run('rm -f %s/current' % app_path)
     run('ln -s %s/%s/daimaduan %s/current' % (app_path, dist, app_path))
     run('cp %s/shared/custom_settings.py %s/current' % (app_path, app_path))
+    run('sed "s/VERSION.*/VERSION = \'%s\'/" -i %s/current/custom_settings.py' % (version, app_path))
+    run('sed "s/DEPLOYED_AT.*/DEPLOYED_AT = \'%s\'/" -i %s/current/custom_settings.py' % (
+        datetime.now().strftime('%Y-%m-%d %H:%M:%S'), app_path))
     run('cp %s/shared/deploy.py %s/current' % (app_path, app_path))
 
     # touching uwsgi ini file will reload this app
