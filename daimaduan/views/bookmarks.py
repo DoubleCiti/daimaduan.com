@@ -79,7 +79,7 @@ def add_paste():
         bookmark.pastes.append(paste)
         bookmark.save()
 
-        if bookmark.user != paste.user:
+        if bookmark.user != paste.user and not bookmark.is_private:
             content = BOOKMARK.format(user_username=current_user.user.username,
                                       user_url=url_for('user_app.view', username=current_user.user.username),
                                       paste_title=paste.title,
