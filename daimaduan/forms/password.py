@@ -6,5 +6,5 @@ from wtforms.validators import EqualTo
 
 
 class PasswordForm(Form):
-    password = PasswordField(u'password', validators=[InputRequired()])
+    password = PasswordField(u'密码', validators=[InputRequired()])
     password_confirm = PasswordField(u'密码确认', validators=[EqualTo('password', message=u'两次密码不同')])
