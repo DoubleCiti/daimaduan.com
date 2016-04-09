@@ -77,16 +77,17 @@ def create_paste():
         if form.validate():
             user = current_user.user
             paste = save_paste_and_codes(form)
-            followers = User.objects(followings=user)
-            content = NEW_PASTE.format(user_username=user.username,
-                                       user_url=url_for('user_app.view', username=user.username),
-                                       paste_title=paste.title,
-                                       paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
-            for follower in followers:
-                message = Message(user=follower,
-                                  who=user,
-                                  content=content)
-                message.save()
+            if not paste.is_private:
+                followers = User.objects(followings=user)
+                content = NEW_PASTE.format(user_username=user.username,
+                                           user_url=url_for('user_app.view', username=user.username),
+                                           paste_title=paste.title,
+                                           paste_url=url_for('paste_app.view_paste', hash_id=paste.hash_id))
+                for follower in followers:
+                    message = Message(user=follower,
+                                      who=user,
+                                      content=content)
+                    message.save()
             return jsonify(success=True, hash_id=paste.hash_id)
         else:
             errors = form.errors
