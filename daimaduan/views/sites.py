@@ -182,15 +182,15 @@ def oauth_callback(provider):
 @site_app.route('/lost_password', methods=['GET', 'POST'])
 def lost_password_get():
     if request.method == 'GET':
-        return render_template('user/lost_password.html',
+        return render_template('users/lost_password.html',
                                form=EmailForm())
     else:
-        form = EmailForm(request.forms)
+        form = EmailForm(request.form)
         if form.validate():
             user = User.objects(email=form.email.data).first()
             send_reset_password_email(current_app.config, user.email)
             return redirect('/reset_password_email_sent')
-        return render_template('user/lost_password.html',
+        return render_template('users/lost_password.html',
                                form=form)
 
 
@@ -208,7 +208,7 @@ def reset_password(token):
         if email:
             user = User.objects(email=email).first()
             if user:
-                return render_template('user/reset_password.html',
+                return render_template('users/reset_password.html',
                                        form=PasswordForm(),
                                        token=token)
         abort(404)
@@ -217,12 +217,12 @@ def reset_password(token):
         if email:
             user = User.objects(email=email).first()
             if user:
-                form = PasswordForm()
+                form = PasswordForm(request.form)
                 if form.validate_on_submit():
                     user.password = user.generate_password(form.password.data)
                     user.save()
                     return redirect('/reset_password_success')
-                return render_template('user/reset_password.html',
+                return render_template('users/reset_password.html',
                                        form=PasswordForm(),
                                        token=token)
         abort(404)
