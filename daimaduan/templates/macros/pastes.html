@@ -15,7 +15,8 @@
 
 
 {% macro render_code(code) %}
-<div class="code panel panel-default" id="code-{{ code.hash_id }}">
+<pre>{{ code }}</pre>
+<div class="code panel panel-default">
   <div class="panel-heading">
     <span class="pull-right">{{ render_tag(code.syntax) }}</span>
     {{ code.title }}
@@ -82,7 +83,7 @@
       </button>
     </span>
     <input type="text" class="form-control input-xs"
-           value="<script type=&quot;text/javascript&quot; src=&quot;{{ url_for('paste_app.embed_js', hash_id=paste.hash_id) }}&quot;></script>">
+           value="<script type=&quot;text/javascript&quot; src=&quot;{{ url_for('paste_app.embed_js', hash_id=paste.hash_id, _external=True) }}&quot;></script>">
   </div><!-- /input-group -->
 {% endmacro %}
 
