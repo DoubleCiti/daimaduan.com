@@ -5,6 +5,10 @@
 {%- from 'macros/common.html' import render_pagination %}
 {%- from 'macros/users.html' import render_user_panel with context %}
 
+{% block metatitle %}
+<meta name="title" content="代码段 - {{ user.username }} 发布的代码段">
+{% endblock %}
+
 {% block title %}{{ user.username }} 发布的代码段{% endblock %}
 
 {% block content %}

@@ -5,6 +5,10 @@
 {% from 'macros/common.html' import render_pagination %}
 {% from 'macros/common.html' import fa_icon %}
 
+{% block metatitle %}
+<meta name="title" content="代码段 - {{ bookmark.title }}">
+{% endblock %}
+
 {% block title %}{{ bookmark.title }}{% endblock %}
 {% block content %}
 <h4 class="page-header">{{ bookmark.title }}

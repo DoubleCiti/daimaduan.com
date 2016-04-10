@@ -3,8 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block metatitle %}<meta name="title" content="代码段 - 代码分享平台">{% endblock %}
     <meta name="description" content="代码段是一个优秀的代码分享平台, 用户可以在代码段上分享自己的代码, 查看别人优秀的代码, 甚至收藏别人的代码, 打造一个属于自己的代码库">
-    <meta name="keywords" content="代码, 开发, 平台, 分享">
+    {% block metakeywords %}<meta name="keywords" content="代码, 开发, 平台, 分享">{% endblock %}
     <title>{% block title %}最新代码{% endblock %} - 代码段</title>
     <link rel="shortcut icon" href="/static/images/favicon.ico" />
     {% assets "css_all" %}
