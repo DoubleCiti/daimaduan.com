@@ -61,5 +61,15 @@ OAUTH = {
         'client_id': '572596272656-9urgn16qjoj36c439pecjcjmsogs76au.apps.googleusercontent.com',
         'client_secret': '085d8ac899e236e12feaceb528c9de63aa601d39',
         'scope': 'email profile openid'
+    },
+    'weibo': {
+        'name': 'weibo',
+        'base_url': 'https://api.weibo.com/2/',
+        'authorize_url': 'https://api.weibo.com/oauth2/authorize',
+        'access_token_url': 'https://api.weibo.com/oauth2/access_token',
+        'callback_url': 'http://daimaduan.dev:8080/oauth/weibo/callback',
+        'client_id': '4132254635',
+        'client_secret': '2eadb1b53a550f61aa326b071a38b48e',
+        'scope': ''
     }
 }

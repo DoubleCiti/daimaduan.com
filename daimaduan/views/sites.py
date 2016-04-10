@@ -1,6 +1,7 @@
 # coding: utf-8
 import json
 import re
+import requests
 from datetime import datetime
 from datetime import date
 
@@ -42,6 +43,7 @@ def get_oauth_services():
     oauth_services = {}
     oauth_services['google'] = OAuth2Service(**oauth_config(current_app.config, 'google'))
     oauth_services['github'] = OAuth2Service(**oauth_config(current_app.config, 'github'))
+    oauth_services['weibo'] = OAuth2Service(**oauth_config(current_app.config, 'weibo'))
     return oauth_services
 
 
@@ -169,6 +171,14 @@ def oauth_callback(provider):
         user_info = oauth_session.get('user').json()
         email = session['email'] = user_info['email']
         username = user_info['login']
+    elif provider == 'weibo':
+        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
+        uid = oauth_session.get('account/get_uid.json', params={'access_token': oauth_session.access_token}).json()['uid']
+        email = oauth_session.get('account/profile/email.json', params={'access_token': oauth_session.access_token}).json()
+        current_app.logger.info("Email: %s" % email)
+        user_info = oauth_session.get('users/show.json', params={'access_token': oauth_session.access_token, 'uid': uid}).json()
+        email = None
+        username = user_info['name']
 
     access_token = oauth_session.access_token
     user_info['id'] = str(user_info['id'])
