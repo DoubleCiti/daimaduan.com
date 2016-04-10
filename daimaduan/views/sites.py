@@ -68,11 +68,13 @@ def tags():
                            tags=Tag.objects().order_by('-popularity'))
 
 
-@site_app.route('/status', methods=['GET'])
+@site_app.route('/status.json', methods=['GET'])
 def status():
-    return {'pastes_count': Paste.objects().count(),
-            'codes_count': Code.objects().count(),
-            'users_count': User.objects().count()}
+    return jsonify(version=current_app.config['VERSION'],
+                   pastes=Paste.objects().count(),
+                   bookmarks=Bookmark.objects().count(),
+                   tags=Tag.objects().count(),
+                   users=User.objects().count())
 
 
 @site_app.route('/signin', methods=['GET', 'POST'])
