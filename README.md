@@ -8,32 +8,23 @@ source code of daimaduan.com
 
 * Python 2.7
 * MongoDB 3.0+
+* node.js
+
+## 开发环境配置
+
+在运行服务器程序之前, 需要先准备好本地的开发坏境
+
+```
+npm install -g bower scss uglifyjs bower
+bower install
+```
 
 ## 本地运行开发服务器
 
 1. 启动MongoDB
-2. `cp daimaduan/default_settings.py daimaduan/config.cfg`
+2. `cp daimaduan/default_settings.py daimaduan/custom_settings.py`
 3. `python setup.py develop`
-4. `CONFIG=config.cfg fab run`
-
-## Assets
-
-Flask Assets 提供了下面几个命令
-
-```bash
-python manage.py assets watch
-python manage.py assets build
-python manage.py assets clean
-```
-
-开发时，可以使用 watch 来自动编译脚本变更。
-
-在部署到生产环境时，确保配置项
-
-```ini
-# daimaduan/default_settings.py
-ASSETS_DEBUG = True
-```
+4. `fab run`
 
 ## message bus系统
 
