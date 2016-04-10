@@ -15,6 +15,9 @@ SECRET_KEY = 'Youshouldnotknowthis'
 
 BROKER_URL = 'mongodb://127.0.0.1:27017/daimaduan_celery'
 
+USE_JINJA_CACHE = False
+MEMCACHED_URL = '127.0.0.1:11211'
+
 EMAIL = {
     'salt': "won't tell you",
     'host': 'smtp.gmail.com',

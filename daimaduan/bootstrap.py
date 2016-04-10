@@ -1,12 +1,14 @@
 # coding: utf-8
 import os
 
+import memcache
 from celery import Celery
 from flask import Flask
 from flask_gravatar import Gravatar
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
 from flask.ext.log import Logging
+from jinja2 import MemcachedBytecodeCache
 
 from daimaduan.extensions import assets
 from daimaduan.utils.filters import datetimeformat
@@ -51,6 +53,8 @@ app.jinja_env.filters['time_used'] = time_used
 app.jinja_env.filters['ternary'] = ternary
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['markdown'] = md
+if app.config['USE_JINJA_CACHE']:
+    app.jinja_env.bytecode_cache = MemcachedBytecodeCache(memcache.Client([app.config['MEMCACHED_URL']]))
 
 login_manager.init_app(app)
 assets.init_app(app)
