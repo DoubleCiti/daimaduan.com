@@ -63,6 +63,7 @@ config.cfg
 .newrelic_key
 
 .DS_Store
+.venv
 
 # Configurations
 /daimaduan/custom_settings.py

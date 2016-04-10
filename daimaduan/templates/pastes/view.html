@@ -10,6 +10,13 @@
 {% from 'macros/pastes.html' import embed_paste_button with context  %}
 {% from 'macros/common.html' import render_comments with context %}
 
+{% block metatitle %}
+<meta name="title" content="代码段 - {{ paste.title }}">
+{% endblock %}
+{% block metakeywords %}
+<meta name="keywords" content="{% for tag in paste.tags %}{{ tag.name }}{% endfor %}">
+{% endblock %}
+
 {% block title %}{{ paste.title }}{% endblock %}
 
 {% block content %}

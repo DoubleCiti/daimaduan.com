@@ -15,6 +15,7 @@ source code of daimaduan.com
 在运行服务器程序之前, 需要先准备好本地的开发坏境
 
 ```
+gem install sass
 npm install -g bower scss uglifyjs bower
 bower install
 ```
