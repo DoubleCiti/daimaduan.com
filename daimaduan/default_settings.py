@@ -25,7 +25,7 @@ EMAIL = {
 
 DOMAIN = 'daimaduan.dev:8080'
 
-VERSION = '2.3'
+VERSION = '2.4'
 DEPLOYED_AT = '2016-04-09 16:02:13'
 
 OAUTH = {
