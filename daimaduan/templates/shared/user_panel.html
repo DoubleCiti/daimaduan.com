@@ -29,6 +29,16 @@
       <span class="badge paste-likes-count">{{ user.likes | length }}</span>
       喜欢的代码段
     </a>
+    <div class="center-block text-center row">
+      <a href="{{ url_for('user_app.view_followings', username=user.username) }}" class="col-md-6 fcard">
+        <h3 class="text-primary">{{ user.followings | length }}</h3>
+        <small class="text-muted">关注</small>
+      </a>
+      <a href="{{ url_for('user_app.view_followers', username=user.username) }}" class="col-md-6 fcard">
+        <h3 class="text-primary">{{ user.followers | length }}</h3>
+        <small class="text-muted">粉丝</small>
+      </a>
+    </div>
     {% if current_user.is_authenticated and (user != current_user.user) %}
       {{ render_user_watch(user, current_user.user) }}
     {% endif %}

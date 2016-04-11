@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{%- from 'macros/common.html' import render_pagination %}
+{%- from 'macros/users.html' import render_user_item %}
+
+{% block title %}关注 {{ user.username }} 的用户{% endblock %}
+
+{% block content %}
+<h4 class="page-header">关注 {{ user.username }} 的用户</h4>
+
+<section class="row followings">
+{% for follower in pagination.items %}
+  {{ render_user_item(follower) }}
+{% endfor %}
+</section>
+
+{{ render_pagination(pagination, url_for('user_app.view_followers', username=user.username)) }}
+{% endblock %}

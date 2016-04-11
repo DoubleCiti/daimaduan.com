@@ -5,6 +5,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from flask.ext.mongoengine import Pagination
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
@@ -60,6 +61,30 @@ def view(username):
                            user=user,
                            pagination=pagination,
                            tags=Tag.objects().order_by('-popularity')[:10])
+
+
+@user_app.route('/<username>/followings', methods=['GET'])
+def view_followings(username):
+    page = get_page()
+    user = User.objects.get_or_404(username=username)
+
+    pagination = Pagination(user.followings, page, per_page=20)
+
+    return render_template('users/followings.html',
+                           user=user,
+                           pagination=pagination)
+
+
+@user_app.route('/<username>/followers', methods=['GET'])
+def view_followers(username):
+    page = get_page()
+    user = User.objects.get_or_404(username=username)
+
+    pagination = User.objects(followings=user).paginate(page, per_page=20)
+
+    return render_template('users/followers.html',
+                           user=user,
+                           pagination=pagination)
 
 
 @user_app.route('/<username>/likes', methods=['GET'])

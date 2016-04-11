@@ -18,3 +18,20 @@
     <button class="btn btn-info btn-xs action action-{{ is_following | ternary('unwatch', 'watch') }}">{{ display }}</button>
   </div>
 {% endmacro %}
+
+{% macro render_user_item(user) %}
+  <div class="media col-md-4">
+    <div class="media-left">
+      <a href="{{ url_for('user_app.view', username=user.username) }}">
+        <img class="img-rounded" alt="{{ user.username }}" src="{{ user.email | gravatar(size=38) }}"/>
+      </a>
+    </div>
+    <div class="media-body">
+      <h5 class="media-heading">
+        <a href="{{ url_for('user_app.view', username=user.username) }}">{{ user.username }}</a>
+      </h5>
+      <i class="fa fa-code"></i><small class="text-muted"> {{ user.pastes_count }} 段代码</small>
+      <i class="fa fa-comments"></i><small class="text-muted"> {{ user.comments_count }} 条评论</small>
+    </div>
+  </div>
+{% endmacro %}
