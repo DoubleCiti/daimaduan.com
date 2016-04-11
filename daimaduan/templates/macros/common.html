@@ -71,6 +71,7 @@
 {%- endmacro %}
 
 {%- macro render_pagination(pagination, endpoint) %}
+{% if pagination.pages > 1 %}
 <nav>
   <ul class="pager">
     <li class="previous {{ pagination.has_prev | ternary('', 'disabled') }}">
@@ -90,4 +91,5 @@
     </li>
   </ul>
 </nav>
+{% endif %}
 {%- endmacro %}

@@ -34,6 +34,10 @@ class User(BaseDocument):
         return len(self.pastes)
 
     @property
+    def comments_count(self):
+        return len(Comment.objects(user=self))
+
+    @property
     def private_pastes_count(self):
         return len(self.pastes(is_private=True))
 
@@ -66,6 +70,10 @@ class User(BaseDocument):
 
     def is_following(self, user):
         return user in self.followings
+
+    @property
+    def followers(self):
+        return User.objects(followings=self)
 
 
 class Code(db.EmbeddedDocument):
