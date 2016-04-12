@@ -1,11 +1,10 @@
 # coding: utf-8
 from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
-from daimaduan.models.base import User
 
 
 class Bookmark(BaseDocument):
-    user = db.ReferenceField(User)
+    user = db.ReferenceField('User')
 
     hash_id = db.StringField(unique=True)
     title = db.StringField(required=True)

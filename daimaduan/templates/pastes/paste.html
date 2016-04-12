@@ -12,18 +12,16 @@
     <div class="media-body">
       <div class="paste-metas pull-right">
         <a href="/paste/{{ paste.hash_id }}" class="text-muted">
-          <span class="fa fa-file-code-o"></span>
-          {{ paste.codes | length }}段代码
+          <span class="fa fa-code"></span>{{ paste.codes | length }}
         </a>
         <a href="javascript:;" class="text-muted">
-          <span class="fa fa-heart-o"></span>
-          {{ paste.likes_count }}次喜欢
+          <span class="fa fa-heart-o"></span>{{ paste.likes_count }}
+        </a>
+        <a href="/paste/{{ paste.hash_id }}" class="text-muted">
+          <span class="fa fa-eye"></span>{{ paste.views }}
         </a>
         <a href="/paste/{{ paste.hash_id }}#comments" class="text-muted">
-          <span class="fa fa-file-code-o"></span>
-          <span class="disqus-comment-count">
-            {{ paste.comments_count }}条评论
-          </span>
+          <span class="fa fa-comment"></span>{{ paste.comments_count }}
         </a>
         {% if bookmark_hash_id %}
         <form class="inline action"
@@ -47,7 +45,7 @@
       </h5>
 
       <p class="text-muted">
-        <small>最后更新于{{ paste.updated_at | time_passed }}</small>
+        <small>最后更新于 {{ paste.updated_at | time_passed }}</small>
       </p>
 
     </div>
