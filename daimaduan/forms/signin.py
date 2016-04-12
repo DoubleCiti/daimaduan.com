@@ -7,8 +7,8 @@ from daimaduan.models.base import User
 
 
 class SigninForm(Form):
-    email = StringField(u'email', validators=[InputRequired()])
-    password = PasswordField(u'password', validators=[InputRequired()])
+    email = StringField(u'邮箱地址', validators=[InputRequired()])
+    password = PasswordField(u'密码', validators=[InputRequired()])
 
     def validate(self):
         if not Form.validate(self):

@@ -177,8 +177,32 @@ def oauth_callback(provider):
             login_user(user_mixin)
             return redirect('/')
         else:
-            return render_template('users/manage.html',
+            return render_template('users/finish_signup.html',
                                    form=UserInfoForm(email=email, username=username))
+
+
+@site_app.route('/finish_signup', methods=['POST'])
+def finish_signup():
+    form = UserInfoForm(request.form)
+    if form.validate():
+        if current_user.is_authenticated:
+            current_user.user.username = form.username.data
+            return redirect('/')
+        else:
+            user = User(email=form.email.data, username=form.username.data,
+                        is_email_confirmed=True)
+            user.save()
+            bookmark = Bookmark(user=user,
+                                title=u"%s 的收藏夹" % user.username,
+                                is_default=True)
+            bookmark.save()
+            user_mixin = LoginManagerUser(user)
+            login_user(user_mixin)
+            if 'email' in session:
+                del (session['email'])
+            return redirect('/')
+    return render_template('users/finish_signup.html',
+                           form=form)
 
 
 @site_app.route('/lost_password', methods=['GET', 'POST'])
