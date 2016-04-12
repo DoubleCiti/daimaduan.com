@@ -15,4 +15,5 @@ class Message(db.Document):
     user = db.ReferenceField('User')
     who = db.ReferenceField('User')
     content = db.StringField()
+    is_read = db.BooleanField(default=False)
     created_at = db.DateTimeField(default=datetime.datetime.now)

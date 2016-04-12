@@ -6,7 +6,10 @@
     {% block metatitle %}<meta name="title" content="代码段 - 代码分享平台">{% endblock %}
     <meta name="description" content="代码段是一个优秀的代码分享平台, 用户可以在代码段上分享自己的代码, 查看别人优秀的代码, 甚至收藏别人的代码, 打造一个属于自己的代码库">
     {% block metakeywords %}<meta name="keywords" content="代码, 开发, 平台, 分享">{% endblock %}
-    <title>{% block title %}最新代码{% endblock %} - 代码段</title>
+    <title>
+      {% if g.unread_messages_count > 0 %}({{ g.unread_messages_count }}) {% endif %}
+      {% block title %}最新代码{% endblock %} - 代码段
+    </title>
     <link rel="shortcut icon" href="/static/images/favicon.ico" />
     {% assets "css_all" %}
     <link href="{{ ASSET_URL }}" rel="stylesheet">

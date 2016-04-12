@@ -3,6 +3,7 @@ import time
 
 from flask import g
 from flask import render_template
+from flask.ext.login import current_user
 
 from daimaduan.bootstrap import app
 
@@ -10,6 +11,9 @@ from daimaduan.bootstrap import app
 @app.before_request
 def before_request():
     g.started_at = time.time()
+    g.unread_messages_count = 0
+    if current_user.is_authenticated:
+        g.unread_messages_count = current_user.user.unread_messages_count
 
 
 @app.errorhandler(401)
