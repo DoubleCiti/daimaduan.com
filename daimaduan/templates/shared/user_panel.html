@@ -29,6 +29,10 @@
       <span class="badge paste-likes-count">{{ user.likes | length }}</span>
       喜欢的代码段
     </a>
+    <a href="{{ url_for('bookmark_app.view_bookmarks', username=user.username) }}" class="list-group-item">
+      <span class="badge paste-likes-count">{{ user.public_bookmarks_count }}</span>
+      发布的收藏夹
+    </a>
     <div class="center-block text-center row">
       <a href="{{ url_for('user_app.view_followings', username=user.username) }}" class="col-md-6 fcard">
         <h3 class="text-primary">{{ user.followings | length }}</h3>

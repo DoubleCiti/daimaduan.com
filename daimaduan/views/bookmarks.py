@@ -8,7 +8,7 @@ from flask import url_for
 from flask.ext.login import current_user, login_required
 
 from daimaduan.forms.bookmark import BookmarkForm
-from daimaduan.models.base import Paste
+from daimaduan.models.base import Paste, User
 from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.message import BOOKMARK
 from daimaduan.models.message import Message
@@ -34,6 +34,18 @@ def my_bookmark():
     page = get_page()
 
     pagination = Bookmark.objects(user=current_user.user).order_by('-updated_at').paginate(page, per_page=20)
+
+    return render_template('bookmarks/index.html',
+                           pagination=pagination)
+
+
+@bookmark_app.route('/<username>/bookmarks', methods=['GET'])
+def view_bookmarks(username):
+    page = get_page()
+
+    user = User.objects(username=username).get_or_404()
+
+    pagination = Bookmark.objects(user=user).order_by('-updated_at').paginate(page, per_page=20)
 
     return render_template('bookmarks/index.html',
                            pagination=pagination)

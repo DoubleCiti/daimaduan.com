@@ -38,11 +38,18 @@
         {{ edit_paste_button(paste) }}
         {{ del_paste_button(paste) }}
       {% endif %}
+      <a href="#" class="btn btn-default btn-xs">
+       <i class="fa fa-eye"></i> 浏览 {{ paste.views }}
+      </a>
       {% if current_user.is_authenticated %}
         {{ like_paste_button(current_user.user, paste) }}
         <div class="pull-right">
           {{ add_to_bookmark_form(paste, paste_lists) }}
         </div>
+      {% else %}
+        <a href="#" class="btn btn-default btn-xs">
+          <i class="fa fa-heart"></i> 喜欢 {{ paste.likes_count }}
+        </a>
       {% endif %}
 
       <div class="pull-right">

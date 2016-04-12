@@ -2,6 +2,7 @@
 import hashlib
 import time
 
+from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.message import Message
 from daimaduan.utils.pagination import get_page
 from pygments import highlight
@@ -45,6 +46,14 @@ class User(BaseDocument):
     @property
     def public_pastes_count(self):
         return len(self.pastes) - len(self.pastes(is_private=True))
+
+    @property
+    def public_bookmarks(self):
+        return Bookmark.objects(user=self, is_private=False)
+
+    @property
+    def public_bookmarks_count(self):
+        return Bookmark.objects(user=self, is_private=False).count()
 
     @property
     def unread_messages_count(self):
