@@ -320,5 +320,8 @@ def search_paste():
 def messages():
     page = get_page()
     pagination = Message.objects(user=current_user.user).order_by('-created_at').paginate(page, per_page=20)
+    for item in pagination.items:
+        item.is_read = True
+        item.save()
     return render_template('users/messages.html',
                            pagination=pagination)

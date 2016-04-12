@@ -2,6 +2,7 @@
 import hashlib
 import time
 
+from daimaduan.models.message import Message
 from daimaduan.utils.pagination import get_page
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
@@ -44,6 +45,10 @@ class User(BaseDocument):
     @property
     def public_pastes_count(self):
         return len(self.pastes) - len(self.pastes(is_private=True))
+
+    @property
+    def unread_messages_count(self):
+        return Message.objects(user=self, is_read=False).count()
 
     def save(self, *args, **kwargs):
         if not self.salt:
