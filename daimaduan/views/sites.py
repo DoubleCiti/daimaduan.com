@@ -88,9 +88,7 @@ def signin():
             user = User.objects.get_or_404(email=form.email.data)
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
-
-            flash('Logged in successfully.')
-
+            flash(u"登录成功", category='info')
             return redirect(url_for('site_app.index'))
         return render_template('users/signin.html',
                                form=form)
@@ -120,6 +118,7 @@ def signup():
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
             send_confirm_email(current_app.config, user.email)
+            flash(u"注册成功, 请查收邮件完成验证", category='info')
             return redirect(url_for('site_app.index'))
         return render_template('users/signup.html',
                                form=form)
@@ -167,6 +166,7 @@ def oauth_callback(provider):
         # TODO: 直接登录时更新 token.
         user_mixin = LoginManagerUser(user)
         login_user(user_mixin)
+        flash(u"登录成功", category='info')
         return redirect('/')
     else:
         user = User.objects(email=email).first()
@@ -175,6 +175,7 @@ def oauth_callback(provider):
             user_oauth.save()
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
+            flash(u"登录成功", category='info')
             return redirect('/')
         else:
             return render_template('users/finish_signup.html',
@@ -198,6 +199,7 @@ def finish_signup():
             bookmark.save()
             user_mixin = LoginManagerUser(user)
             login_user(user_mixin)
+            flash(u"登录成功", category='info')
             if 'email' in session:
                 del (session['email'])
             return redirect('/')

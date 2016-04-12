@@ -34,6 +34,16 @@
     {% include 'shared/header.html' %}
 
     <div class="container">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-info alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
       <div class="col-md-12">{% block full_content %}{% endblock %}</div>
       <div class="col-md-9">{% block content %}{% endblock %}</div>
       <div class="col-md-3">{% block sidebar %}{% endblock %}</div>

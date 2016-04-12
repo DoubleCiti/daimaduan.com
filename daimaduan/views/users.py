@@ -1,6 +1,8 @@
 # coding: utf-8
 from daimaduan.models.syntax import Syntax
-from flask import Blueprint, jsonify
+from flask import Blueprint
+from flask import flash
+from flask import jsonify
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -12,7 +14,6 @@ from flask_login import login_required
 from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models.base import User
 from daimaduan.models.base import Paste
-from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.message import WATCH
 from daimaduan.models.message import Message
 from daimaduan.models.tag import Tag
@@ -33,6 +34,7 @@ def manage():
             current_user.user.username = form.username.data
             current_user.user.description = form.description.data
             current_user.user.save()
+            flash(u"用户信息已修改", category='info')
             return redirect(url_for('user_app.manage'))
     return render_template('users/manage.html',
                            form=form)
