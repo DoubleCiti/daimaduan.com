@@ -21,6 +21,8 @@ class User(BaseDocument):
     salt = db.StringField()
     is_email_confirmed = db.BooleanField(default=False)
     email_confirmed_on = db.DateTimeField(default=None)
+    number = db.IntField(default=0, unique=True)
+    description = db.StringField(default=u"这个家伙很懒, TA什么都没写...")
 
     oauths = db.ListField(db.ReferenceField(UserOauth))
 
@@ -63,6 +65,10 @@ class User(BaseDocument):
         if not self.salt:
             self.salt = hashlib.sha1(str(time.time())).hexdigest()
             self.password = self.generate_password(self.password)
+            number = User.objects().count() + 1
+            while(User.objects(number=number).first()):
+                number += 1
+            self.number = number
         super(User, self).save(*args, **kwargs)
 
     def owns_record(self, record):

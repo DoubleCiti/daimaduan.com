@@ -12,8 +12,8 @@ from daimaduan.models.base import User
 
 class SignupForm(Form):
     username = StringField(u'昵称', validators=[
-        InputRequired(), Regexp(r'\S{3,12}', message=u'3到12个字符，不能包含空格')])
-    email = StringField(u'Email', validators=[InputRequired(), Email()])
+        InputRequired(), Regexp(r'^[a-zA-Z0-9-_]{3,12}$', message=u'3到12个字符，不能包含空格')])
+    email = StringField(u'邮箱地址', validators=[InputRequired(), Email()])
     password = PasswordField(u'密码', validators=[InputRequired()])
     password_confirm = PasswordField(u'密码确认', validators=[EqualTo('password', message=u'两次密码不同')])
 

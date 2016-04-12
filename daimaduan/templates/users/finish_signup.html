@@ -2,12 +2,16 @@
 {% import 'wtf.html' as f %}
 {% block title %}修改信息{% endblock %}
 {% block full_content %}
-<form action="{{ url_for('user_app.manage') }}" method="POST" id="form-signup" class="form">
+<form action="{{ url_for('site_app.finish_signup') }}" method="POST" id="form-signup" class="form">
   {{ form.csrf_token }}
   <div class="panel panel-default">
     <div class="panel-heading">修改个人信息</div>
     <div class="panel-body">
-      {{ f.render_field(form.email, placeholder='邮箱地址', type='email', readonly='readonly') }}
+      {% if session['email'] %}
+        {{ f.render_field(form.email, placeholder='邮箱地址', type='email', readonly='readonly') }}
+      {% else %}
+        {{ f.render_field(form.email, placeholder='邮箱地址', type='email') }}
+      {% endif %}
       {{ f.render_field(form.username, placeholder='用户名', type='text') }}
       {{ f.render_field(form.description, placeholder='个性签名', type='text') }}
     </div>

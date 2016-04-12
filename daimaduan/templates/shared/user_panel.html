@@ -2,6 +2,7 @@
 {% from 'macros/common.html' import fa_icon %}
 {% from 'macros/users.html' import render_user_avatar %}
 {% from 'macros/users.html' import render_user_watch %}
+{% from 'macros/tags.html' import render_tag -%}
 
 <div class="panel panel-default"
      id="panel-paste-user"
@@ -11,7 +12,10 @@
       {{ render_user_avatar(user, size=80) }}  
     </div>
     
-    <h4>{{ user.username }}</h4>
+    <h4 class="text-primary">{{ user.username }}</h4>
+
+    <p><span>{{ user.description }}</span></p>
+    <p><small class="text-muted">代码段 {{ user.number }} 号会员, 注册于 {{ user.created_at | datetimeformat }}</small></p>
   </div>
 
   <div class="list-group">
@@ -45,6 +49,13 @@
     </div>
     {% if current_user.is_authenticated and (user != current_user.user) %}
       {{ render_user_watch(user, current_user.user) }}
+    {% endif %}
+    {% if most_syntax %}
+      <div class="list-group-item">
+        {% for syntax in most_syntax %}
+          {{ render_tag(syntax) }}
+        {% endfor %}
+      </div>
     {% endif %}
   </div>
 </div>

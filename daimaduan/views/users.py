@@ -1,18 +1,17 @@
 # coding: utf-8
+from daimaduan.models.syntax import Syntax
 from flask import Blueprint, jsonify
 from flask import redirect
 from flask import render_template
 from flask import request
-from flask import session
 from flask import url_for
 from flask.ext.mongoengine import Pagination
 from flask_login import current_user
 from flask_login import login_required
-from flask_login import login_user
 
 from daimaduan.forms.userinfo import UserInfoForm
-from daimaduan.models import LoginManagerUser
-from daimaduan.models.base import User, Paste
+from daimaduan.models.base import User
+from daimaduan.models.base import Paste
 from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.message import WATCH
 from daimaduan.models.message import Message
@@ -22,28 +21,33 @@ from daimaduan.utils.pagination import get_page
 user_app = Blueprint("user_app", __name__, template_folder="templates")
 
 
-@user_app.route('/manage', methods=['POST'])
+@user_app.route('/manage', methods=['GET', 'POST'])
+@login_required
 def manage():
-    form = UserInfoForm(request.form)
-    if form.validate():
-        if current_user.is_authenticated:
+    form = UserInfoForm(data=dict(username=current_user.user.username,
+                                  email=current_user.user.email,
+                                  description=current_user.user.description))
+    if request.method == 'POST':
+        form = UserInfoForm(request.form)
+        if form.validate():
             current_user.user.username = form.username.data
-            return redirect('/')
-        else:
-            user = User(email=form.email.data, username=form.username.data,
-                        is_email_confirmed=True)
-            user.save()
-            bookmark = Bookmark(user=user,
-                                title=u"%s 的收藏夹" % user.username,
-                                is_default=True)
-            bookmark.save()
-            user_mixin = LoginManagerUser(user)
-            login_user(user_mixin)
-            if 'email' in session:
-                del(session['email'])
-            return redirect('/')
+            current_user.user.description = form.description.data
+            current_user.user.save()
+            return redirect(url_for('user_app.manage'))
     return render_template('users/manage.html',
                            form=form)
+
+
+def get_most_syntax(syntax):
+    highest_name = None
+    for name in syntax:
+        if not highest_name:
+            highest_name = name
+        else:
+            if syntax[name] > syntax[highest_name]:
+                highest_name = name
+    syntax.pop(highest_name)
+    return Syntax.objects(name=highest_name).first()
 
 
 @user_app.route('/<username>', methods=['GET'])
@@ -57,9 +61,24 @@ def view(username):
 
     pagination = pastes.paginate(page, per_page=20)
 
+    pastes = Paste.objects(user=user)
+    syntax = {}
+    for paste in pastes:
+        for code in paste.codes:
+            if code.syntax.name not in syntax:
+                syntax[code.syntax.name] = 1
+            else:
+                syntax[code.syntax.name] += 1
+
+    if len(syntax.keys()) > 3:
+        most_syntax = [get_most_syntax(syntax) for i in range(3)]
+    else:
+        most_syntax = [Syntax.objects(name=key).first() for key in syntax]
+
     return render_template('users/user.html',
                            user=user,
                            pagination=pagination,
+                           most_syntax=most_syntax,
                            tags=Tag.objects().order_by('-popularity')[:10])
 
 
