@@ -1,6 +1,10 @@
 # coding: utf-8
-from flask import abort, jsonify, url_for
-from flask import current_app, request
+from flask import abort
+from flask import flash
+from flask import jsonify
+from flask import url_for
+from flask import current_app
+from flask import request
 from flask import make_response
 from flask import redirect
 from flask import render_template, Blueprint
@@ -123,6 +127,7 @@ def edit_paste(hash_id):
         form = PasteForm(request.form)
         if form.validate():
             paste = save_paste_and_codes(form, paste=paste)
+            flash(u"代码集合已成功修改")
             return jsonify(success=True, hash_id=paste.hash_id)
         else:
             errors = form.errors
@@ -177,6 +182,7 @@ def edit_comment(paste_id, hash_id):
         if form.validate():
             comment.content = form.content.data
             comment.save()
+            flash(u"评论已修改")
             return redirect(url_for('paste_app.view_paste', hash_id=paste_id))
 
     return render_template('pastes/edit_comment.html',
@@ -188,6 +194,7 @@ def edit_comment(paste_id, hash_id):
 def delete_comment(paste_id, hash_id):
     comment = Comment.objects.get_or_404(hash_id=hash_id)
     comment.delete()
+    flash(u"评论已删除")
     return redirect(url_for('paste_app.view_paste', hash_id=paste_id))
 
 
@@ -237,6 +244,7 @@ def delete(hash_id):
 
     if current_user.user.owns_record(paste):
         paste.delete()
+        flash(u"代码集合已删除")
         return redirect('/')
     else:
         abort(403)
