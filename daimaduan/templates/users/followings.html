@@ -8,11 +8,19 @@
 {% block content %}
 <h4 class="page-header">{{ user.username }} 关注的用户</h4>
 
-<section class="row followings">
-{% for following in pagination.items %}
-  {{ render_user_item(following) }}
-{% endfor %}
-</section>
+{% if pagination.items %}
+  <section class="row followings">
+  {% for following in pagination.items %}
+    {{ render_user_item(following) }}
+  {% endfor %}
+  </section>
+{% else %}
+  <div class="media">
+    <div class="media-body">
+      <span class="text-muted">{{ user.username }} 还没有关注任何用户, 下次再来吧</span>
+    </div>
+  </div>
+{% endif %}
 
 {{ render_pagination(pagination, url_for('user_app.view_followings', username=user.username)) }}
 {% endblock %}

@@ -26,11 +26,19 @@
   {% endif %}
 </h4>
 
-<section class="pastes">
-	{% for paste in bookmark.pastes %}
-		{{ render_paste_item(paste) }}
-	{% endfor %}
-</section>
+{% if bookmark.pastes %}
+  <section class="pastes">
+    {% for paste in bookmark.pastes %}
+      {{ render_paste_item(paste) }}
+    {% endfor %}
+  </section>
+{% else %}
+  <div class="media">
+    <div class="media-body">
+      <span class="text-muted">此收藏夹还没有任何代码</span>
+    </div>
+  </div>
+{% endif %}
 {% endblock %}
 
 {% block sidebar %}

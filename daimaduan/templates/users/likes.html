@@ -10,15 +10,21 @@
 {% block content %}
 <h4 class="page-header">{{ user.username }} 喜欢的代码段</h4>
 
-<section class="pastes">
-	{% for paste in pagination.items %}
-		{{ render_paste_item(paste) }}
-	{% endfor %}
+  {% if pagination.items %}
+  <section class="pastes">
+    {% for paste in pagination.items %}
+      {{ render_paste_item(paste) }}
+    {% endfor %}
 
-	<hr />
-
-	{{ render_pagination(pagination, url_for('user_app.view_likes', username=user.nickname)) }}
-</section><!-- .pastes -->
+    {{ render_pagination(pagination, url_for('user_app.view_likes', username=user.nickname)) }}
+  </section><!-- .pastes -->
+{% else %}
+  <div class="media">
+    <div class="media-body">
+      <span class="text-muted">{{ user.username }} 还没有标记过任何代码为喜欢</span>
+    </div>
+  </div>
+{% endif %}
 {% endblock %}
 
 {% block sidebar %}
