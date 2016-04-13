@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {%- from 'macros/tags.html' import render_tag -%}
+{%- from 'macros/pastes.html' import render_hot_pastes %}
+
 {% block title %}所有标签{% endblock %}
+
 {% block content %}
 <h4 class="new-paste-title pl10">
 	<span></span>
@@ -11,4 +14,8 @@
 		{{ render_tag(tag) }}
 	{% endfor %}
 </div>
+{% endblock %}
+
+{% block sidebar %}
+  {{ render_hot_pastes(hot_pastes) }}
 {% endblock %}

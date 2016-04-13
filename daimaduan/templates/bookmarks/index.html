@@ -48,8 +48,28 @@
     </div>
   {% endfor %}
 
-  <hr />
-
   {{ render_pagination(pagination, url_for('bookmark_app.index')) }}
 </section>
+{% endblock %}
+
+{% block sidebar %}
+  <div class="panel panel-default">
+    <div class="panel-heading">热门收藏夹</div>
+    <div class="panel-body">
+      {% for bookmark in hot_bookmarks %}
+        <div class="media">
+          <div class="media-left">
+            {{ render_user_avatar(bookmark.user, size=22) }}
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading">
+              <a href="{{ url_for('bookmark_app.view', hash_id=bookmark.hash_id) }}" title="{{ bookmark.title }}">
+                {{ bookmark.title | truncate(24) }}
+              </a>
+            </h5>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}

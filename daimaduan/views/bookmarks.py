@@ -25,6 +25,7 @@ def index():
     pagination = Bookmark.objects(is_private=False).order_by('-updated_at').paginate(page, per_page=20)
 
     return render_template('bookmarks/index.html',
+                           hot_bookmarks=Bookmark.objects(is_private=False).order_by('-views')[:10],
                            pagination=pagination)
 
 
@@ -79,6 +80,10 @@ def add_paste():
 
     bookmark = Bookmark.objects(hash_id=request.form['bookmark_id']).get_or_404()
     paste = Paste.objects(hash_id=request.form['paste_hash_id']).get_or_404()
+    if paste.is_private and not bookmark.is_private:
+        return render_template('error.html',
+                               title=u'公开的收藏夹不能添加私有的代码集合',
+                               message=u'公开的收藏夹不能添加私有的代码集合')
     if paste in bookmark.pastes:
         return render_template('error.html',
                                title=u'该代码集合已经在收藏夹中',
@@ -144,6 +149,8 @@ def delete(hash_id):
 @bookmark_app.route('/<hash_id>', methods=['GET'])
 def view(hash_id):
     bookmark = Bookmark.objects(hash_id=hash_id).get_or_404()
+    bookmark.views += 1
+    bookmark.save()
 
     bookmark_hash_id = None
     if current_user.is_authenticated and current_user.user == bookmark.user:

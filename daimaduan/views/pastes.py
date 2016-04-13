@@ -145,8 +145,12 @@ def view_paste(hash_id):
     if current_user.is_authenticated:
         paste_lists = Bookmark.objects(user=current_user.user)
 
+    syntax_list = [code.syntax for code in paste.codes]
+    related_pastes = Paste.objects(codes__syntax__in=syntax_list).order_by('-created_at')[:10]
+
     return render_template('pastes/view.html',
                            paste=paste,
+                           related_pastes=related_pastes,
                            paste_lists=paste_lists)
 
 

@@ -9,6 +9,7 @@ class Bookmark(BaseDocument):
     hash_id = db.StringField(unique=True)
     title = db.StringField(required=True)
     description = db.StringField()
+    views = db.IntField(default=0)
     is_private = db.BooleanField(default=False)
     is_default = db.BooleanField(default=False)
 

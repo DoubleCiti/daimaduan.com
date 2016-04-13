@@ -9,6 +9,7 @@
 {% from 'macros/pastes.html' import add_to_bookmark_form %}
 {% from 'macros/pastes.html' import embed_paste_button with context  %}
 {% from 'macros/common.html' import render_comments with context %}
+{% from 'macros/users.html' import render_user_avatar -%}
 
 {% block metatitle %}
 <meta name="title" content="代码段 - {{ paste.title }}">
@@ -71,4 +72,24 @@
 
 {% block sidebar %}
   {{ render_user_panel(paste.user) }}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">同语言代码</div>
+    <div class="panel-body">
+      {% for paste in related_pastes %}
+            <div class="media">
+              <div class="media-left">
+                {{ render_user_avatar(paste.user, size=22) }}
+              </div>
+              <div class="media-body">
+                <h5 class="media-heading">
+                  <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">
+                    {{ paste.title | truncate(24) }}
+                  </a>
+                </h5>
+              </div>
+            </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}

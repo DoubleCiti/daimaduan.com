@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import render_template
 
+from daimaduan.models.base import Paste
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
 
@@ -18,4 +19,5 @@ def view(tag_name):
 
     return render_template('tags/view.html',
                            tag=tag,
+                           hot_pastes=Paste.objects(is_private=False).order_by('-views')[:10],
                            pagination=pagination)

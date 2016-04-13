@@ -2,6 +2,8 @@
 
 {%- from 'macros/tags.html' import render_tag %}
 {%- from 'macros/pastes.html' import render_paste_item %}
+{%- from 'macros/pastes.html' import render_hot_pastes %}
+{%- from 'macros/users.html' import render_user_avatar %}
 {%- from 'macros/common.html' import render_pagination %}
 
 {% block content %}
@@ -24,6 +26,32 @@
 		{{ render_tag(tag) }}
 	{% endfor %}
 	</div>
+</div>
+
+{{  render_hot_pastes(hot_pastes) }}
+
+<div class="panel panel-default">
+  <div class="panel-heading">网站实时数据</div>
+  <p class="list-group-item">
+    <span class="badge">{{ users_count }}</span>
+    会员
+  </p>
+  <p class="list-group-item">
+    <span class="badge">{{ pastes_count }}</span>
+    代码集合
+  </p>
+  <p class="list-group-item">
+    <span class="badge">{{ comments_count }}</span>
+    评论
+  </p>
+  <p class="list-group-item">
+    <span class="badge">{{ bookmarks_count }}</span>
+    收藏夹
+  </p>
+  <p class="list-group-item">
+    <span class="badge">{{ syntax_count }}</span>
+    支持的语法高亮
+  </p>
 </div>
 {#<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>#}
 {#<!-- daimaduan -->#}

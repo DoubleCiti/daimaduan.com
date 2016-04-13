@@ -3,6 +3,7 @@ import datetime
 import json
 import re
 
+from daimaduan.models.syntax import Syntax
 from flask import abort
 from flask import Blueprint, flash, current_app, session, jsonify
 from flask import redirect
@@ -22,7 +23,7 @@ from daimaduan.forms.signin import SigninForm
 from daimaduan.forms.signup import SignupForm
 from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models import LoginManagerUser
-from daimaduan.models.base import Code
+from daimaduan.models.base import Code, Comment
 from daimaduan.models.base import Paste
 from daimaduan.models.base import User
 from daimaduan.models.bookmark import Bookmark
@@ -59,12 +60,19 @@ def index():
 
     return render_template('index.html',
                            pagination=pagination,
+                           hot_pastes=Paste.objects(is_private=False).order_by('-views')[:10],
+                           pastes_count=Paste.objects().count(),
+                           comments_count=Comment.objects().count(),
+                           users_count=User.objects().count(),
+                           syntax_count=Syntax.objects().count(),
+                           bookmarks_count=Bookmark.objects().count(),
                            tags=Tag.objects().order_by('-popularity')[:10])
 
 
 @site_app.route('/tags', methods=['GET'])
 def tags():
     return render_template('tags/index.html',
+                           hot_pastes=Paste.objects(is_private=False).order_by('-views')[:10],
                            tags=Tag.objects().order_by('-popularity'))
 
 
