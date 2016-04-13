@@ -1,4 +1,5 @@
 {% from 'macros/tags.html' import render_tag %}
+{% from 'macros/users.html' import render_user_avatar %}
 {% from 'macros/common.html' import fa_icon %}
 
 
@@ -6,6 +7,27 @@
   {% include 'pastes/paste.html' %}
 {% endmacro %}
 
+{% macro render_hot_pastes(pastes) %}
+  <div class="panel panel-default">
+    <div class="panel-heading">热门代码</div>
+    <div class="panel-body">
+      {% for paste in pastes %}
+        <div class="media">
+          <div class="media-left">
+            {{ render_user_avatar(paste.user, size=22) }}
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading">
+              <a href="/paste/{{ paste.hash_id }}" title="{{ paste.title }}">
+                {{ paste.title | truncate(24) }}
+              </a>
+            </h5>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endmacro %}
 
 {% macro render_private(paste) %}
   {% if paste.is_private -%}

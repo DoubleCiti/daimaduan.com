@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {%- from 'macros/pastes.html' import render_paste_item %}
+{%- from 'macros/pastes.html' import render_hot_pastes %}
 {%- from 'macros/common.html' import render_pagination %}
 
 {% block title %}{{ tag.name }}{% endblock %}
@@ -16,4 +17,8 @@
 
 	{{ render_pagination(pagination, url_for('tag_app.view', tag_name=tag.name)) }}
 </section>
+{% endblock %}
+
+{% block sidebar %}
+  {{ render_hot_pastes(hot_pastes) }}
 {% endblock %}

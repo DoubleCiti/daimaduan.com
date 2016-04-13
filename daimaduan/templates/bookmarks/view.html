@@ -2,6 +2,7 @@
 
 {% from 'macros/users.html' import render_user_panel with context %}
 {% from 'macros/pastes.html' import render_paste_item with context %}
+{% from 'macros/pastes.html' import render_private %}
 {% from 'macros/common.html' import render_pagination %}
 {% from 'macros/common.html' import fa_icon %}
 
@@ -11,7 +12,7 @@
 
 {% block title %}{{ bookmark.title }}{% endblock %}
 {% block content %}
-<h4 class="page-header">{{ bookmark.title }}
+<h4 class="page-header">{{ bookmark.title }}{{ render_private(bookmark) }}
   {% if current_user.is_authenticated and current_user.user == bookmark.user %}
   <form class="inline action"
         action="{{ url_for('bookmark_app.delete', hash_id=bookmark.hash_id) }}"
