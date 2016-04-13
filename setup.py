@@ -23,7 +23,7 @@ if err:
 
 setup(
     name='daimaduan.com',
-    version='2.4+%s' % out.strip(),
+    version='2.5+%s' % out.strip(),
     long_description=__doc__,
     url='https://github.com/DoubleCiti/daimaduan.com',
     author='David Xie',
