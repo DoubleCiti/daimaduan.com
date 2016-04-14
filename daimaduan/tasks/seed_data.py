@@ -234,7 +234,7 @@ ALL_SUPPORTED_SYNTAX = (
     # ('lasso', 'lasso', 'Lasso'),
     # ('ragel-java', 'ragel-java', 'Ragel in Java Host'),
     # ('vala', 'vala', 'Vala'),
-    # ('haskell', 'haskell', 'Haskell'),
+    ('haskell', 'haskell', 'Haskell'),
     ('lua', 'lua', 'Lua'),
     # ('aspectj', 'aspectj', 'AspectJ'),
     # ('groff', 'groff', 'Groff'),
