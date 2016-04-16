@@ -5,6 +5,7 @@
 {%- from 'macros/pastes.html' import render_hot_pastes %}
 {%- from 'macros/users.html' import render_user_avatar %}
 {%- from 'macros/common.html' import render_pagination %}
+{%- from 'macros/common.html' import fa_icon %}
 
 {% block content %}
 <h4 class="page-header">最新代码</h4>
@@ -34,19 +35,19 @@
   <div class="panel-heading">网站实时数据</div>
   <p class="list-group-item">
     <span class="badge">{{ users_count }}</span>
-    会员
+    会员 {{ fa_icon('arrow-up', users_increased, class='text-danger') }}
   </p>
   <p class="list-group-item">
     <span class="badge">{{ pastes_count }}</span>
-    代码集合
+    代码集合 {{ fa_icon('arrow-up', pastes_increased, class='text-danger') }}
   </p>
   <p class="list-group-item">
     <span class="badge">{{ comments_count }}</span>
-    评论
+    评论 {{ fa_icon('arrow-up', comments_increased, class='text-danger') }}
   </p>
   <p class="list-group-item">
     <span class="badge">{{ bookmarks_count }}</span>
-    收藏夹
+    收藏夹 {{ fa_icon('arrow-up', bookmarks_increased, class='text-danger') }}
   </p>
   <p class="list-group-item">
     <span class="badge">{{ syntax_count }}</span>
