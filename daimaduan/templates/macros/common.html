@@ -2,6 +2,11 @@
   <div href="#comments">
     <h4>{{ paste.comments_count }} 条评论</h4>
     <hr />
+        {% if paste.comments.total <= paste.comments.per_page %}
+          {% set start = paste.comments.total - 1 %}
+        {% else %}
+          {% set start = paste.comments.per_page * (paste.comments.pages - paste.comments.page) %}
+        {% endif %}
         {% for comment in paste.comments.items %}
           <div class="media">
             <div class="media-left">
@@ -20,13 +25,14 @@
                   <i class="fa fa-eraser"></i>
                   <span>删除</span>
                 </a>
+                <strong>#{{ start - loop.index + 2 }}</strong>
               </div>
               {% endif %}
               <h5 class="media-heading">
                 <a href="{{ url_for('user_app.view', username=comment.user.username) }}">{{ comment.user.username }}</a>
                 <small class="text-muted">发表于 {{ comment.created_at | time_passed }}</small>
               </h5>
-              <p>{{ comment.content }}</p>
+              <p>{{ comment.content | markdown | safe }}</p>
             </div>
           </div>
         {% endfor %}
