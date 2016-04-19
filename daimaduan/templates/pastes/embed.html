@@ -1,5 +1,5 @@
 {% assets "embed" -%}
-document.write('<link href="//{{ config['DOMAIN'] }}{{ ASSET_URL }}" rel="stylesheet">');
+document.write('<link href="{{ ASSET_URL }}" rel="stylesheet">');
 {% endassets -%}
 {% for code in paste.codes -%}
 document.write('<div class="daimaduan-code" id="paste-{{ paste.hash_id }}">');
