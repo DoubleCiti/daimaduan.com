@@ -9,4 +9,5 @@ recursive-exclude daimaduan/static/css *
 recursive-exclude daimaduan/static/js *
 recursive-exclude daimaduan/static/lib *
 include daimaduan/static/css/compiled.css
+include daimaduan/static/css/embed.css
 include daimaduan/static/js/compiled.js
