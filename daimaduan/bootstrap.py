@@ -8,6 +8,7 @@ from flask_gravatar import Gravatar
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
 from flask.ext.log import Logging
+from flask.ext.cdn import CDN
 from jinja2 import MemcachedBytecodeCache
 
 from daimaduan.extensions import assets
@@ -26,6 +27,7 @@ if not os.environ.get('CONFIG', None):
 db = MongoEngine()
 login_manager = LoginManager()
 flask_log = Logging()
+cdn = CDN()
 
 app = Flask(__name__)
 app.config.from_object('daimaduan.default_settings')
@@ -58,6 +60,7 @@ if app.config['USE_JINJA_CACHE']:
 
 login_manager.init_app(app)
 assets.init_app(app)
+cdn.init_app(app)
 
 gravatar = Gravatar(app,
                     size=100,
