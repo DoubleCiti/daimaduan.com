@@ -6,6 +6,16 @@ FLASK_LOG_LEVEL = 'DEBUG'
 # Enable Flask-Assets debug mode.
 ASSETS_DEBUG = False
 
+# CDN
+FLASK_ASSETS_USE_CDN = False
+CDN_DOMAIN = 'daimaduan1.b0.upaiyun.com'
+CDN_HTTPS = True
+CDN_TIMESTAMP = True
+ASSETS_CDN_DOMAIN = 'daimaduan1.b0.upaiyun.com'
+ASSETS_CDN_HTTPS = True
+ASSETS_CDN_TIMESTAMP = True
+
+
 MONGODB_SETTINGS = {
     'host': '127.0.0.1',
     'db': 'daimaduan'
