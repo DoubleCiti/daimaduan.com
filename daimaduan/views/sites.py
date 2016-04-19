@@ -1,7 +1,8 @@
 # coding: utf-8
-import datetime
 import json
 import re
+from datetime import datetime
+from datetime import date
 
 from daimaduan.models.syntax import Syntax
 from flask import abort
@@ -58,6 +59,8 @@ def index():
     page = get_page()
     pagination = Paste.objects(is_private=False).order_by('-updated_at').paginate(page=page, per_page=20)
 
+    print datetime.today()
+
     return render_template('index.html',
                            pagination=pagination,
                            hot_pastes=Paste.objects(is_private=False).order_by('-views')[:10],
@@ -66,6 +69,10 @@ def index():
                            users_count=User.objects().count(),
                            syntax_count=Syntax.objects().count(),
                            bookmarks_count=Bookmark.objects().count(),
+                           users_increased=User.objects(created_at__gt=date.today()).count(),
+                           pastes_increased=Paste.objects(created_at__gt=date.today()).count(),
+                           comments_increased=Comment.objects(created_at__gt=date.today()).count(),
+                           bookmarks_increased=Bookmark.objects(created_at__gt=date.today()).count(),
                            tags=Tag.objects().order_by('-popularity')[:10])
 
 
@@ -281,7 +288,7 @@ def confirm_email(token):
                 return render_template('email/confirm.html', title=u"Email已经激活过了", message=u"对不起，您的email已经激活过了。")
             else:
                 user.is_email_confirmed = True
-                user.email_confirmed_on = datetime.datetime.now()
+                user.email_confirmed_on = datetime.now()
                 user.save()
                 return render_template('email/confirm.html', title=u'Email已经激活', message=u'您的email已经激活，请点击登录查看最新代码段。')
     return render_template('email/confirm.html',

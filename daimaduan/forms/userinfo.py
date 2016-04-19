@@ -16,7 +16,7 @@ class UserInfoForm(Form):
         InputRequired(), Regexp(r'^[a-zA-Z0-9-_]{3,12}$', message=u'3到12个字符，不能包含空格')])
     email = StringField(u'邮箱地址', validators=[InputRequired(), Email()])
     description = StringField(u'个性签名', validators=[
-        InputRequired(), Regexp(r'^\S{1,20}$', message=u'1到20个字符，不能包含空格')])
+        InputRequired(), Regexp(r'^.{1,20}$', message=u'1到20个字符')])
 
     def validate_username(self, field):
         if current_user.is_authenticated and current_user.user.username == field.data:

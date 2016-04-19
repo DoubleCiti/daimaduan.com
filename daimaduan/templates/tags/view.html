@@ -6,14 +6,18 @@
 
 {% block title %}{{ tag.name }}{% endblock %}
 {% block content %}
-<h4 class="page-header">{{ tag.name }}代码</h4>
+<h4 class="page-header">{{ tag.name }} 代码
+  {% if current_user.is_authenticated %}
+  <span class="pull-right">
+    <a class="btn btn-xs" href="{{ url_for('tag_app.view', tag_name=tag.key) }}?filter=mine">只看我发的代码</a>
+  </span>
+  {% endif %}
+</h4>
 
 <section class="pastes">
 	{% for paste in pagination.items %}
 		{{ render_paste_item(paste) }}
 	{% endfor %}
-
-  <hr />
 
 	{{ render_pagination(pagination, url_for('tag_app.view', tag_name=tag.name)) }}
 </section>

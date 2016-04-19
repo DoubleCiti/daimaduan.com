@@ -20,3 +20,7 @@ class Bookmark(BaseDocument):
         if not self.title:
             self.title = u"收藏夹: %s" % self.hash_id
         super(Bookmark, self).save(*args, **kwargs)
+
+    @property
+    def pastes_count(self):
+        return len(self.pastes)
