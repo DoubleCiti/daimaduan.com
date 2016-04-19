@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% from 'macros/common.html' import render_pagination %}
+{% from 'macros/common.html' import fa_icon %}
 {% from 'macros/users.html' import render_user_avatar %}
 {% from 'macros/pastes.html' import render_private %}
 {% from 'macros/common.html' import fa_icon %}
@@ -27,8 +28,7 @@
         <div class="media-body">
           <div class="paste-metas pull-right">
             <a href="{{ url_for('bookmark_app.view', hash_id=li.hash_id) }}" class="text-muted">
-              <span class="fa fa-file-code-o"></span>
-              {{ li.pastes | length }}个代码集合
+              {{ fa_icon('file-code-o', text=li.pastes_count) }}
             </a>
           </div>
 

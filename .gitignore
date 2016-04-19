@@ -61,6 +61,7 @@ config.cfg
 .idea/
 .venv/
 .newrelic_key
+.upyun
 
 .DS_Store
 .venv
