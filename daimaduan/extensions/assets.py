@@ -5,6 +5,7 @@ assets = Environment()
 
 js = Bundle('lib/vue/dist/vue.js',
             'lib/underscore/underscore.js',
+            'lib/clipboard/dist/clipboard.min.js',
             'js/lexers.js',
             'js/app.js',
             'js/pastes.js',

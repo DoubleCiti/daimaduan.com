@@ -40,7 +40,8 @@
 <div class="code panel panel-default">
   <div class="panel-heading">
     <span class="pull-right">{{ render_tag(code.syntax) }}</span>
-    {{ code.title }}
+    <span>{{ code.title }}</span>
+    <a class="btn btn-xs copy-code" data-toggle="tooltip" data-placement="right" title="已复制">复制代码到剪贴板</a>
   </div>
   <div class="panel-body" style="overflow-x: auto;">
     {{ render_source_code(code.highlight_content) }}

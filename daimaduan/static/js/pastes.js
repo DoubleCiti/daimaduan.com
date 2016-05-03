@@ -106,5 +106,16 @@
     $('.input-group-embed').on('click', selectEmbedCode);
     $('.input-group-embed :text').on('focus', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
+
+    var clipboard = new Clipboard('.copy-code', {
+      text: function(trigger) {
+        var nextElement = $(trigger)[0].parentNode.nextElementSibling;
+        return $(nextElement).find('div.highlight').text();
+      }
+    });
+    
+    clipboard.on('success', function(e) {
+      $(e.trigger).tooltip('toggle');
+    })
   });
 })();
