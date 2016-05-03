@@ -27,3 +27,4 @@ assets.register('css_all', css)
 embed = Bundle('css/embed.scss', filters='scss,cssmin', output='css/embed.css')
 
 assets.register('embed', embed)
+

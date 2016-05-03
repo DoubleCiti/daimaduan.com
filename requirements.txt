@@ -5,6 +5,7 @@ flask-login==0.3.2
 Flask-Gravatar==0.4.2
 flask-log==0.1.0
 flask-cdn==1.5.0
+flask-admin==1.4.0
 ecdsa==0.13
 Fabric==1.10.2
 flake8==2.4.1

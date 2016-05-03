@@ -50,6 +50,9 @@ app.register_blueprint(paste_app, url_prefix='/paste')
 app.register_blueprint(tag_app, url_prefix='/tag')
 app.register_blueprint(bookmark_app, url_prefix='/bookmark')
 
+from daimaduan.views.admin import admin
+admin.init_app(app)
+
 app.jinja_env.filters['time_passed'] = time_passed
 app.jinja_env.filters['time_used'] = time_used
 app.jinja_env.filters['ternary'] = ternary
