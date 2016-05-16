@@ -53,4 +53,6 @@ $(document).ready(function() {
     initToggleFullCode();
     $(document).on('click', '.action-signout', signoutHandler);
     $(document).on('click', '.action-watch, .action-unwatch', toggleUserWatch);
+    hljs.initHighlightingOnLoad();
+    hljs.initLineNumbersOnLoad();
 });

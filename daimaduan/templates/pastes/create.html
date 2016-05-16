@@ -23,6 +23,10 @@ app.paste = {
     <label><input type="checkbox" v-model="paste.is_private" name="is_private" /> 我想要将这段代码私有</label>
   </div>
 
+  <div class="form-group">
+    <input type="text" class="form-control" data-role="tagsinput" id="tags" />
+  </div>
+
   <div class="codes">
     {% include "pastes/form_code.html" %}
     <button type="button"

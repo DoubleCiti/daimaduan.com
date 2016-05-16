@@ -6,6 +6,7 @@ from daimaduan.models.base import Paste
 class Tag(BaseDocument):
     key = db.StringField(required=True, unique=True)
     name = db.StringField(required=True, unique=True)
+    is_default_tag = db.BooleanField(default=False)
     popularity = db.IntField(default=1)
 
     @property

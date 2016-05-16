@@ -8,8 +8,6 @@ from wtforms import SelectField
 from wtforms import BooleanField
 from wtforms.validators import InputRequired, ValidationError
 
-from daimaduan.models.syntax import Syntax
-
 
 class NonValidatingSelectField(SelectField):
     def pre_validate(self, form):

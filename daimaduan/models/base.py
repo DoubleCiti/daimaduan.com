@@ -5,9 +5,6 @@ import time
 from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.message import Message
 from daimaduan.utils.pagination import get_page
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name
 
 from daimaduan.bootstrap import db
 from daimaduan.models import BaseDocument
@@ -98,8 +95,8 @@ class User(BaseDocument):
 
 class Code(db.EmbeddedDocument):
     title = db.StringField()
-    content = db.StringField(required=True)
     syntax = db.ReferenceField('Syntax')
+    content = db.StringField(required=True)
 
     def content_head(self, n=10):
         lines = self.content.splitlines()[:n]
@@ -107,9 +104,7 @@ class Code(db.EmbeddedDocument):
 
     @property
     def highlight_content(self):
-        lexer = get_lexer_by_name(self.syntax.syntax, stripall=True)
-        formatter = HtmlFormatter(linenos=True, cssclass='highlight')
-        return highlight(self.content, lexer, formatter)
+        return self.content
 
 
 class Paste(BaseDocument):
