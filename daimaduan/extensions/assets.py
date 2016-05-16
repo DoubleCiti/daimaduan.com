@@ -6,6 +6,8 @@ assets = Environment()
 js = Bundle('lib/vue/dist/vue.js',
             'lib/underscore/underscore.js',
             'lib/clipboard/dist/clipboard.min.js',
+            'js/highlight.pack.js',
+            'js/highlight-line-number.min.js',
             'js/lexers.js',
             'js/app.js',
             'js/pastes.js',
@@ -18,7 +20,7 @@ scss = Bundle('css/app.scss',
               filters='scss')
 
 css = Bundle('css/bootstrap.min.css',
-             'css/colorful.min.css',
+             'css/styles/foundation.css',
              scss,
              filters='cssmin', output='css/compiled.css')
 

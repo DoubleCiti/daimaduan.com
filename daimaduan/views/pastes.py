@@ -38,10 +38,8 @@ def save_paste_and_codes(form, paste=None):
     paste.title = form.title.data
     paste.is_private = form.is_private.data
     paste.codes = []
-    tags = {}
+    tags = form.tags.data.split(',')
 
-    for tag in form.tags.data.split():
-        tags[tag.lower()] = tag.lower()
     for i, c in enumerate(form.codes):
         syntax = Syntax.objects(key=c.syntax.data).get_or_404()
         if not c.title.data:
@@ -49,16 +47,15 @@ def save_paste_and_codes(form, paste=None):
         code = Code(title=c.title.data,
                     content=c.content.data,
                     syntax=syntax)
-        tags[syntax.key] = syntax.name
         paste.codes.append(code)
+
     for key in tags:
-        syntax = Syntax.objects(name__iexact=tags[key]).first()
+        syntax = Syntax.objects(name__iexact=key).first()
         tag = Tag.objects(key__iexact=key).first()
         if not tag and syntax:
-            tag = Tag(key=syntax.key, name=syntax.name)
-            tag.save()
+            tag = Tag(key=syntax.key, name=syntax.name, is_default_tag=True)
         elif not tag and not syntax:
-            tag = Tag(key=key, name=tags[key])
+            tag = Tag(key=key, name=key)
         else:
             tag.popularity += 1
         tag.save()
@@ -118,7 +115,7 @@ def edit_paste(hash_id):
         data = {'hash_id': paste.hash_id,
                 'title': paste.title,
                 'is_private': paste.is_private,
-                'tags': ' '.join(tags),
+                'tags': ','.join(tags),
                 'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax.key} for code in paste.codes]}
         return render_template('pastes/edit.html',
                                paste=paste,

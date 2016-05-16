@@ -43,11 +43,21 @@
     $('.input-group-embed :text').select();
   }
 
+  function pasteCodeAction() {
+    $('#tags').tagsinput('removeAll');
+    $('div.codes textarea').each(function(i, item) {
+      hl = hljs.highlightAuto($(item).val());
+      $('#tags').tagsinput('add', hl.language);
+      var select_div = $(item)[0].parentNode.parentNode.previousElementSibling;
+      $(select_div).find('select').val(hl.language);
+    });
+  }
+  
   function initPasteEditor() {
     if ($('#form-paste').size() == 0) return;
 
     var newCode = { title: "", syntax: "text", content: "" };
-    var codes = new Vue({
+    new Vue({
       el: "#form-paste",
       data: {
         lexers: lexers,
@@ -76,16 +86,18 @@
         },
         removeCode: function(code) {
           this.paste.codes.$remove(code);
+          setTimeout(pasteCodeAction, 200);
         },
         submitPaste: function() {
           var self = this;
-          var url = app.rootUrl;
+          
+          console.log($('#tags').val());
 
           $.ajax({
             url: document.location.href,
             method: 'POST',
             dataType: 'json',
-            data: $('#form-paste').serialize(),
+            data: $('#form-paste').serialize() + '&tags=' + $('#tags').val(),
             success: function(data) {
               if (data.success) {
                 document.location = '/paste/' + data.hash_id;
@@ -103,6 +115,8 @@
     initPaste();
     initPasteEditor();
 
+    $('.bootstrap-tagsinput').addClass('form-control');
+    
     $('.input-group-embed').on('click', selectEmbedCode);
     $('.input-group-embed :text').on('focus', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);

@@ -5,7 +5,6 @@ from daimaduan.models.base import Paste
 
 class Syntax(BaseDocument):
     key = db.StringField(required=True, unique=True)
-    syntax = db.StringField(required=True)
     name = db.StringField(required=True, unique=True)
 
     @property

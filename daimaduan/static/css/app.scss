@@ -44,6 +44,7 @@ pre {
 	&.panel-body {
 		border: 0;
 		margin: 0;
+		background: none;
 	}
 	code {
 		white-space: pre;
@@ -141,6 +142,7 @@ pre {
 	}
 }
 .code .panel-body pre {
+	margin: -15px;
 	border: 0;
 	background-color: #FFF;
 }
@@ -161,6 +163,8 @@ pre {
 .code_preview {
 	max-height: 192px;
 	overflow: hidden;
+	padding: 0;
+	background-color: #FFF;
 }
 .footer {
 	margin-bottom: 100px;
@@ -176,4 +180,23 @@ a.fcard {
 }
 .followings > .media {
 	margin-top: 15px;
+}
+
+.hljs {
+	background: none;
+}
+
+.code-table {
+	white-space: pre;
+	font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+	font-size: 13px;
+}
+
+.code-table td.code-line-num {
+	text-align: right;
+	color: #BBB;
+}
+
+.code-table td {
+	padding: 0 10px;
 }

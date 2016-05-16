@@ -1,4 +1,3 @@
-from flask import current_app
 from mailthon import email
 from mailthon.middleware import TLS, Auth
 from mailthon.postman import Postman
