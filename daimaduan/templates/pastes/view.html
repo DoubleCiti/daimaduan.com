@@ -52,6 +52,9 @@
           <i class="fa fa-heart"></i> 喜欢 {{ paste.likes_count }}
         </a>
       {% endif %}
+      <a href="{{ url_for('paste_app.download', hash_id=paste.hash_id) }}" class="btn btn-default btn-xs">
+        <i class="fa fa-download"></i> 下载代码
+      </a>
 
       <div class="pull-right">
         {{ embed_paste_button(paste) }}

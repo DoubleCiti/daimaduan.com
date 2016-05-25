@@ -1,4 +1,7 @@
 # coding: utf-8
+import zipfile
+import StringIO
+
 from flask import abort
 from flask import flash
 from flask import jsonify
@@ -8,6 +11,7 @@ from flask import request
 from flask import make_response
 from flask import redirect
 from flask import render_template, Blueprint
+from flask import send_file
 from flask_login import current_user
 from flask_login import login_required
 
@@ -257,6 +261,28 @@ def delete(hash_id):
         return redirect('/')
     else:
         abort(403)
+
+
+@paste_app.route('/<hash_id>/download', methods=['GET'])
+def download(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+    str = StringIO.StringIO()
+    zf = zipfile.ZipFile(str, "w", zipfile.ZIP_DEFLATED, False)
+
+    for i, code in enumerate(paste.codes):
+        zf.writestr("code-%s.txt" % i, code.content.encode('utf-8'))
+
+    for f in zf.filelist:
+        f.create_system = 0
+
+    zf.close()
+
+    str.seek(0)
+
+    return send_file(str,
+                     mimetype="application/octet-stream",
+                     as_attachment=True,
+                     attachment_filename="%s.zip" % hash_id)
 
 
 @paste_app.route('/<hash_id>/embed.js', methods=['GET'])
