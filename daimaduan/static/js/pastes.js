@@ -43,13 +43,31 @@
     $('.input-group-embed :text').select();
   }
 
-  function pasteCodeAction() {
-    $('#tags').tagsinput('removeAll');
-    $('div.codes textarea').each(function(i, item) {
-      hl = hljs.highlightAuto($(item).val());
-      $('#tags').tagsinput('add', hl.language);
-      var select_div = $(item)[0].parentNode.parentNode.previousElementSibling;
-      $(select_div).find('select').val(hl.language);
+  function pasteCodeAction(event) {
+    var $textarea = $(event.target);
+    var $code_div = $(event.target.parentNode.parentNode.parentNode);
+    hl = hljs.highlightAuto($textarea.val());
+    $code_div.find('select').val(hl.language);
+    syntaxSelectAction();
+  }
+
+  function syntaxSelectAction() {
+    var $tags = $('#tags');
+    var tags = [];
+    if ($tags.val() != '')
+        tags = $tags.val().split(',');
+    $.each(languages, function(i, language) {
+      var index = tags.indexOf(language);
+      delete tags[index];
+    });
+    languages = [];
+    $('div.codes select').each(function(i, select) {
+      tags.push($(select).val());
+      languages.push($(select).val());
+    });
+    $tags.tagsinput('removeAll');
+    $.each(tags, function(i, language) {
+      $tags.tagsinput('add', language);
     });
   }
   
@@ -91,8 +109,6 @@
         submitPaste: function() {
           var self = this;
           
-          console.log($('#tags').val());
-
           $.ajax({
             url: document.location.href,
             method: 'POST',
@@ -114,12 +130,17 @@
   $(document).ready(function() {
     initPaste();
     initPasteEditor();
+    
+    languages = [];
 
     $('.bootstrap-tagsinput').addClass('form-control');
     
     $('.input-group-embed').on('click', selectEmbedCode);
-    $('.input-group-embed :text').on('focus', selectEmbedCode);
+    $(document).on('click', '.input-group-embed', selectEmbedCode);
+    $(document).on('focus', '.input-group-embed :text', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
+    $(document).on('change', 'div.codes textarea', pasteCodeAction);
+    $(document).on('change', 'div.codes select', syntaxSelectAction);
 
     var clipboard = new Clipboard('.copy-code', {
       text: function(trigger) {
