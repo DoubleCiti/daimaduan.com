@@ -44,15 +44,24 @@
     <a class="btn btn-xs copy-code" data-toggle="tooltip" data-placement="right" title="已复制">复制代码到剪贴板</a>
   </div>
   <div class="panel-body" style="overflow-x: auto;">
-      <pre><code>{{ code.content }}</code></pre>
+      <pre class="hidden"><code>{{ code.content }}</code></pre>
   </div>
 </div>
 {% endmacro %}
 
 
-{% macro render_source_code_preview(source) %}
-  <pre class="code_preview"><code>{{ source | safe }}</code></pre>
-  <a href="javascript:;" class="btn btn-link full-code-toggle">显示完整代码</a>
+{% macro render_source_code_preview(code) %}
+<div class="code panel panel-default code_preview ">
+  <div class="panel-heading">
+    <span class="pull-right">{{ render_tag(code.syntax) }}</span>
+    <span>{{ code.title }}</span>
+    <a class="btn btn-xs copy-code" data-toggle="tooltip" data-placement="right" title="已复制">复制代码到剪贴板</a>
+  </div>
+  <div class="panel-body" style="overflow-x: auto;">
+    <pre class="hidden"><code>{{ code.content }}</code></pre>
+  </div>
+</div>
+<a href="javascript:;" class="btn btn-link full-code-toggle">显示完整代码</a>
 {% endmacro %}
 
 
