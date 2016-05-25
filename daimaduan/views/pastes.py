@@ -280,6 +280,18 @@ def download(hash_id):
                      attachment_filename="%s.zip" % hash_id)
 
 
+@paste_app.route('/<hash_id>/fork', methods=['GET'])
+@login_required
+def fork(hash_id):
+    paste = Paste.objects.get_or_404(hash_id=hash_id)
+    new_paste = Paste(user=current_user.user,
+                      tags=paste.tags,
+                      codes=paste.codes)
+    new_paste.save()
+
+    return redirect(url_for('paste_app.view_paste', hash_id=new_paste.hash_id))
+
+
 @paste_app.route('/<hash_id>/embed.js', methods=['GET'])
 def embed_js(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)

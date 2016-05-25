@@ -29,6 +29,8 @@
     </h4>
 
     <div class="text-muted">
+      <small><i class="fa fa-eye"></i> {{ paste.views }}</small>
+      <small><i class="fa fa-comment"></i> {{ paste.comments_count }}</small>
       <small>最后更新于 {{ paste.updated_at | time_passed }}</small>
     </div>
   </div>
@@ -39,9 +41,6 @@
         {{ edit_paste_button(paste) }}
         {{ del_paste_button(paste) }}
       {% endif %}
-      <a href="#" class="btn btn-default btn-xs">
-       <i class="fa fa-eye"></i> 浏览 {{ paste.views }}
-      </a>
       {% if current_user.is_authenticated %}
         {{ like_paste_button(current_user.user, paste) }}
         <div class="pull-right">
@@ -55,6 +54,11 @@
       <a href="{{ url_for('paste_app.download', hash_id=paste.hash_id) }}" class="btn btn-default btn-xs">
         <i class="fa fa-download"></i> 下载代码
       </a>
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('paste_app.fork', hash_id=paste.hash_id) }}" class="btn btn-default btn-xs">
+        <i class="fa fa-download"></i> 复制到我的代码段
+      </a>
+      {% endif %}
 
       <div class="pull-right">
         {{ embed_paste_button(paste) }}
