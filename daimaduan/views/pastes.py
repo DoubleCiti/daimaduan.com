@@ -285,6 +285,7 @@ def download(hash_id):
 def fork(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     new_paste = Paste(user=current_user.user,
+                      title=paste.title,
                       tags=paste.tags,
                       codes=paste.codes)
     new_paste.save()
