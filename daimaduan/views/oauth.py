@@ -1,67 +1,83 @@
 # coding: utf-8
+import json
 
 from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import current_app
 from flask import abort
+from flask import redirect
+from flask import session
 
 from rauth import OAuth2Service
 
+from daimaduan.models.base import User
 from daimaduan.models.user_oauth import UserOauth
+from daimaduan.extensions.log import get_logger
 
 oauth_app = Blueprint("oauth_app", __name__, template_folder="templates")
+logger = get_logger()
 
-def service_for(provider):
-    oauth_config = current_app.config['OAUTH'][provider]
 
-    if oauth_config:
-        return OAuth2Service(**oauth_config)
-    else:
+def oauth_for(provider):
+    try:
+        config = current_app.config['OAUTH'][provider]
+        service = OAuth2Service(client_id=config['client_id'],
+                                client_secret=config['client_secret'],
+                                name=config['name'],
+                                access_token_url=config['access_token_url'],
+                                authorize_url=config['authorize_url'],
+                                base_url=config['base_url'])
+        return config, service
+    except KeyError:
+        logger.warn('Not supported oauth provider: %s', provider)
         abort(404)
+
 
 @oauth_app.route('/<provider>', methods=['GET'])
 def oauth_signin(provider):
-    oauth_service = service_for(provider)
-    url = oauth_service.get_authorize_url(response_type='code')
-
+    logger.info('Request for %s authorization' % provider)
+    config, service = oauth_for(provider)
+    url = service.get_authorize_url(response_type='code',
+                                    redirect_uri=config['callback_url'],
+                                    scope=config['scope'])
+    logger.info("Redirect to %s" % url)
     return redirect(url)
 
 
 @oauth_app.route('/<provider>/callback', methods=['GET'])
 def oauth_callback(provider):
-    current_app.logger.info("Oauth callback for %s" % provider)
-    redirect_uri = current_app.config['OAUTH'][provider]['callback_url']
-    oauth_service = get_oauth_services()[provider]
-
+    logger.info("Oauth callback for %s" % provider)
+    config, service = oauth_for(provider)
     data = dict(code=request.args.get('code'),
                 grant_type='authorization_code',
-                redirect_uri=redirect_uri)
+                redirect_uri=config['callback_url'])
 
     if provider == 'google':
-        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
-        user_info = oauth_session.get('userinfo').json()
+        api = service.get_auth_session(data=data, decoder=json.loads)
+        user_info = api.get('userinfo').json()
         email = session['email'] = user_info['email']
         username = user_info['given_name']
     elif provider == 'github':
-        oauth_session = oauth_service.get_auth_session(data=data)
-        user_info = oauth_session.get('user').json()
+        api = service.get_auth_session(data=data)
+        user_info = api.get('user').json()
         email = session['email'] = user_info['email']
         username = user_info['login']
     elif provider == 'weibo':
-        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
-        uid = oauth_session.get('account/get_uid.json', params={'access_token': oauth_session.access_token}).json()['uid']
-        email = oauth_session.get('account/profile/email.json', params={'access_token': oauth_session.access_token}).json()
-        current_app.logger.info("Email: %s" % email)
-        user_info = oauth_session.get('users/show.json', params={'access_token': oauth_session.access_token, 'uid': uid}).json()
-        email = None
+        api = service.get_auth_session(data=data, decoder=json.loads)
+        
+        payload = {'access_token': api.access_token}
+
+        uid = api.get('account/get_uid.json', params=payload).json()['uid']
+        email = api.get('account/profile/email.json', params=payload).json()
+        email = session['email'] = ''
+
+        payload['uid'] = uid
+        user_info = api.get('users/show.json', params=payload).json()
         username = user_info['name']
 
-    access_token = oauth_session.access_token
+    access_token = api.access_token
     user_info['id'] = str(user_info['id'])
-
-    current_app.logger.info("%s oauth access token is: %s" % (provider, access_token))
-    current_app.logger.info("%s oauth user info is %s" % (provider, user_info))
 
     user = User.find_by_oauth(provider, user_info['id'])
     if user:

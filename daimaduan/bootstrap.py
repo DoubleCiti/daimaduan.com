@@ -1,23 +1,22 @@
 # coding: utf-8
 import os
-
 import memcache
+
 from celery import Celery
 from flask import Flask
 from flask_gravatar import Gravatar
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
-from flask.ext.log import Logging
 from flask.ext.cdn import CDN
 from jinja2 import MemcachedBytecodeCache
 
 from daimaduan.extensions import assets
+from daimaduan.extensions import log
 from daimaduan.utils.filters import datetimeformat
 from daimaduan.utils.filters import md
 from daimaduan.utils.filters import ternary
 from daimaduan.utils.filters import time_passed
 from daimaduan.utils.filters import time_used
-
 
 # set default CONFIG to custom_settings.py
 if not os.environ.get('CONFIG', None):
@@ -26,15 +25,14 @@ if not os.environ.get('CONFIG', None):
 
 db = MongoEngine()
 login_manager = LoginManager()
-flask_log = Logging()
 cdn = CDN()
 
 app = Flask(__name__)
 app.config.from_object('daimaduan.default_settings')
 app.config.from_envvar('CONFIG')
 
+log.init_app(app)
 db.init_app(app)
-flask_log.init_app(app)
 celery = Celery(__name__)
 celery.conf.add_defaults(app.config)
 
