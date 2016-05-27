@@ -6,12 +6,12 @@ from flask import abort
 from flask import flash
 from flask import jsonify
 from flask import url_for
-from flask import current_app
 from flask import request
 from flask import make_response
 from flask import redirect
 from flask import render_template, Blueprint
 from flask import send_file
+from flask import current_app as app
 from flask_login import current_user
 from flask_login import login_required
 
@@ -29,7 +29,6 @@ from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.decorators import user_active_required
-from daimaduan.utils import logger
 
 
 paste_app = Blueprint("paste_app", __name__, template_folder="templates")
@@ -100,7 +99,7 @@ def create_paste():
         else:
             errors = form.errors
             errors['codes'] = [code.errors for code in form.codes]
-            logger.info('Failed saving paste for reason: %s', errors)
+            app.logger.info('Failed saving paste for reason: %s', errors)
             return jsonify(success=False, errors=errors)
 
 
@@ -136,7 +135,7 @@ def edit_paste(hash_id):
         else:
             errors = form.errors
             errors['codes'] = [code.errors for code in form.codes]
-            logger.info('Failed saving paste for reason: %s', errors)
+            app.logger.info('Failed saving paste for reason: %s', errors)
             return jsonify(success=False, errors=errors)
 
 
@@ -297,6 +296,8 @@ def fork(hash_id):
 def embed_js(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
 
-    resp = make_response(render_template('pastes/embed.html', paste=paste, domain=current_app.config['DOMAIN']), 200)
+    resp = make_response(render_template('pastes/embed.html',
+                         paste=paste,
+                         domain=app.config['DOMAIN']), 200)
     resp.headers['Content-Type'] = 'text/javascript; charset=utf-8'
     return resp

@@ -70,6 +70,6 @@ OAUTH = {
         'callback_url': 'http://daimaduan.dev:8080/oauth/weibo/callback',
         'client_id': '4132254635',
         'client_secret': '2eadb1b53a550f61aa326b071a38b48e',
-        'scope': ''
+        'scope': 'email'
     }
 }

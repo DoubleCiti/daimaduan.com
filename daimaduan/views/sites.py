@@ -16,7 +16,6 @@ from flask.ext.login import login_required
 from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
-from rauth import OAuth2Service
 
 from daimaduan.bootstrap import login_manager
 from daimaduan.forms.email import EmailForm
@@ -31,21 +30,10 @@ from daimaduan.models.base import User
 from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.tag import Tag
 from daimaduan.models.message import Message
-from daimaduan.models.user_oauth import UserOauth
 from daimaduan.utils.email_confirmation import send_confirm_email
 from daimaduan.utils.email_confirmation import send_reset_password_email
 from daimaduan.utils.email_confirmation import validate_token
-from daimaduan.utils.oauth import oauth_config
 from daimaduan.utils.pagination import get_page
-
-
-def get_oauth_services():
-    oauth_services = {}
-    oauth_services['google'] = OAuth2Service(**oauth_config(current_app.config, 'google'))
-    oauth_services['github'] = OAuth2Service(**oauth_config(current_app.config, 'github'))
-    oauth_services['weibo'] = OAuth2Service(**oauth_config(current_app.config, 'weibo'))
-    return oauth_services
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -55,13 +43,11 @@ def load_user(user_id):
 
 site_app = Blueprint("site_app", __name__, template_folder="templates")
 
-
 @site_app.route('/', methods=['GET'])
 def index():
-    page = get_page()
-    pagination = Paste.objects(is_private=False).order_by('-updated_at').paginate(page=page, per_page=20)
-
-    print datetime.today()
+    pagination = (Paste.objects(is_private=False)
+                       .order_by('-updated_at')
+                       .paginate(get_page(), per_page=20))
 
     return render_template('index.html',
                            pagination=pagination,
@@ -139,72 +125,6 @@ def signup():
             return redirect(url_for('site_app.index'))
         return render_template('users/signup.html',
                                form=form)
-
-
-@site_app.route('/oauth/<provider>', methods=['GET'])
-def oauth_signin(provider):
-    oauth_service = get_oauth_services()[provider]
-
-    url = oauth_service.get_authorize_url(scope=current_app.config['OAUTH'][provider]['scope'],
-                                          response_type='code',
-                                          redirect_uri=current_app.config['OAUTH'][provider]['callback_url'])
-    return redirect(url)
-
-
-@site_app.route('/oauth/<provider>/callback', methods=['GET'])
-def oauth_callback(provider):
-    current_app.logger.info("Oauth callback for %s" % provider)
-    redirect_uri = current_app.config['OAUTH'][provider]['callback_url']
-    oauth_service = get_oauth_services()[provider]
-
-    data = dict(code=request.args.get('code'),
-                grant_type='authorization_code',
-                redirect_uri=redirect_uri)
-
-    if provider == 'google':
-        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
-        user_info = oauth_session.get('userinfo').json()
-        email = session['email'] = user_info['email']
-        username = user_info['given_name']
-    elif provider == 'github':
-        oauth_session = oauth_service.get_auth_session(data=data)
-        user_info = oauth_session.get('user').json()
-        email = session['email'] = user_info['email']
-        username = user_info['login']
-    elif provider == 'weibo':
-        oauth_session = oauth_service.get_auth_session(data=data, decoder=json.loads)
-        uid = oauth_session.get('account/get_uid.json', params={'access_token': oauth_session.access_token}).json()['uid']
-        email = oauth_session.get('account/profile/email.json', params={'access_token': oauth_session.access_token}).json()
-        current_app.logger.info("Email: %s" % email)
-        user_info = oauth_session.get('users/show.json', params={'access_token': oauth_session.access_token, 'uid': uid}).json()
-        email = None
-        username = user_info['name']
-
-    access_token = oauth_session.access_token
-    user_info['id'] = str(user_info['id'])
-
-    current_app.logger.info("%s oauth access token is: %s" % (provider, access_token))
-    current_app.logger.info("%s oauth user info is %s" % (provider, user_info))
-
-    user = User.find_by_oauth(provider, user_info['id'])
-    if user:
-        # TODO: 直接登录时更新 token.
-        user_mixin = LoginManagerUser(user)
-        login_user(user_mixin)
-        flash(u"登录成功", category='info')
-        return redirect('/')
-    else:
-        user = User.objects(email=email).first()
-        if user:
-            user_oauth = UserOauth(provider=provider, openid=user_info['id'], token=access_token)
-            user_oauth.save()
-            user_mixin = LoginManagerUser(user)
-            login_user(user_mixin)
-            flash(u"登录成功", category='info')
-            return redirect('/')
-        else:
-            return render_template('users/finish_signup.html',
-                                   form=UserInfoForm(email=email, username=username))
 
 
 @site_app.route('/finish_signup', methods=['POST'])

@@ -31,9 +31,11 @@ class UserInfoForm(Form):
             field.data = current_user.user.email
             return True
 
-        if session['email']:
+        if 'email' in session:
             if session['email'] != field.data:
                 raise ValidationError(u'不能修改第三方登录的email地址')
+
+        print 'User email %s' % field.data
         user = User.objects(email=field.data).first()
         if user:
             raise ValidationError(u'Email地址已被使用')
