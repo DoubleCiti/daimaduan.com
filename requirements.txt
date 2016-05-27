@@ -32,3 +32,4 @@ celery==3.1.19
 markdown==2.6.5
 mongodb-migrations==0.1.1
 python-memcached==1.57
+upyun==2.3.4
