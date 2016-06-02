@@ -33,6 +33,7 @@
       <textarea class="form-control" rows="8"
                 v-model="code.content"
                 name="codes-{{ index }}-content"
+                @change="codeChanged(code)"
                 placeholder=""></textarea>
     </div>
   </div>

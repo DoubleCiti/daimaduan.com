@@ -43,14 +43,6 @@
     $('.input-group-embed :text').select();
   }
 
-  function pasteCodeAction(event) {
-    var $textarea = $(event.target);
-    var $code_div = $(event.target.parentNode.parentNode.parentNode);
-    hl = hljs.highlightAuto($textarea.val());
-    $code_div.find('select').val(hl.language);
-    syntaxSelectAction();
-  }
-
   function syntaxSelectAction() {
     var $tags = $('#tags');
     var tags = [];
@@ -104,7 +96,6 @@
         },
         removeCode: function(code) {
           this.paste.codes.$remove(code);
-          setTimeout(pasteCodeAction, 200);
         },
         submitPaste: function() {
           var self = this;
@@ -122,6 +113,13 @@
               }
             }
           });
+        },
+        codeChanged: function(code) {
+          var hl = hljs.highlightAuto(code.content);
+          var primarySyntax = hl.language;
+          var secondarySyntax = hl.second_best && hl.second_best.language;
+
+          code.syntax = hl.primarySyntax || secondarySyntax;
         }
       }
     });
@@ -139,7 +137,6 @@
     $(document).on('click', '.input-group-embed', selectEmbedCode);
     $(document).on('focus', '.input-group-embed :text', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
-    $(document).on('change', 'div.codes textarea', pasteCodeAction);
     $(document).on('change', 'div.codes select', syntaxSelectAction);
 
     var clipboard = new Clipboard('.copy-code', {
