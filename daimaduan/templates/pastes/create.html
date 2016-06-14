@@ -4,48 +4,11 @@
 {% block title %}粘贴新代码{% endblock %}
 
 {% block content %}
-<script type="text/javascript">
-app.paste = {
-  title: "",
-  is_private: false,
-  codes: [{ title: "", syntax: "text", content: "" }]
-};
-</script>
 
 <h4 class="page-header">分享代码</h4>
 
-<form id="form-paste">
-  <div class="form-group">
-    <input type="text" class="form-control" placeholder="描述一下这段代码集合（选填）" v-model="paste.title" name="title" autofocus />
-  </div>
-  
-  <div class="form-group">
-    <label><input type="checkbox" v-model="paste.is_private" name="is_private" /> 我想要将这段代码私有</label>
-  </div>
+{% include "pastes/form.html" %}
 
-  <div class="form-group">
-    <input type="text" class="form-control" data-role="tagsinput" id="tags" />
-  </div>
-
-  <div class="codes">
-    {% include "pastes/form_code.html" %}
-    <button type="button"
-            class="btn btn-default"
-            @click="addCode()"
-            v-if="codeIncreasable">
-      {{ fa_icon("plus", text="增加一个片断") }}
-    </button>
-  </div>
-
-  <hr/>
-
-  <div class="form-group text-center">
-    <button type="button"
-            class="btn btn-primary btn-lg"
-            @click="submitPaste()">分享这段代码集合</button>
-  </div>
-
-</form>
 {% endblock %}
 
 {% block sidebar %}

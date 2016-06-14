@@ -107,19 +107,13 @@ def edit_paste(hash_id):
         abort(404)
 
     if request.method == 'GET':
-        tags = []
-        syntaxes = [code.syntax.name for code in paste.codes]
-        for tag in paste.tags:
-            if tag.name not in syntaxes:
-                tags.append(tag.name)
-        data = {'hash_id': paste.hash_id,
-                'title': paste.title,
-                'is_private': paste.is_private,
-                'tags': ','.join(tags),
-                'codes': [{'title': code.title, 'content': code.content, 'syntax': code.syntax.key} for code in paste.codes]}
+        form = PasteForm(title=paste.title,
+                         is_private=paste.is_private,
+                         codes=paste.codes,
+                         tags=paste.tags)
         return render_template('pastes/edit.html',
                                paste=paste,
-                               data=data)
+                               form=form)
     else:
         form = PasteForm(request.form)
         if form.validate():
