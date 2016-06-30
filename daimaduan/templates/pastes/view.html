@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from 'macros/users.html' import render_user_panel with context %}
 {% from 'macros/tags.html' import render_tag %}
-{% from 'macros/pastes.html' import render_code %}
+{% from 'macros/pastes.html' import render_source_code %}
 {% from 'macros/pastes.html' import render_private %}
 {% from 'macros/pastes.html' import like_paste_button %}
 {% from 'macros/pastes.html' import edit_paste_button %}
@@ -62,7 +62,7 @@
   </div>
 
   {% for code in paste.codes %}
-    {{ render_code(code) }}
+    {{ render_source_code(code) }}
   {% endfor %}
 
   {{ render_comments(paste) }}

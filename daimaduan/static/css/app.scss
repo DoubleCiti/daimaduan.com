@@ -1,6 +1,35 @@
 //@extend-elements
-//original selectors
-//.bubble:after, .bubble:before
+.container-fluid {
+	background: #333;
+}
+
+.container-fluid > .navbar-header > .navbar-text {
+	color: #fff;
+}
+
+.navbar {
+	border: none;
+}
+
+.navbar-default .navbar-nav > li > a {
+	border-bottom: 2px solid #333;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+	color: #ff8303;
+	border-bottom: 2px solid #ff830e;
+}
+
+#navbar-brand-a {
+	padding-right: 0;
+	margin-left: 10px;
+}
+
+.navbar-brand > img {
+	height: 22px;
+}
+
 %extend_1 {
 	right: 100%;
 	top: 50%;
@@ -166,8 +195,38 @@ pre {
 	padding: 0;
 	background-color: #FFF;
 }
+
 .footer {
-	margin-bottom: 100px;
+	padding-top: 20px;
+	padding-bottom: 100px;
+	background: #333;
+}
+
+.footer a {
+	color: #ff830e;
+}
+
+.footer-logo {
+	padding-right: 20px;
+	border-right: 2px solid #fff;
+}
+
+.footer-declaration {
+	margin-left: 10px;
+}
+
+.footer-declaration h2,
+.footer-declaration h4 {
+	color: #fff;
+}
+
+.footer-declaration h2 {
+	font-size: 20px;
+	margin-top: 5px;
+}
+
+.footer-declaration h4 {
+	font-size: 14px;
 }
 
 .fcard > h3 {

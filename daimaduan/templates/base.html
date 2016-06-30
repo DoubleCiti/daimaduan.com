@@ -11,12 +11,13 @@
       {% block title %}最新代码{% endblock %} - 代码段
     </title>
     <link rel="shortcut icon" href="/static/images/favicon.ico" />
-    {% assets "css_all" %}
-      <link href="{{ ASSET_URL }}" rel="stylesheet">
-    {% endassets %}
+
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/bootstrap-social/4.11.0/bootstrap-social.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet">
+    {% assets "css_all" %}
+      <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
 
     <script type="text/javascript">
       var app = {};
