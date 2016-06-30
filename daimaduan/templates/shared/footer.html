@@ -1,15 +1,25 @@
-<div class="container footer">
-  <div class="col-md-12">
-    <hr />
-    <span>© 2011 - 2016 <a href="https://github.com/DoubleCiti/daimaduan.com">daimaduan.com</a> All right reserved</span>
-    <small class="text-muted">当前版本: {{ config['VERSION'] }} | 发布时间: {{ config['DEPLOYED_AT'] }} | 页面加载时间: {{ g.started_at | time_used }}</small>
-    <span class="pull-right">
-      <a href="http://blog.daimaduan.com/pages/about/">关于代码段</a> |
-      <a href="https://github.com/DoubleCiti/daimaduan.com">项目主页</a> |
-      <a href="https://github.com/DoubleCiti/daimaduan.com/issues/new">提交bug</a>
-    </span>
-    <div class="text-center">
-      <a href="//www.upyun.com"><img src="//www.upyun.com/assets/league/90X45.png" /></a>
+<div class="footer">
+  <div class="container">
+    <div class="pull-left footer-logo">
+      <img src="/static/images/logo_2x.png" />
     </div>
+    <div class="pull-left footer-declaration">
+      <h2>代码段</h2>
+      <h4>分享, 收藏你的代码</h4>
+    </div>
+    <div class="pull-right">
+      <p>
+        <a href="http://blog.daimaduan.com/pages/about/">关于代码段</a> |
+        <a href="https://github.com/DoubleCiti/daimaduan.com">项目主页</a> |
+        <a href="https://github.com/DoubleCiti/daimaduan.com/issues/new">提交bug</a>
+      </p>
+      <p class="text-right"><a href="//www.upyun.com"><img src="//www.upyun.com/assets/league/90X45.png" /></a></p>
+    </div>
+    <div class="clearfix"></div>
+    <hr />
+    <span class="text-muted">© 2011 - 2016 <a href="https://github.com/DoubleCiti/daimaduan.com">daimaduan.com</a> All right reserved</span>
+    <span class="pull-right">
+      <small class="text-muted text-right">当前版本: {{ config['VERSION'] }} | 发布时间: {{ config['DEPLOYED_AT'] }} | 页面加载时间: {{ g.started_at | time_used }}</small>
+    </span>
   </div>
 </div>
