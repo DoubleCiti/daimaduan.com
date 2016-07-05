@@ -10,6 +10,8 @@
   "dependencies": {
     "vue": "~1.0.14",
     "underscore": "~1.8.3",
-    "clipboard": "~1.5.10"
+    "clipboard": "~1.5.10",
+    "selectize": "0.12.1",
+    "vue-tagsinput": "latest"
   }
 }

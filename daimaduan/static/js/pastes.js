@@ -43,28 +43,50 @@
     $('.input-group-embed :text').select();
   }
 
-  function syntaxSelectAction() {
-    var $tags = $('#tags');
-    var tags = [];
-    if ($tags.val() != '')
-        tags = $tags.val().split(',');
-    $.each(languages, function(i, language) {
-      var index = tags.indexOf(language);
-      delete tags[index];
-    });
-    languages = [];
-    $('div.codes select').each(function(i, select) {
-      tags.push($(select).val());
-      languages.push($(select).val());
-    });
-    $tags.tagsinput('removeAll');
-    $.each(tags, function(i, language) {
-      $tags.tagsinput('add', language);
-    });
-  }
-  
   function initPasteEditor() {
     if ($('#form-paste').size() == 0) return;
+
+    var makeOption = function(input) {
+        return {
+          value: input,
+          text: input
+        };
+    };
+
+    // https://gist.github.com/james2doyle/85e503c77e581df6a5c0
+    Vue.directive('selectize-tags', {
+      twoWay: true,
+      priority: 1000,
+      bind: function (tags) {
+        var self = this;
+        $(this.el).selectize({
+          delimiter: ',',
+          persist: false,
+          create: makeOption,
+          onChange: function (val) {
+            self.set(val);
+          },
+          onItemRemove: function(value) {
+            // Avoid to delete syntax tags
+            if (_.contains(self.vm.syntaxTags, value)) {
+              self.update(self.vm.tags);
+            }
+          }
+        });
+      },
+      update: function (tags) {
+        var selectize = $(this.el).data('selectize');
+        selectize.clearOptions();
+
+        _.each(tags, function(tag) {
+            selectize.addOption(makeOption(tag));
+            selectize.addItem(tag);
+        });
+      },
+      unbind: function () {
+        $(this.el).destroy();
+      }
+    });
 
     var newCode = { title: "", syntax: "text", content: "" };
     new Vue({
@@ -72,7 +94,11 @@
       data: {
         lexers: lexers,
         paste: app.paste,
-        errors: {}
+        errors: {},
+        customTags: []
+      },
+      created: function() {
+        this.sliceCustomTags(app.paste.tags);
       },
       computed: {
         codeRemovable: function() {
@@ -80,9 +106,24 @@
         },
         codeIncreasable: function() {
           return this.paste.codes.length < 7;
+        },
+        syntaxTags: function() {
+            return _.map(app.paste.codes, 'syntax') || [];
+        },
+        tags: {
+            get: function() {
+                return this.syntaxTags.concat(this.customTags);
+            },
+
+            set: function(tags) {
+                this.sliceCustomTags(tags.split(','));
+            }
         }
       },
       methods: {
+        sliceCustomTags: function(inputTags) {
+            this.customTags = _.chain(inputTags || []).difference(this.syntaxTags).compact().uniq().value();
+        },
         codeHasError: function(index, field) {
           try {
             var error = this.errors.codes[index][field];
@@ -120,6 +161,9 @@
           var secondarySyntax = hl.second_best && hl.second_best.language;
 
           code.syntax = hl.primarySyntax || secondarySyntax;
+        },
+        syntaxChanged: function() {
+          this.sliceCustomTags(this.syntaxTags.concat(this.customTags));
         }
       }
     });
@@ -137,7 +181,6 @@
     $(document).on('click', '.input-group-embed', selectEmbedCode);
     $(document).on('focus', '.input-group-embed :text', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
-    $(document).on('change', 'div.codes select', syntaxSelectAction);
 
     var clipboard = new Clipboard('.copy-code', {
       text: function(trigger) {
