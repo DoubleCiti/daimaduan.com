@@ -95,7 +95,8 @@
         lexers: lexers,
         paste: app.paste,
         errors: {},
-        customTags: []
+        customTags: [],
+        languages: hljs.listLanguages()
       },
       created: function() {
         this.sliceCustomTags(app.paste.tags);
@@ -154,13 +155,6 @@
               }
             }
           });
-        },
-        codeChanged: function(code) {
-          var hl = hljs.highlightAuto(code.content);
-          var primarySyntax = hl.language;
-          var secondarySyntax = hl.second_best && hl.second_best.language;
-
-          code.syntax = hl.primarySyntax || secondarySyntax;
         },
         syntaxChanged: function() {
           this.sliceCustomTags(this.syntaxTags.concat(this.customTags));
