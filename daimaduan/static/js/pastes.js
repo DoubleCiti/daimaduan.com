@@ -68,7 +68,7 @@
           },
           onItemRemove: function(value) {
             // Avoid to delete syntax tags
-            if (_.contains(self.vm.syntaxTags, value)) {
+            if (_.includes(self.vm.syntaxTags, value)) {
               self.update(self.vm.tags);
             }
           }
@@ -96,7 +96,6 @@
         paste: app.paste,
         errors: {},
         customTags: [],
-        languages: hljs.listLanguages()
       },
       created: function() {
         this.sliceCustomTags(app.paste.tags);
@@ -123,7 +122,12 @@
       },
       methods: {
         sliceCustomTags: function(inputTags) {
-            this.customTags = _.chain(inputTags || []).difference(this.syntaxTags).compact().uniq().value();
+            this.customTags = _.chain(inputTags || [])
+                               .difference(this.syntaxTags)
+                               .compact()
+                               .uniq()
+                               .value();
+            this.paste.tags = this.tags.join(',');
         },
         codeHasError: function(index, field) {
           try {
@@ -140,13 +144,14 @@
           this.paste.codes.$remove(code);
         },
         submitPaste: function() {
-          var self = this;
+          var formData = this.paste;
           
           $.ajax({
             url: document.location.href,
             method: 'POST',
             dataType: 'json',
-            data: $('#form-paste').serialize() + '&tags=' + $('#tags').val(),
+            contentType: "application/json",
+            data: JSON.stringify(formData),
             success: function(data) {
               if (data.success) {
                 document.location = '/paste/' + data.hash_id;

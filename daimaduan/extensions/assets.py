@@ -4,10 +4,10 @@ from flask_assets import Environment
 assets = Environment()
 
 js = Bundle('lib/vue/dist/vue.js',
-            'lib/underscore/underscore.js',
+            'lib/lodash/lodash.js',
             'lib/clipboard/dist/clipboard.min.js',
             'lib/selectize/dist/js/standalone/selectize.js',
-            'js/highlight.pack.js',
+            'lib/highlightjs/highlight.pack.js',
             'js/lexers.js',
             'js/app.js',
             'js/pastes.js',
