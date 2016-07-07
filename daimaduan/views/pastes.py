@@ -71,10 +71,10 @@ def save_paste_and_codes(form, paste=None):
 def create_paste():
     if request.method == 'GET':
         # missing csrf
-        form = PasteForm(data={'codes': [{'title': '', 'content': '', 'syntax': ''}]})
+        form = PasteForm(data={'codes': [{'title': '', 'content': '', 'syntax': 'markdown'}]})
         return render_template('pastes/create.html', form=form)
     else:
-        form = PasteForm(request.form)
+        form = PasteForm.from_json(data=request.json)
         if form.validate():
             user = current_user.user
             paste = save_paste_and_codes(form)
@@ -107,15 +107,22 @@ def edit_paste(hash_id):
         abort(404)
 
     if request.method == 'GET':
+        tags = [tag.key for tag in paste.tags]
         form = PasteForm(title=paste.title,
                          is_private=paste.is_private,
-                         codes=paste.codes,
-                         tags=paste.tags)
+                         tags=','.join(tags))
+
+        form.codes.pop_entry()
+        for code in paste.codes:
+            form.codes.append_entry({'title': code.title,
+                                     'content': code.content,
+                                     'syntax': code.syntax.key})
+
         return render_template('pastes/edit.html',
                                paste=paste,
                                form=form)
     else:
-        form = PasteForm(request.form)
+        form = PasteForm.from_json(request.json)
         if form.validate():
             paste = save_paste_and_codes(form, paste=paste)
             flash(u"代码集合已成功修改")

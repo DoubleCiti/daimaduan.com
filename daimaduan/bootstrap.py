@@ -12,6 +12,7 @@ from flask.ext.cdn import CDN
 from jinja2 import MemcachedBytecodeCache
 
 from daimaduan.extensions import assets
+from daimaduan.extensions import wtforms
 from daimaduan.utils.filters import datetimeformat
 from daimaduan.utils.filters import md
 from daimaduan.utils.filters import ternary

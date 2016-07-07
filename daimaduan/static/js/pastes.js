@@ -132,9 +132,9 @@
         codeHasError: function(index, field) {
           try {
             var error = this.errors.codes[index][field];
-            return error ? 'has-error' : '';
+            return { 'has-error': !!error };
           } catch(e) {
-            return '';
+            return { 'has-error': false };
           }
         },
         addCode: function() {
@@ -144,14 +144,14 @@
           this.paste.codes.$remove(code);
         },
         submitPaste: function() {
-          var formData = this.paste;
+          var self = this;
           
           $.ajax({
             url: document.location.href,
             method: 'POST',
             dataType: 'json',
             contentType: "application/json",
-            data: JSON.stringify(formData),
+            data: JSON.stringify(self.paste),
             success: function(data) {
               if (data.success) {
                 document.location = '/paste/' + data.hash_id;

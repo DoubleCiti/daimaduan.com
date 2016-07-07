@@ -39,7 +39,7 @@
 {% macro render_source_code(code) %}
 <div class="code panel panel-default">
   <div class="panel-heading">
-    <span class="pull-right">{{ render_tag(code.syntax) }}</span>
+    <span class="pull-right">{{ render_tag(code.syntax, style='info') }}</span>
     <span>{{ code.title }}</span>
     <a class="btn btn-xs copy-code" data-toggle="tooltip" data-placement="right" title="已复制">复制代码到剪贴板</a>
   </div>
@@ -53,7 +53,7 @@
 {% macro render_source_code_preview(code) %}
 <div class="code panel panel-default code_preview ">
   <div class="panel-heading">
-    <span class="pull-right">{{ render_tag(code.syntax) }}</span>
+    <span class="pull-right">{{ render_tag(code.syntax, style='info') }}</span>
     <span>{{ code.title }}</span>
     <a class="btn btn-xs copy-code" data-toggle="tooltip" data-placement="right" title="已复制">复制代码到剪贴板</a>
   </div>
