@@ -71,7 +71,7 @@ def save_paste_and_codes(form, paste=None):
 def create_paste():
     if request.method == 'GET':
         # missing csrf
-        form = PasteForm(data={'codes': [{'title': '', 'content': '', 'syntax': '' }]})
+        form = PasteForm(data={'codes': [{'title': '', 'content': '', 'syntax': ''}]})
         return render_template('pastes/create.html', form=form)
     else:
         form = PasteForm(request.form)
