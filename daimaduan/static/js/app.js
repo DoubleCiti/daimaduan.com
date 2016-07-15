@@ -50,9 +50,20 @@ function toggleUserWatch() {
 }
 
 $(document).ready(function() {
+    $('div.code').each(function(i, element){
+        var $panel = $(element).find('div.panel-body');
+        var $code = $panel.find('pre');
+        var result = hljs.highlightAuto($code.text());
+        var $table = $('<table class="code-table"></table>');
+        $.each($.trim(result.value).split('\n'), function(i, line) {
+            $table.append('<tr><td class="code-line-num">' + (i + 1) + '</td><td class="code-line-code">' + line + '</td></tr>');
+        });
+        $code.remove();
+        $panel.append($table);
+    });
     initToggleFullCode();
     $(document).on('click', '.action-signout', signoutHandler);
     $(document).on('click', '.action-watch, .action-unwatch', toggleUserWatch);
-    hljs.initHighlightingOnLoad();
-    hljs.initLineNumbersOnLoad();
+    // hljs.initHighlightingOnLoad();
+    // hljs.initLineNumbersOnLoad();
 });

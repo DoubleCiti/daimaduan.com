@@ -4,10 +4,9 @@ from flask_assets import Environment
 assets = Environment()
 
 js = Bundle('lib/vue/dist/vue.js',
-            'lib/underscore/underscore.js',
+            'lib/lodash/lodash.js',
             'lib/clipboard/dist/clipboard.min.js',
-            'js/highlight.pack.js',
-            'js/highlight-line-number.min.js',
+            'lib/highlightjs/highlight.pack.js',
             'js/lexers.js',
             'js/app.js',
             'js/pastes.js',
@@ -17,10 +16,10 @@ assets.register('js_all', js)
 scss = Bundle('css/app.scss',
               'css/pastes.scss',
               'css/embed.scss',
-              filters='scss')
+              filters='scss', output='css/app.css')
 
-css = Bundle('css/bootstrap.min.css',
-             'css/styles/foundation.css',
+css = Bundle('css/styles/foundation.css',
+             'css/bootstrap.min.css',
              scss,
              filters='cssmin', output='css/compiled.css')
 

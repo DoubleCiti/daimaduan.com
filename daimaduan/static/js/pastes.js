@@ -43,16 +43,6 @@
     $('.input-group-embed :text').select();
   }
 
-  function pasteCodeAction() {
-    $('#tags').tagsinput('removeAll');
-    $('div.codes textarea').each(function(i, item) {
-      hl = hljs.highlightAuto($(item).val());
-      $('#tags').tagsinput('add', hl.language);
-      var select_div = $(item)[0].parentNode.parentNode.previousElementSibling;
-      $(select_div).find('select').val(hl.language);
-    });
-  }
-  
   function initPasteEditor() {
     if ($('#form-paste').size() == 0) return;
 
@@ -76,9 +66,9 @@
         codeHasError: function(index, field) {
           try {
             var error = this.errors.codes[index][field];
-            return error ? 'has-error' : '';
+            return { 'has-error': !!error };
           } catch(e) {
-            return '';
+            return { 'has-error': false };
           }
         },
         addCode: function() {
@@ -86,18 +76,16 @@
         },
         removeCode: function(code) {
           this.paste.codes.$remove(code);
-          setTimeout(pasteCodeAction, 200);
         },
         submitPaste: function() {
           var self = this;
           
-          console.log($('#tags').val());
-
           $.ajax({
             url: document.location.href,
             method: 'POST',
             dataType: 'json',
-            data: $('#form-paste').serialize() + '&tags=' + $('#tags').val(),
+            contentType: "application/json",
+            data: JSON.stringify(self.paste),
             success: function(data) {
               if (data.success) {
                 document.location = '/paste/' + data.hash_id;
@@ -114,11 +102,14 @@
   $(document).ready(function() {
     initPaste();
     initPasteEditor();
+    
+    languages = [];
 
     $('.bootstrap-tagsinput').addClass('form-control');
     
     $('.input-group-embed').on('click', selectEmbedCode);
-    $('.input-group-embed :text').on('focus', selectEmbedCode);
+    $(document).on('click', '.input-group-embed', selectEmbedCode);
+    $(document).on('focus', '.input-group-embed :text', selectEmbedCode);
     $(document).on('click', '.action-like, .action-unlike', togglePasteLike);
 
     var clipboard = new Clipboard('.copy-code', {

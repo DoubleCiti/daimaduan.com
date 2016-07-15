@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+dump.rdb
 
 # C extensions
 *.so
@@ -72,6 +73,7 @@ config.cfg
 # Assets
 /daimaduan/static/lib
 /daimaduan/static/.webassets-cache
+/daimaduan/static/css/app.css
 /daimaduan/static/css/compiled.css
 /daimaduan/static/css/embed.css
 /daimaduan/static/js/compiled.js

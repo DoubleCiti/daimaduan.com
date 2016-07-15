@@ -2,7 +2,7 @@ check:
 	@tox -e pep8
 
 server:
-	cd daimaduan && python runserver.py
+	honcho start
 
 install:
 	sudo pip install -r requirements.txt

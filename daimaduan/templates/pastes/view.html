@@ -61,6 +61,14 @@
     </div>
   </div>
 
+  <p class="paste-tags">
+    {% for tag in paste.tags %}
+      {{ render_tag(tag) }}
+    {% endfor %}
+  </p>
+
+  <div class="clearfix"></div>
+
   {% for code in paste.codes %}
     {{ render_source_code(code) }}
   {% endfor %}
