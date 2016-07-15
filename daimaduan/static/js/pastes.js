@@ -46,59 +46,13 @@
   function initPasteEditor() {
     if ($('#form-paste').size() == 0) return;
 
-    var makeOption = function(input) {
-        return {
-          value: input,
-          text: input
-        };
-    };
-
-    // https://gist.github.com/james2doyle/85e503c77e581df6a5c0
-    Vue.directive('selectize-tags', {
-      twoWay: true,
-      priority: 1000,
-      bind: function (tags) {
-        var self = this;
-        $(this.el).selectize({
-          delimiter: ',',
-          persist: false,
-          create: makeOption,
-          onChange: function (val) {
-            self.set(val);
-          },
-          onItemRemove: function(value) {
-            // Avoid to delete syntax tags
-            if (_.includes(self.vm.syntaxTags, value)) {
-              self.update(self.vm.tags);
-            }
-          }
-        });
-      },
-      update: function (tags) {
-        var selectize = $(this.el).data('selectize');
-        selectize.clearOptions();
-
-        _.each(tags, function(tag) {
-            selectize.addOption(makeOption(tag));
-            selectize.addItem(tag);
-        });
-      },
-      unbind: function () {
-        $(this.el).destroy();
-      }
-    });
-
     var newCode = { title: "", syntax: "text", content: "" };
     new Vue({
       el: "#form-paste",
       data: {
         lexers: lexers,
         paste: app.paste,
-        errors: {},
-        customTags: [],
-      },
-      created: function() {
-        this.sliceCustomTags(app.paste.tags);
+        errors: {}
       },
       computed: {
         codeRemovable: function() {
@@ -106,29 +60,9 @@
         },
         codeIncreasable: function() {
           return this.paste.codes.length < 7;
-        },
-        syntaxTags: function() {
-            return _.map(app.paste.codes, 'syntax') || [];
-        },
-        tags: {
-            get: function() {
-                return this.syntaxTags.concat(this.customTags);
-            },
-
-            set: function(tags) {
-                this.sliceCustomTags(tags.split(','));
-            }
         }
       },
       methods: {
-        sliceCustomTags: function(inputTags) {
-            this.customTags = _.chain(inputTags || [])
-                               .difference(this.syntaxTags)
-                               .compact()
-                               .uniq()
-                               .value();
-            this.paste.tags = this.tags.join(',');
-        },
         codeHasError: function(index, field) {
           try {
             var error = this.errors.codes[index][field];
@@ -160,9 +94,6 @@
               }
             }
           });
-        },
-        syntaxChanged: function() {
-          this.sliceCustomTags(this.syntaxTags.concat(this.customTags));
         }
       }
     });

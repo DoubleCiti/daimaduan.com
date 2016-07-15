@@ -38,10 +38,13 @@ def save_paste_and_codes(form, paste=None):
     paste.title = form.title.data
     paste.is_private = form.is_private.data
     paste.codes = []
-    tags = form.tags.data.split(',')
+    paste.tags = []
+    tags = form.tags.data.split(' ')
 
+    syntaxes = []
     for i, c in enumerate(form.codes):
         syntax = Syntax.objects(key=c.syntax.data).get_or_404()
+        syntaxes.append(syntax)
         if not c.title.data:
             c.title.data = '代码片段%s' % (i + 1)
         code = Code(title=c.title.data,
@@ -49,18 +52,22 @@ def save_paste_and_codes(form, paste=None):
                     syntax=syntax)
         paste.codes.append(code)
 
+    for syntax in syntaxes:
+        tag = Tag.objects(key=syntax.key).first()
+        if not tag:
+            tag = Tag(key=syntax.key, name=syntax.name)
+            tag.save()
+
     for key in tags:
-        syntax = Syntax.objects(name__iexact=key).first()
-        tag = Tag.objects(key__iexact=key).first()
-        if not tag and syntax:
-            tag = Tag(key=syntax.key, name=syntax.name, is_default_tag=True)
-        elif not tag and not syntax:
-            tag = Tag(key=key, name=key)
+        tag = Tag.objects(name__iexact=key).first()
+        if not tag:
+            tag = Tag(key=key.lower(), name=key.lower())
         else:
             tag.popularity += 1
         tag.save()
         if tag not in paste.tags:
             paste.tags.append(tag)
+
     paste.save()
     return paste
 
@@ -71,7 +78,7 @@ def save_paste_and_codes(form, paste=None):
 def create_paste():
     if request.method == 'GET':
         # missing csrf
-        form = PasteForm(data={'codes': [{'title': '', 'content': '', 'syntax': 'markdown'}]})
+        form = PasteForm(data={'codes': [{'title': '', 'content': '', 'syntax': 'text'}]})
         return render_template('pastes/create.html', form=form)
     else:
         form = PasteForm.from_json(data=request.json)
@@ -107,10 +114,10 @@ def edit_paste(hash_id):
         abort(404)
 
     if request.method == 'GET':
-        tags = [tag.key for tag in paste.tags]
+        tags = [tag.name for tag in paste.tags]
         form = PasteForm(title=paste.title,
                          is_private=paste.is_private,
-                         tags=','.join(tags))
+                         tags=' '.join(tags))
 
         form.codes.pop_entry()
         for code in paste.codes:

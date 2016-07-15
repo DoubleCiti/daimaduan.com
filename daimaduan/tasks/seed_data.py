@@ -61,6 +61,7 @@ ALL_SUPPORTED_SYNTAX = (
     ('sql', 'SQL'),
     ('swift', 'Swift'),
     ('tex', 'Tex'),
+    ('text', 'Text'),
     ('vbscript', 'VBScript'),
     ('vim', 'Vim'),
     ('xml', 'XML'),

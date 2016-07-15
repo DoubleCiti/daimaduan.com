@@ -6,7 +6,6 @@ assets = Environment()
 js = Bundle('lib/vue/dist/vue.js',
             'lib/lodash/lodash.js',
             'lib/clipboard/dist/clipboard.min.js',
-            'lib/selectize/dist/js/standalone/selectize.js',
             'lib/highlightjs/highlight.pack.js',
             'js/lexers.js',
             'js/app.js',
@@ -19,10 +18,8 @@ scss = Bundle('css/app.scss',
               'css/embed.scss',
               filters='scss', output='css/app.css')
 
-css = Bundle('lib/selectize/dist/css/selectize.css',
-             'lib/selectize/dist/css/selectize.bootstrap3.css',
+css = Bundle('css/styles/foundation.css',
              'css/bootstrap.min.css',
-             'css/styles/foundation.css',
              scss,
              filters='cssmin', output='css/compiled.css')
 
