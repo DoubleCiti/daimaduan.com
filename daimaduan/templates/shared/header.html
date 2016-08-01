@@ -23,14 +23,22 @@
         <li class="dropdown">
           <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">
             <img src="{{ current_user.email | gravatar(size=24) }}" />
-            {{ current_user.username }}
+            {% if g.unread_messages_count > 0 %}
+              ({{ g.unread_messages_count }}) {{ current_user.username }}
+            {% else %}
+              {{ current_user.username }}
+            {% endif %}
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
             <li><a href="{{ url_for('user_app.view', username=current_user.username) }}">我的主页</a></li>
             <li><a href="{{ url_for('bookmark_app.my_bookmark') }}">我的收藏夹</a></li>
             <li class="divider"></li>
-            <li><a href="{{ url_for('site_app.messages') }}"><i class="icon-envelope"></i> 系统消息</a></li>
+            {% if g.unread_messages_count > 0 %}
+              <li><a href="{{ url_for('site_app.messages') }}"><i class="icon-envelope"></i>({{ g.unread_messages_count }}) 系统消息</a></li>
+            {% else %}
+              <li><a href="{{ url_for('site_app.messages') }}"><i class="icon-envelope"></i> 系统消息</a></li>
+            {% endif %}
             <li><a href="{{ url_for('user_app.manage') }}"><i class="icon-cog"></i> 设置</a></li>
             <!-- <li class="divider"></li> -->
             <li><a href="javascript:;" class="action-signout"><i class="icon-off"></i> 登出</a></li>
