@@ -43,7 +43,9 @@ def save_paste_and_codes(form, paste=None):
     paste.is_private = form.is_private.data
     paste.codes = []
     paste.tags = []
-    tags = form.tags.data.split(' ')
+    tags = []
+    if form.tags.data:
+        form.tags.data.split(' ')
 
     syntaxes = []
     for i, c in enumerate(form.codes):
