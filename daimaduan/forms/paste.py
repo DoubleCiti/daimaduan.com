@@ -31,6 +31,16 @@ class PasteForm(Form):
     codes = FieldList(FormField(CodeForm), min_entries=1, max_entries=7)
     tags = StringField(u'标签')
 
+    def validate(self):
+        if not Form.validate(self):
+            return False
+
+        if self.tags.data and len(self.tags.data.split(' ')) > 3:
+            self.tags.errors.append(u'只能输入3个标签')
+            return False
+
+        return True
+
 
 class CommentForm(Form):
     content = StringField(u'评论')
