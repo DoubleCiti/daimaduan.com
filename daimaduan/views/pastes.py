@@ -45,7 +45,7 @@ def save_paste_and_codes(form, paste=None):
     paste.tags = []
     tags = []
     if form.tags.data:
-        form.tags.data.split(' ')
+        tags = form.tags.data.split(' ')
 
     syntaxes = []
     for i, c in enumerate(form.codes):
