@@ -35,6 +35,7 @@ from daimaduan.utils.email_confirmation import send_confirm_email
 from daimaduan.utils.email_confirmation import send_reset_password_email
 from daimaduan.utils.email_confirmation import validate_token
 from daimaduan.utils.oauth import oauth_config
+from daimaduan.utils.decorators import crossdomain
 from daimaduan.utils.pagination import get_page
 
 
@@ -74,13 +75,6 @@ def index():
                            comments_increased=Comment.objects(created_at__gt=date.today()).count(),
                            bookmarks_increased=Bookmark.objects(created_at__gt=date.today()).count(),
                            tags=Tag.objects().order_by('-popularity')[:10])
-
-
-@site_app.route('/tags', methods=['GET'])
-def tags():
-    return render_template('tags/index.html',
-                           hot_pastes=Paste.objects(is_private=False).order_by('-views')[:10],
-                           tags=Tag.objects().order_by('-popularity'))
 
 
 @site_app.route('/status.json', methods=['GET'])

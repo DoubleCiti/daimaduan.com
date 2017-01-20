@@ -45,10 +45,10 @@ from daimaduan.views.pastes import paste_app
 from daimaduan.views.tags import tag_app
 from daimaduan.views.bookmarks import bookmark_app
 
-app.register_blueprint(site_app)
+app.register_blueprint(site_app, url_prfile='/api/v1')
 app.register_blueprint(user_app, url_prefix='/user')
-app.register_blueprint(paste_app, url_prefix='/paste')
-app.register_blueprint(tag_app, url_prefix='/tag')
+app.register_blueprint(paste_app, url_prefix='/api/v1/pastes')
+app.register_blueprint(tag_app, url_prefix='/api/v1/tags')
 app.register_blueprint(bookmark_app, url_prefix='/bookmark')
 
 app.jinja_env.filters['time_passed'] = time_passed
