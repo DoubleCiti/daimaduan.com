@@ -11,6 +11,8 @@ from flask.ext.mongoengine import Pagination
 from flask_login import current_user
 from flask_login import login_required
 
+import jwt
+
 from daimaduan.forms.userinfo import UserInfoForm
 from daimaduan.models.base import User
 from daimaduan.models.base import Paste
@@ -18,8 +20,27 @@ from daimaduan.models.message import WATCH
 from daimaduan.models.message import Message
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
+from daimaduan.utils.decorators import crossdomain
 
 user_app = Blueprint("user_app", __name__, template_folder="templates")
+
+
+@user_app.route('/login', methods=['POST'])
+@crossdomain(origin='*')
+def login():
+    form = SigninForm()
+    if form.validate_on_submit():
+        user = User.objects.get_or_404(email='david30xie@gmail.com')
+        user_mixin = LoginManagerUser(user)
+        login_user(user_mixin)
+        flash(u"登录成功", category='info')
+        return redirect(url_for('site_app.index'))
+    return render_template('users/signin.html',
+                            form=form)
+
+    return jsonify(id_token=jwt.encode({'name': 'David Xie'},
+                                       'secret',
+                                       algorithm='HS256'))
 
 
 @user_app.route('/manage', methods=['GET', 'POST'])
