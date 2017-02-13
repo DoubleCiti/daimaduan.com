@@ -29,7 +29,6 @@ from daimaduan.models.bookmark import Bookmark
 from daimaduan.models.syntax import Syntax
 from daimaduan.models.tag import Tag
 from daimaduan.utils.pagination import get_page
-from daimaduan.utils.decorators import crossdomain
 from daimaduan.utils.decorators import user_active_required
 from daimaduan.utils import logger
 
@@ -81,7 +80,6 @@ def save_paste_and_codes(form, paste=None):
 
 
 @paste_app.route('', methods=['GET'])
-@crossdomain(origin='*')
 def list_pastes():
     page = get_page()
     pagination = Paste.objects(is_private=False).order_by('-updated_at').paginate(page=page, per_page=20)
@@ -159,7 +157,6 @@ def edit_paste(hash_id):
 
 
 @paste_app.route('/<hash_id>', methods=['GET'])
-@crossdomain(origin='*')
 def view_paste(hash_id):
     paste = Paste.objects.get_or_404(hash_id=hash_id)
     paste.increase_views()

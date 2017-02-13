@@ -7,8 +7,11 @@ from flask import Flask
 from flask_gravatar import Gravatar
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
-from flask.ext.log import Logging
-from flask.ext.cdn import CDN
+from flask_log import Logging
+from flask_cdn import CDN
+from flask_cors import CORS
+import wtforms_json
+
 from jinja2 import MemcachedBytecodeCache
 
 from daimaduan.extensions import assets
@@ -33,11 +36,14 @@ cdn = CDN()
 app = Flask(__name__)
 app.config.from_object('daimaduan.default_settings')
 app.config.from_envvar('CONFIG')
+CORS(app)
 
 db.init_app(app)
 flask_log.init_app(app)
 celery = Celery(__name__)
 celery.conf.add_defaults(app.config)
+
+wtforms_json.init()
 
 from daimaduan.views.sites import site_app
 from daimaduan.views.users import user_app

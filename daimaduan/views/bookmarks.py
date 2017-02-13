@@ -5,7 +5,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
-from flask.ext.login import current_user, login_required
+from flask_login import current_user, login_required
 
 from daimaduan.forms.bookmark import BookmarkForm
 from daimaduan.models.base import Paste, User

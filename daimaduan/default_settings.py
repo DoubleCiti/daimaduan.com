@@ -6,6 +6,9 @@ FLASK_LOG_LEVEL = 'DEBUG'
 # Enable Flask-Assets debug mode.
 ASSETS_DEBUG = False
 
+# Disable CSRF
+WTF_CSRF_ENABLED = False
+
 # CDN
 FLASK_ASSETS_USE_CDN = False
 CDN_DOMAIN = 'daimaduan1.b0.upaiyun.com'

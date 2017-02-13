@@ -3,7 +3,7 @@ import time
 
 from flask import g
 from flask import render_template
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from daimaduan.bootstrap import app
 
